@@ -1,9 +1,10 @@
 import java.util.*;
+import java.time.*;
 
 public class Patient extends User {
     private String patientID;
     private String name;
-    private Date dob;
+    private LocalDate dob;
     private String gender;
     private ContactInfo contactInfo;
     private String bloodType;
@@ -15,7 +16,7 @@ public class Patient extends User {
     public Patient(
         String patientID,
         String name,
-        Date dob,
+        LocalDate dob,
         String gender,
         ContactInfo contactInfo,
         String bloodType,
@@ -43,11 +44,11 @@ public class Patient extends User {
         System.out.println(this.getMedicalRecord());
     }
 
-    public void scheduleAppointment(Doctor doctor, Date date, Time time) {
+    public void scheduleAppointment(Doctor doctor, LocalDate date, LocalTime time) {
         return;
     }
 
-    public void rescheduleAppointment(Appointment appointment, Date newDate, Time newTime) {
+    public void rescheduleAppointment(Appointment appointment, LocalDate newDate, LocalTime newTime) {
         return;
     }
 
@@ -63,7 +64,7 @@ public class Patient extends User {
         return;
     }
 
-    
+
 
 
     // Getter and Setter
@@ -75,7 +76,7 @@ public class Patient extends User {
         return name;
     }
 
-    public Date getDOB() {
+    public LocalDate getDOB() {
         return dob;
     }
 
@@ -107,7 +108,7 @@ public class Patient extends User {
         this.name = name;
     }
 
-    public void setDob(String dob) {
+    public void setDob(LocalDate dob) {
         this.dob = dob;
     }
 
