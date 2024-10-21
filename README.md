@@ -43,12 +43,6 @@ This directory contains CSV files used for initializing the HMS with data.
 - `Staff_list.csv`: Contains a list of hospital staff members (doctors and pharmacists) for system initialization.
 - `Medicine_List.csv`: Contains a list of medications and their stock levels for inventory management.
 
-### `/src/utils`
-This directory contains utility classes to support the main application.
-
-- `FileManager.java`: Handles file operations such as loading data from the CSV files into the system.
-- `Validator.java`: Validates user input, ensuring that it meets the necessary criteria for successful authentication and data entry.
-
 ## Assumptions
 - The system assumes that all users have a unique hospital ID.
 - The default password for all users is "password", which they are prompted to change upon initial login.
