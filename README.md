@@ -7,10 +7,7 @@
 ## Getting Started
 1. Clone this repository to your local machine.
 2. Navigate to the Project Directory - `/src` directory and compile the Java files using a Java compiler: `cd SC2002-OOP`
-3. Compile the Java Files:
-Navigate to the src directory: `cd src`
-then run the following: `javac *.java`
-4. After compilation, run the `Main.java` file to start the application while in src file path: `java Main`
+3. After compilation, run the `Main.java` file to start the application while in src file path: `java Main`
 4. Follow the prompts in the CLI to log in and access the functionalities available for your user role. 
 Log In with a valid ID, default password is "password"
 5. Change password upon initial login
