@@ -1,3 +1,4 @@
+/*
 public class Staff {
     private String staffID;
     private String name;
@@ -53,3 +54,4 @@ public class Staff {
         this.age = age;
     }
 }
+*/
