@@ -56,22 +56,174 @@ public class Main {
     }
 
     public static void displayDoctorMenu() {
-        System.out.println("Welcome, Doctor! Here are your options:");
-        // implement doctor menu logic
-    }
+    Scanner scanner = new Scanner(System.in);
+    int choice;
+    
+    do {
+        System.out.println("\nDoctor Menu:");
+        System.out.println("1. View Patient Medical Records");
+        System.out.println("2. Update Patient Medical Records");
+        System.out.println("3. View Personal Schedule");
+        System.out.println("4. Set Availability for Appointments");
+        System.out.println("5. Accept or Decline Appointment Requests");
+        System.out.println("6. View Upcoming Appointments");
+        System.out.println("7. Record Appointment Outcome");
+        System.out.println("8. Logout");
+        System.out.print("Enter your choice: ");
+        choice = scanner.nextInt();
+
+        switch (choice) {
+            case 1:
+                //implement logic to view patient medical records
+                break;
+            case 2:
+                //implement logic to update patient medical records
+                break;
+            case 3:
+                //implement logic to view personal schedule
+                break;
+            case 4:
+                //implement logic to set availability for appointments
+                break;
+            case 5:
+                //implement logic to accept or decline appointment requests
+                break;
+            case 6:
+                //implement logic to view upcoming appointments
+                break;
+            case 7:
+                //implement logic to record appointment outcome
+                break;
+            case 8:
+                System.out.println("Logging out...");
+                break;
+            default:
+                System.out.println("Invalid choice, please try again.");
+        }
+    } while (choice != 8);
+}
 
     public static void displayPharmacistMenu() {
-        System.out.println("Welcome, Pharmacist! Here are your options:");
-        // implement pharmacist menu logic
+        Scanner scanner = new Scanner(System.in);
+        int choice;
+        
+        do {
+            System.out.println("\nPharmacist Menu:");
+            System.out.println("1. View Appointment Outcome Record");
+            System.out.println("2. Update Prescription Status");
+            System.out.println("3. View Medication Inventory");
+            System.out.println("4. Submit Replenishment Request");
+            System.out.println("5. Logout");
+            System.out.print("Enter your choice: ");
+            choice = scanner.nextInt();
+
+            switch (choice) {
+                case 1:
+                    //implement logic to view appointment outcome record
+                    break;
+                case 2:
+                    //implement logic to update prescription status
+                    break;
+                case 3:
+                    //implement logic to view medication inventory
+                    break;
+                case 4:
+                    //implement logic to submit replenishment request
+                    break;
+                case 5:
+                    System.out.println("Logging out...");
+                    break;
+                default:
+                    System.out.println("Invalid choice, please try again.");
+            }
+        } while (choice != 5);
     }
 
     public static void displayAdminMenu() {
-        System.out.println("Welcome, Administrator! Here are your options:");
-        // implement administrator menu logic
+        Scanner scanner = new Scanner(System.in);
+        int choice;
+        
+        do {
+            System.out.println("\nAdministrator Menu:");
+            System.out.println("1. View and Manage Hospital Staff");
+            System.out.println("2. View Appointment details");
+            System.out.println("3. View and Manage Medication Inventory");
+            System.out.println("4. Approve Replenishment Requests");
+            System.out.println("5. Logout");
+            System.out.print("Enter your choice: ");
+            choice = scanner.nextInt();
+
+            switch (choice) {
+                case 1:
+                    //implement logic to view and manage hospital staff
+                    break;
+                case 2:
+                    //implement logic to view appointment details
+                    break;
+                case 3:
+                    //implement logic to view and manage medication inventory
+                    break;
+                case 4:
+                    // implement logic to approve replenishment requests
+                    break;
+                case 5:
+                    System.out.println("Logging out...");
+                    break;
+                default:
+                    System.out.println("Invalid choice, please try again.");
+            }
+        } while (choice != 5);
     }
 
     public static void displayPatientMenu() {
-        System.out.println("Welcome, Patient! Here are your options:");
-        // implement patient menu logic
-    }
+    Scanner scanner = new Scanner(System.in);
+    int choice;
+    
+    do {
+        System.out.println("\nPatient Menu:");
+        System.out.println("1. View Medical Record");
+        System.out.println("2. Update Personal Information");
+        System.out.println("3. View Available Appointment Slots");
+        System.out.println("4. Schedule an Appointment");
+        System.out.println("5. Reschedule an Appointment");
+        System.out.println("6. Cancel an Appointment");
+        System.out.println("7. View Scheduled Appointments");
+        System.out.println("8. View Past Appointment Outcome Records");
+        System.out.println("9. Logout");
+        System.out.print("Enter your choice: ");
+        choice = scanner.nextInt();
+
+        switch (choice) {
+            case 1:
+                //implement logic to view medical records
+                break;
+            case 2:
+                //implement logic to update personal information
+                break;
+            case 3:
+                //implement logic to view available appointment slots
+                break;
+            case 4:
+                //implement logic to schedule an appointment
+                break;
+            case 5:
+                //implement logic to reschedule an appointment
+                break;
+            case 6:
+                //implement logic to cancel an appointment
+                break;
+            case 7:
+                //implement logic to view scheduled appointments
+                break;
+            case 8:
+                //Implement logic to view past appointment outcome records
+                break;
+            case 9:
+                System.out.println("Logging out...");
+                break;
+            default:
+                System.out.println("Invalid choice, please try again.");
+        }
+    } while (choice != 9);
+}
 }
