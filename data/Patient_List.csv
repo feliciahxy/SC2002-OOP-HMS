@@ -1,4 +1,4 @@
-Patient ID,Name,Date of Birth,Gender,Blood Type,Contact Information,Password
-P1001,Alice Brown,N/A,N/A,N/A,N/A,password
-P1002,Bob Stone,N/A,N/A,N/A,N/A,password
-P1003,Charlie White,N/A,N/A,N/A,N/A,password
+Patient ID,Name,Date of Birth,Gender,Blood Type,Phone Number,Email,Password
+P1001,Alice Brown,010101,F,A,91234567,a@gmail.com,password
+P1002,Bob Stone,010102,M,B,91234568,b@gmail.com,password
+P1003,Charlie White,010103,M,O,91234569,c@gmail.com,password
