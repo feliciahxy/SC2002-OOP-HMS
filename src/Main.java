@@ -212,27 +212,10 @@ public class Main {
                     System.out.println("Personal information updated successfully.");
                     break;
                 case 3:
-                    String staffListFile = "../data/Staff_List.csv";
-                    String scheduleFile = "../data/Schedule.csv";  
-    
-                    System.out.println("List of Doctors");
-                    List<String> doctorNames = Schedule.displayDoctorNames(staffListFile);
-                    System.out.print("Select doctor by entering the corresponding number: ");
-                    int doctorChoice = scanner.nextInt();
+                    String staffListFile = "../data/Staff_List.csv"; 
+                    String scheduleFile = "../data/Schedule.csv"; 
+                    Schedule.viewAvailableSlots(staffListFile, scheduleFile);
 
-                    if (doctorChoice > 0 && doctorChoice <= doctorNames.size()) {
-                        String selectedDoctor = doctorNames.get(doctorChoice - 1); 
-                        System.out.println("You selected: " + selectedDoctor);
-                        List<Integer> availableDays = Schedule.getAvailableDays(selectedDoctor, scheduleFile);
-                        System.out.println("Available dates: " + availableDays);
-
-                    } else {
-                        System.out.println("Invalid choice, please try again.");
-                    }
-
-                    System.out.println("Input date to view available slots: ");
-                    int dateChoice = scanner.nextInt();
-                    
                     break;
 
                 case 4:
