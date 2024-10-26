@@ -1,10 +1,14 @@
 import java.util.*;
+import java.io.*;
 
 public class Main {
     private static Patient currentPatient;
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
+
+        // Initialize Schedules
+        ScheduleInitializer.main(args);
         
         System.out.print("Enter your ID: ");
         String userID = scanner.nextLine();
@@ -208,8 +212,29 @@ public class Main {
                     System.out.println("Personal information updated successfully.");
                     break;
                 case 3:
-                    //implement logic to view available appointment slots
+                    String staffListFile = "../data/Staff_List.csv";
+                    String scheduleFile = "../data/Schedule.csv";  
+    
+                    System.out.println("List of Doctors");
+                    List<String> doctorNames = Schedule.displayDoctorNames(staffListFile);
+                    System.out.print("Select doctor by entering the corresponding number: ");
+                    int doctorChoice = scanner.nextInt();
+
+                    if (doctorChoice > 0 && doctorChoice <= doctorNames.size()) {
+                        String selectedDoctor = doctorNames.get(doctorChoice - 1); 
+                        System.out.println("You selected: " + selectedDoctor);
+                        List<Integer> availableDays = Schedule.getAvailableDays(selectedDoctor, scheduleFile);
+                        System.out.println("Available dates: " + availableDays);
+
+                    } else {
+                        System.out.println("Invalid choice, please try again.");
+                    }
+
+                    System.out.println("Input date to view available slots: ");
+                    int dateChoice = scanner.nextInt();
+                    
                     break;
+
                 case 4:
                     //implement logic to schedule an appointment
                     break;
