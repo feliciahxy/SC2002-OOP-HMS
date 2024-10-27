@@ -1,6 +1,8 @@
 import java.io.*;
 import java.time.LocalDate;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Patient extends User {
     private final String patientID;
@@ -35,10 +37,38 @@ public class Patient extends User {
         System.out.println("Past Diagnoses and Treatments: " + pastDiagnosesAndTreatments);
     }
 
+    private boolean isValidPhoneNumber(String phoneNumber) {
+        return phoneNumber.matches("^[689]\\d{7}$"); //validator for phone no. format in accordance to starting digit or 6,8, or 9, and length of no. to be 8
+    }
+
+    private boolean isValidEmail(String email) {
+        String emailRegex = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$"; //validator for email format
+        Pattern pattern = Pattern.compile(emailRegex);
+        Matcher matcher = pattern.matcher(email);
+        return matcher.matches();
+    }
+
     public void updatePersonalInfo(String newPhoneNumber, String newEmail) {
-        this.phoneNumber = newPhoneNumber;
-        this.email = newEmail;
-        updatePatientInfoInCSV();
+        boolean isPhoneNumberValid = isValidPhoneNumber(newPhoneNumber);
+        boolean isEmailValid = isValidEmail(newEmail);
+        
+        if (!isPhoneNumberValid) {
+            System.out.println("Invalid phone number format.");
+        }
+        
+        if (!isEmailValid) {
+            System.out.println("Invalid email format.");
+        }
+
+        // Only update if both are valid
+        if (isPhoneNumberValid && isEmailValid) {
+            this.phoneNumber = newPhoneNumber;
+            this.email = newEmail;
+            updatePatientInfoInCSV();
+            System.out.println("Personal information updated successfully.");
+        } else {
+            System.out.println("Personal information not updated due to invalid inputs.");
+        }
     }
 
     private void updatePatientInfoInCSV() {

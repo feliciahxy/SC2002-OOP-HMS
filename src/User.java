@@ -5,6 +5,7 @@ public class User {
     private String gender;
     private int age;
     private String password;
+    private boolean isPasswordChanged; // New flag
 
     public User(String id, String name, String role, String gender, int age, String password) {
         this.id = id;
@@ -13,6 +14,7 @@ public class User {
         this.gender = gender;
         this.age = age;
         this.password = password;
+        this.isPasswordChanged = password.equals("password") ? false : true; // Initialize based on default password
     }
 
     public String getId() {
@@ -39,7 +41,12 @@ public class User {
         return password;
     }
 
+    public boolean isPasswordChanged() {
+        return isPasswordChanged;
+    }
+
     public void setPassword(String password) {
         this.password = password;
+        this.isPasswordChanged = true; //set true when password changed
     }
 }

@@ -71,12 +71,33 @@ public class UserManager {
             user = findUser(userID, patientUsers);
         }
         if (user != null) {
-            user.setPassword(newPassword);
-            writeUsersToCSV();
-            System.out.println("Password changed successfully for user ID: " + userID);
-            return true;
+            if (!user.isPasswordChanged()) {
+                if (isValidPassword(newPassword)) {
+                    user.setPassword(newPassword);
+                    writeUsersToCSV();
+                    System.out.println("Password changed successfully for user ID: " + userID);
+                    return true;
+                } else {
+                    System.out.println("Password does not meet requirements.");
+                    System.out.println("- must be min. 8 characters long.");
+                    System.out.println("- must contain at least 1 uppercase & 1 lowercase");
+                    System.out.println("- must contain at least 1 digit");
+                    System.out.println("- must contain at least 1 special character.");
+                }
+            } else {
+                System.out.println("Password change is only allowed on initial login.");
+            }
         }
         return false;
+    }
+
+
+    private boolean isValidPassword(String password) {
+        return password.length() >= 8 && //min. length of 8
+            password.matches(".*[A-Z].*") && //at least 1 uppercase
+            password.matches(".*[a-z].*") && //at least 1 lowercase
+            password.matches(".*\\d.*") && //at least 1 digit/numerical
+            password.matches(".*[!@#$%^&*(),.?\":{}|<>].*"); //at least 1 special character
     }
 
     public boolean login(String userID, String password) {
