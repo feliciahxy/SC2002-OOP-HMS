@@ -3,12 +3,14 @@ import java.util.*;
 public class AppointmentOutcome {
 
     private String appointmentID;
+    private String diagnosis;
     private String serviceType;
     private Date date;
     private ArrayList<PrescribedMedication> PrescribedMedications;
     private String notes;
-    public void AppointmentOutcome(String appointmentID, String serviceType, Date date, ArrayList<PrescribedMedication> PrescribedMedications, String notes){
+    public void AppointmentOutcome(String appointmentID, String diagnosis,String serviceType, Date date, ArrayList<PrescribedMedication> PrescribedMedications, String notes){
         this.appointmentID = appointmentID;
+        this.diagnosis = diagnosis;
         this.serviceType = serviceType;
         this.date = date;
         this.PrescribedMedications = PrescribedMedications;
@@ -19,7 +21,10 @@ public class AppointmentOutcome {
     public String getAppointmentID() {
         return this.appointmentID;
     }
-
+    
+    public String getDiagnosis(){
+        return this.diagnosis;
+    }
     public String getServiceType() {
         return this.serviceType;
     }
