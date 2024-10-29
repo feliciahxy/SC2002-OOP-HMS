@@ -10,6 +10,7 @@ public class Doctor extends User {
     private Schedule schedule;
     private final List<Patient> patientList;
     private final List<Appointment> appointmentList;
+    private final List<AppointmentOutcome> appointmentOutcomesList;
 
     public Doctor(
         String id,
@@ -27,6 +28,8 @@ public class Doctor extends User {
         loadPatientsFromCSV("../data/Patient_List.csv");
         appointmentList = new ArrayList<>();
         loadAppointmentsFromCSV("../data/Appointment.csv");
+        appointmentOutcomesList = new ArrayList<>();
+        loadAppointmentOutcomesFromCSV("../data/AppointmentOutcome.csv");
 
         for (Patient patient : patientList) {
             int isUnderCare = 0;
@@ -85,6 +88,27 @@ public class Doctor extends User {
         }
     }
 
+    private void loadAppointmentOutcomesFromCSV(String filePath) {
+        try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
+            String line;
+            br.readLine(); // Skip header
+            while ((line = br.readLine()) != null) {
+                String[] fields = line.split(",");
+                String appointmentID = fields[0];
+                String diagnosis = fields[1];
+                String serviceType = fields[2];
+                String notes = fields[3];
+
+                AppointmentOutcome appointmentOutcome = new AppointmentOutcome(appointmentID, diagnosis, serviceType, notes);
+                appointmentOutcomesList.add(appointmentOutcome);
+            }
+        } catch (IOException e) {
+            System.out.println("Error reading file: " + e.getMessage());
+        }
+    }
+
+    // actual doctor functions
+
     public void viewPatientRecords(Patient patient) {
         if (patientList.contains(patient)) {
             System.out.println("Patient ID: " + patient.getId());
@@ -99,7 +123,7 @@ public class Doctor extends User {
         }
     }
 
-    public void updatePatientRecord(Patient patient, String newDiagnosis, String newPrescription, String newService) {
+    public void updatePatientRecord(Patient patient, String newDiagnosis, String newPrescription, String newServiceType) {
 
     }
 
