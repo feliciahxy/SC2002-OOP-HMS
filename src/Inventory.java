@@ -11,6 +11,9 @@ public class Inventory {
                 Medication med = medications.get(i);
                 if (med.quantityChange(quantitychange)){
                     return true;
+                }
+                else{
+                    return false;
                 } 
             }
         }
