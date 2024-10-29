@@ -19,11 +19,12 @@ public class AppointmentManager {
                 String[] fields = line.split(",");
                 String appointmentID = fields[0];
                 String patientID = fields[1];
-                String doctorID = fields[2];
-                String slotDate = fields[3];
-                String status = fields[4];
+                String date = fields[2];
+                String time = fields[3];
+                String slotDate = fields[4];
+                String status = fields[5];
 
-                Appointment appointment = new Appointment(appointmentID, patientID, doctorID, slotDate, status);
+                Appointment appointment = new Appointment(appointmentID, patientID, doctorID, date, time, status);
                 appointmentList.add(appointment);
             }
         } catch (IOException e) {

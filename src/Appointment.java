@@ -11,13 +11,6 @@ public class Appointment {
     private String status;
     private AppointmentOutcome outcomeRecord;
 
-    public void confirm() {
-        
-    }
-
-    public void cancel() {
-        
-    }
 
     public void reschedule(LocalDate newDate, LocalTime newTime) {
         this.date = newDate;

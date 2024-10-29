@@ -1,1 +1,1 @@
-appointmentID,patientID,doctorID,slot_date,status
+appointmentID,patientID,doctorID,date,time,status
