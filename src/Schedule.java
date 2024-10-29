@@ -2,185 +2,151 @@ import java.io.*;
 import java.util.*;
 
 public class Schedule { 
+    private final String doctorID;
+    private final ArrayList<String> slots;
 
-    public static void viewAvailableSlots(String staffListFile, String scheduleFilePath) {
+    public Schedule(String doctorID, ArrayList<String> slots) {
+        this.doctorID = doctorID;
+        this.slots = slots;
+    }
+
+    public String getDoctorID() {
+        return doctorID;
+    }
+
+    public ArrayList<String> getSlots() {
+        return slots;
+    }
+
+    public static void viewAvailableSlots(List<User> staffUsers, ArrayList<Schedule> schedules) {
         Scanner scanner = new Scanner(System.in);
 
-        // Display list of doctors
-        System.out.println("\nList of Doctors:");
-        List<String> doctorNames = displayDoctorNames(staffListFile);
-        System.out.print("Select doctor by entering the corresponding number: ");
-        int doctorChoice = scanner.nextInt();
+        ArrayList<String> doctorNames = getDoctorNames(staffUsers);
+        displayDoctorNames(doctorNames);
+        int numDoctors = doctorNames.size();
 
-        if (doctorChoice > 0 && doctorChoice <= doctorNames.size()) {
-            String selectedDoctor = doctorNames.get(doctorChoice - 1); 
-            System.out.println("\nYou selected: " + selectedDoctor);
-            
-            // Display available days for selected doctor
-            List<Integer> availableDays = getAvailableDays(selectedDoctor, scheduleFilePath);
-            if (availableDays.isEmpty()) {
-                System.out.println("No available dates for this doctor.");
-                return;
+        int doctorChoice = -1;
+        while (doctorChoice < 1 || doctorChoice > numDoctors) { 
+            System.out.print("Enter a valid Doctor Choice (1 - " + numDoctors + "): ");
+            if (scanner.hasNextInt()) {
+                doctorChoice = scanner.nextInt();
+            } else {
+                scanner.next(); 
+                System.out.println("Invalid input. Try Again.");
             }
-            System.out.println("Available dates: " + availableDays);
-            
-            // Prompt for date selection with error handling
-            int dateChoice;
-            while (true) {
-                System.out.print("Input date to view available slots: ");
-                dateChoice = scanner.nextInt();
-                if (availableDays.contains(dateChoice)) {
-                    break;
-                } else {
-                    System.out.println("\nInvalid date. Please select from available dates: " + availableDays);
-                }
-            }
-
-            // Display available slots for the selected day
-            List<Integer> availableSlots = getAvailableSlots(selectedDoctor, scheduleFilePath, dateChoice);
-            System.out.println("\nSlot 1: 0900-1000");
-            System.out.println("Slot 2: 1000-1100");
-            System.out.println("Slot 3: 1100-1200");
-            System.out.println("Available Slots: " + availableSlots);
-
-        } else {
-            System.out.println("Invalid choice, please try again.");
         }
+
+        String doctorName = doctorNames.get(doctorChoice - 1);
+        String doctorID = getDoctorIDFromName(staffUsers, doctorName);
+        ArrayList<Integer> availableDates = getAvailableDates(doctorID, schedules);
+        displayAvailableDates(availableDates);
+
+        int dateChoice;
+        while (true) {
+            System.out.print("Enter a valid Date Choice: ");
+            dateChoice = scanner.nextInt();
+            if (availableDates.contains(dateChoice)) {
+                break; 
+            } else {
+                System.out.println("Invalid date choice. Please choose from the available dates.");
+            }
+        }
+
+        displayAvailableSlotsForDate(doctorID, dateChoice, schedules);
+
     }
 
-    private static String getDoctorName(String doctorID) {
-        String staffListFile = "../data/Staff_List.csv"; 
-        try (BufferedReader reader = new BufferedReader(new FileReader(staffListFile))) {
-            String line;
-            reader.readLine(); 
-        
-            while ((line = reader.readLine()) != null) {
-                String[] fields = line.split(",");
+    public static void displayAvailableSlotsForDate(String doctorID, int date, ArrayList<Schedule> schedules) {
 
-                if (fields.length >= 2 && fields[0].trim().equals(doctorID)) {
-                    return fields[1].trim(); 
+        System.out.println("\nAvailable Timings: ");
+        for (Schedule schedule : schedules) {
+            if (schedule.getDoctorID().equals(doctorID)) {
+                int startIndex = (date - 1) * 3; 
+                for (int i = 0; i < 3; i++) { 
+                    if (startIndex + i < schedule.getSlots().size()) { 
+                        String slot = schedule.getSlots().get(startIndex + i);
+                        if (slot.equals("N/A")) {
+                            if (i == 0) System.out.println("0900-1000");
+                            else if (i == 1) System.out.println("1000-1100");
+                            else System.out.println("1100-1200");
+                        }
+                    }
                 }
+            break;
             }
-        } catch (IOException e) {
-            e.printStackTrace();
         }
-        return null; 
+        
     }
 
-    private static String getDoctorID(String doctorName) {
-        String staffListFile = "../data/Staff_List.csv"; 
-        try (BufferedReader reader = new BufferedReader(new FileReader(staffListFile))) {
-            String line;
-            reader.readLine(); 
-            
-            while ((line = reader.readLine()) != null) {
-                String[] fields = line.split(",");
-
-                if (fields.length >= 2 && fields[1].trim().equalsIgnoreCase(doctorName)) {
-                    return fields[0].trim(); 
-                }
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return null; 
+    public static void displayAvailableDates(ArrayList<Integer> availableDates) {
+        System.out.println("\nIn the month of November, the Doctor is free on: ");
+        System.out.println(availableDates);
     }
 
-    public static List<String> displayDoctorNames(String filePath) {
-        List<String> doctorNames = new ArrayList<>();
-        
-        try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
-            String line = reader.readLine(); // Skip header line, assuming first line is headers
-        
-            while ((line = reader.readLine()) != null) {
-                String[] fields = line.split(",");
+    public static ArrayList<Integer> getAvailableDates(String doctorID, ArrayList<Schedule> schedules) {
+        ArrayList<Integer> availableDates = new ArrayList<>();
 
-                if (fields.length > 2) { 
+        for (Schedule schedule : schedules) {
+            if (schedule.getDoctorID().equals(doctorID)) {
+                ArrayList<String> slots = schedule.getSlots();
+                int totalDays = slots.size() / 3; 
+                
+
+                for (int day = 0; day < totalDays; day++) {
+                    boolean isDayAvailable = false;
                     
-                    String doctorName = fields[1].trim();
-                    String role = fields[2].trim();
 
-                    if ("Doctor".equalsIgnoreCase(role)) {
-                        doctorNames.add(doctorName);
+                    for (int slot = 0; slot < 3; slot++) { 
+                        if (slots.get(day * 3 + slot).equals("N/A")) {
+                            isDayAvailable = true; 
+                            break; 
+                        }
+                    }
+
+                    if (isDayAvailable) {
+                        availableDates.add(day + 1);
                     }
                 }
             }
-        } catch (IOException e) {
-            e.printStackTrace();
         }
 
-        if (doctorNames.isEmpty()) {
-            System.out.println("No doctors found in the schedule file.");
-        } else {
-            int index = 1; 
-            for (String name : doctorNames) {
-                System.out.println("[" + index + "] " + name);
-                index++; 
+        return availableDates;
+    }
+
+
+
+    public static ArrayList<String> getDoctorNames (List<User> staffUsers) {
+        ArrayList<String> doctorNames = new ArrayList<>();
+        for (User user : staffUsers) {
+            if ("Doctor".equalsIgnoreCase(user.getRole())) { 
+                doctorNames.add(user.getName());
             }
         }
-
         return doctorNames;
     }
 
-    public static List<Integer> getAvailableDays(String doctorName, String scheduleFilePath) {
-        String doctorID = getDoctorID(doctorName);
-        List<Integer> availableDays = new ArrayList<>();
-
-        try (BufferedReader reader = new BufferedReader(new FileReader(scheduleFilePath))) {
-            String line = reader.readLine(); 
-            
-            while ((line = reader.readLine()) != null) {
-                String[] fields = line.split(",");
-                
-                if (fields.length > 0 && fields[0].trim().equals(doctorID)) { 
-                    for (int day = 1; day <= 30; day++) {
-
-                        int baseIndex = (day - 1) * 3 + 1;
-                        
-                        if (fields[baseIndex].equals("N/A") || fields[baseIndex + 1].equals("N/A") || fields[baseIndex + 2].equals("N/A")) {
-                            availableDays.add(day); 
-                        }
-                    }
-                    break; 
-                }
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
+    public static void displayDoctorNames(ArrayList<String> doctorNames) {
+        System.out.println("\nList of Doctors:");
+        for (int i = 0; i < doctorNames.size(); i++) {
+            System.out.println("[" + (i + 1) + "] Dr " + doctorNames.get(i)); // Display with index starting from 1
         }
-
-        return availableDays;
     }
 
-    public static List<Integer> getAvailableSlots(String doctorName, String scheduleFilePath, int day) {
-        String doctorID = getDoctorID(doctorName); 
-        List<Integer> availableSlots = new ArrayList<>();
-    
-        try (BufferedReader reader = new BufferedReader(new FileReader(scheduleFilePath))) {
-            String line = reader.readLine(); 
-            
-            while ((line = reader.readLine()) != null) {
-                String[] fields = line.split(",");
-                
-                if (fields.length > 0 && fields[0].trim().equals(doctorID)) { 
-  
-                    int baseIndex = (day - 1) * 3 + 1;
-                    
-
-                    for (int slot = 0; slot < 3; slot++) {
-                        if (fields[baseIndex + slot].equals("N/A")) {
-                            availableSlots.add(slot + 1); 
-                        }
-                    }
-                    break; 
-                }
+    public static String getDoctorIDFromName (List<User> staffUsers, String doctorName) {
+        for (User user : staffUsers) {
+            if (doctorName.equalsIgnoreCase(user.getName())) {
+                return user.getId();
             }
-        } catch (IOException e) {
-            e.printStackTrace();
         }
-    
-        return availableSlots;
+        return null;
     }
+
 }
+
+   
+
+
+
 
 /* public class Schedule {
     private List<Date> availableDates;

@@ -7,8 +7,11 @@ public class Main {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
 
-        // Initialize Schedules
+        // Ensure that there is a Schedule.csv
         ScheduleInitializer.main(args);
+
+        ScheduleManager scheduleManager = new ScheduleManager();
+
         
         System.out.print("Enter your ID: ");
         String userID = scanner.nextLine();
@@ -44,7 +47,7 @@ public class Main {
                         displayAdminMenu();
                         break;
                     case "Patient":
-                        displayPatientMenu(userManager, userID);
+                        displayPatientMenu(userManager, userID, scheduleManager);
                         break;
                     default:
                         System.out.println("Role not recognized.");
@@ -178,7 +181,7 @@ public class Main {
         } while (choice != 5);
     }
 
-    public static void displayPatientMenu(UserManager userManager, String userID) {
+    public static void displayPatientMenu(UserManager userManager, String userID, ScheduleManager scheduleManager) {
         Scanner scanner = new Scanner(System.in);
         Patient patient = userManager.findPatientByID(userID);
         int choice;
@@ -212,10 +215,7 @@ public class Main {
                     System.out.println("Personal information updated successfully.");
                     break;
                 case 3:
-                    String staffListFile = "../data/Staff_List.csv"; 
-                    String scheduleFile = "../data/Schedule.csv"; 
-                    Schedule.viewAvailableSlots(staffListFile, scheduleFile);
-
+                    Schedule.viewAvailableSlots(userManager.getStaffUsers(), scheduleManager.getSchedules());
                     break;
 
                 case 4:
