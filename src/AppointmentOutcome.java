@@ -8,7 +8,7 @@ public class AppointmentOutcome {
     private Date date;
     private ArrayList<PrescribedMedication> PrescribedMedications;
     private String notes;
-    public void AppointmentOutcome(String appointmentID, String diagnosis,String serviceType, Date date, ArrayList<PrescribedMedication> PrescribedMedications, String notes){
+    public AppointmentOutcome(String appointmentID, String diagnosis,String serviceType, Date date, ArrayList<PrescribedMedication> PrescribedMedications, String notes){
         this.appointmentID = appointmentID;
         this.diagnosis = diagnosis;
         this.serviceType = serviceType;
