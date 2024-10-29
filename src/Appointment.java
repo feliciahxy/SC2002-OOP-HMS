@@ -1,21 +1,25 @@
 import java.util.*;
-import java.time.LocalDate; 
-import java.time.LocalTime;
 
 public class Appointment {
     private String appointmentID;
     private String patientID;
     private String doctorID;
-    private LocalDate date; 
-    private LocalTime time;
+    private String date; 
+    private String time;
     private String status;
-    private AppointmentOutcome outcomeRecord;
 
+    public Appointment (String appointmentID, String patientID, String doctorID, String date, String time, String status){
+        this.appointmentID= appointmentID;
+        this.patientID = patientID;
+        this.doctorID = doctorID;
+        this.date = date;
+        this.time = time;
+        this.status = status;
+    }
 
-    public void reschedule(LocalDate newDate, LocalTime newTime) {
+    public void reschedule(String newDate, String newTime) {
         this.date = newDate;
         this.time = newTime;
-        
     }
 
     public String getAppointmentID() { 
@@ -42,19 +46,19 @@ public class Appointment {
         this.doctorID = doctorID; 
     }
 
-    public LocalDate getDate() { 
+    public String getDate() { 
         return date; 
     }
 
-    public void setDate(LocalDate date) { 
+    public void setDate(String date) { 
         this.date = date; 
     }
 
-    public LocalTime getTime() { 
+    public String getTime() { 
         return time; 
     }
 
-    public void setTime(LocalTime time) { 
+    public void setTime(String time) { 
         this.time = time; 
     }
 
@@ -66,11 +70,17 @@ public class Appointment {
         this.status = status; 
     }
 
-    public AppointmentOutcome getOutcomeRecord() { 
-        return outcomeRecord; 
+    public void cancel(){
+        this.status = "canceled";
     }
 
-    public void setOutcomeRecord(AppointmentOutcome outcomeRecord) { 
-        this.outcomeRecord = outcomeRecord; 
+    public void confirm(){
+        this.status = "confirmed";
     }
+
+    public void complete(){
+        this.status = "completed";
+    }
+
+
 }
