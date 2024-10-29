@@ -6,9 +6,13 @@ public class Main {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
 
-        // Initialize Schedules
+        // Ensure that there is a Schedule.csv
         ScheduleInitializer.main(args);
+
+        ScheduleManager scheduleManager = new ScheduleManager();
+
         
+
         System.out.print("Enter your ID: ");
         String userID = scanner.nextLine();
 
@@ -221,7 +225,6 @@ public class Main {
                 case 3:
                     Schedule.viewAvailableSlots(userManager.getStaffUsers(), scheduleManager.getSchedules());
                     break;
-
                 case 4:
                     //implement logic to schedule an appointment
                     break;

@@ -16,7 +16,7 @@ public class UserManager {
 
     public List<User> getStaffUsers() {
         return staffUsers;
-    }
+    } 
 
     private void loadUsersFromCSV(String filePath, boolean isStaff) {
         try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {

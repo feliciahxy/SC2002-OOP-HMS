@@ -18,9 +18,8 @@ public class Schedule {
         return slots;
     }
 
-    public static void viewAvailableSlots(List<User> staffUsers, ArrayList<Schedule> schedules) {
+     public static void viewAvailableSlots(List<User> staffUsers, ArrayList<Schedule> schedules) {
         Scanner scanner = new Scanner(System.in);
-
         ArrayList<String> doctorNames = getDoctorNames(staffUsers);
         displayDoctorNames(doctorNames);
         int numDoctors = doctorNames.size();
@@ -35,8 +34,7 @@ public class Schedule {
                 System.out.println("Invalid input. Try Again.");
             }
         }
-
-        String doctorName = doctorNames.get(doctorChoice - 1);
+          String doctorName = doctorNames.get(doctorChoice - 1);
         String doctorID = getDoctorIDFromName(staffUsers, doctorName);
         ArrayList<Integer> availableDates = getAvailableDates(doctorID, schedules);
         displayAvailableDates(availableDates);
@@ -50,11 +48,9 @@ public class Schedule {
             } else {
                 System.out.println("Invalid date choice. Please choose from the available dates.");
             }
+            displayAvailableSlotsForDate(doctorID, dateChoice, schedules);
         }
-
-        displayAvailableSlotsForDate(doctorID, dateChoice, schedules);
-
-    }
+     }
 
     public static void displayAvailableSlotsForDate(String doctorID, int date, ArrayList<Schedule> schedules) {
 
@@ -72,12 +68,11 @@ public class Schedule {
                         }
                     }
                 }
-            break;
+                break;
             }
         }
-        
     }
-
+    
     public static void displayAvailableDates(ArrayList<Integer> availableDates) {
         System.out.println("\nIn the month of November, the Doctor is free on: ");
         System.out.println(availableDates);
@@ -85,14 +80,11 @@ public class Schedule {
 
     public static ArrayList<Integer> getAvailableDates(String doctorID, ArrayList<Schedule> schedules) {
         ArrayList<Integer> availableDates = new ArrayList<>();
-
-        for (Schedule schedule : schedules) {
+         for (Schedule schedule : schedules) {
             if (schedule.getDoctorID().equals(doctorID)) {
                 ArrayList<String> slots = schedule.getSlots();
                 int totalDays = slots.size() / 3; 
-                
-
-                for (int day = 0; day < totalDays; day++) {
+                 for (int day = 0; day < totalDays; day++) {
                     boolean isDayAvailable = false;
                     
 
@@ -102,18 +94,14 @@ public class Schedule {
                             break; 
                         }
                     }
-
                     if (isDayAvailable) {
                         availableDates.add(day + 1);
                     }
                 }
             }
-        }
-
-        return availableDates;
+         }
+         return availableDates;
     }
-
-
 
     public static ArrayList<String> getDoctorNames (List<User> staffUsers) {
         ArrayList<String> doctorNames = new ArrayList<>();
@@ -138,43 +126,6 @@ public class Schedule {
                 return user.getId();
             }
         }
-        return null;
-    }
-
-}
-
-   
-
-
-
-
-/* public class Schedule {
-    private List<Date> availableDates;
-    private List<Time> availableTimes;
-
-    public Schedule(List<Date> availableDates, List<Time> availableTimes) {
-        this.availableDates = availableDates;
-        this.availableTimes = availableTimes;
-    }
-
-    public void updateAvailability(Date date, Time time) {
-        return;
-    }
-
-    public List<Date> getAvailableDates() {
-        return availableDates;
-    }
-
-    public void setAvailableDates(List<Date> availableDates) {
-        this.availableDates = availableDates;
-    }
-
-    public List<Time> getAvailableTimes() {
-        return availableTimes;
-    }
-
-    public void setAvailableTimes(List<Time> availableTimes) {
-        this.availableTimes = availableTimes;
+         return null;
     }
 }
-*/
