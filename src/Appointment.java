@@ -1,4 +1,3 @@
-import java.util.*;
 
 public class Appointment {
     private String appointmentID;
@@ -8,7 +7,7 @@ public class Appointment {
     private String time;
     private String status;
 
-    public Appointment (String appointmentID, String patientID, String doctorID, String date, String time, String status){
+    public Appointment (String appointmentID, String patientID, String doctorID, String date, String time, String status) {
         this.appointmentID= appointmentID;
         this.patientID = patientID;
         this.doctorID = doctorID;

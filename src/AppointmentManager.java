@@ -1,5 +1,4 @@
 import java.io.*;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,9 +18,9 @@ public class AppointmentManager {
                 String[] fields = line.split(",");
                 String appointmentID = fields[0];
                 String patientID = fields[1];
-                String date = fields[2];
-                String time = fields[3];
-                String slotDate = fields[4];
+                String doctorID = fields[2];
+                String date = fields[3];
+                String time = fields[4];
                 String status = fields[5];
 
                 Appointment appointment = new Appointment(appointmentID, patientID, doctorID, date, time, status);
