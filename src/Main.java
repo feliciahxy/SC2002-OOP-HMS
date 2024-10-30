@@ -11,8 +11,6 @@ public class Main {
 
         ScheduleManager scheduleManager = new ScheduleManager();
 
-        
-
         System.out.print("Enter your ID: ");
         String userID = scanner.nextLine();
 
