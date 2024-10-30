@@ -5,10 +5,11 @@ public class AppointmentOutcome {
     private String appointmentID;
     private String diagnosis;
     private String serviceType;
-    private Date date;
+    private String date;
     private ArrayList<PrescribedMedication> PrescribedMedications;
     private String notes;
-    public AppointmentOutcome(String appointmentID, String diagnosis,String serviceType, Date date, ArrayList<PrescribedMedication> PrescribedMedications, String notes){
+
+    public AppointmentOutcome(String appointmentID, String diagnosis,String serviceType, String date, ArrayList<PrescribedMedication> PrescribedMedications, String notes){
         this.appointmentID = appointmentID;
         this.diagnosis = diagnosis;
         this.serviceType = serviceType;
@@ -16,7 +17,6 @@ public class AppointmentOutcome {
         this.PrescribedMedications = PrescribedMedications;
         this.notes = notes;
     }
-
 
     public String getAppointmentID() {
         return this.appointmentID;
@@ -29,7 +29,7 @@ public class AppointmentOutcome {
         return this.serviceType;
     }
 
-    public Date getDate() {
+    public String getDate() {
         return this.date;
     }
 
@@ -37,11 +37,37 @@ public class AppointmentOutcome {
     //     return;
     // }
 
-    public ArrayList<PrescribedMedication> getPrescribedMedications() {
+    public ArrayList<PrescribedMedication> getPrescribedMedicationList() {
         return this.PrescribedMedications;
     }
+    
+    // public PrescribedMedication getPrescribedMedication(String medicationName){
+    //     boolean found = false;
+    //     for (int i = 0; i<this.PrescribedMedications.size(); i++){
+    //         PrescribedMedication med = PrescribedMedications.get(i);
+    //         if (medicationName.equals(med.getMedicationName())){
+    //             found = true;
+    //             return med;
+    //         }
+    //     }
+    //     if (found == false){
+    //         System.out.println("Medication not found.");
+    //         return null;
+    //     }
+    //     return null;
+    // }
 
-    public String getNotes() {
+    public void setMedicationStatus(PrescribedMedication med, String status){
+        med.setMedicationStatus(status);
+        // for (int i = 0; i<this.PrescribedMedications.size(); i++){
+        //     PrescribedMedication med = PrescribedMedications.get(i);
+        //     if (medicationName.equals(med.getMedicationName())){
+        //         med.setMedicationStatus(status);
+        //     }
+        // }
+    }
+
+    public String getNotes(){
         return this.notes;
     }
 

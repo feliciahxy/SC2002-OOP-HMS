@@ -1,12 +1,11 @@
 import java.io.*;
 import java.util.ArrayList;
-import java.util.List;
 
 public class MedicationManager {
-    private List<Medication> medications;
+    private ArrayList<Medication> medications;
 
     public MedicationManager() {
-        medications = new ArrayList<>();
+        this.medications = new ArrayList<>();
         loadMedicationsFromCSV("../data/Medicine_List.csv");
     }
 
@@ -34,8 +33,8 @@ public class MedicationManager {
         }
     }
 
-    public List<Medication> getMedications() {
-        return medications;
+    public ArrayList<Medication> getMedications() {
+        return this.medications;
     }
 }
 
