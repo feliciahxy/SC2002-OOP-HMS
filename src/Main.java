@@ -1,5 +1,4 @@
 import java.util.*;
-import java.io.*;
 
 public class Main {
     private static Patient currentPatient;
@@ -13,26 +12,36 @@ public class Main {
         ScheduleManager scheduleManager = new ScheduleManager();
 
         
+
         System.out.print("Enter your ID: ");
         String userID = scanner.nextLine();
-        
+
         System.out.print("Enter your password: ");
         String password = scanner.nextLine();
 
         UserManager userManager = new UserManager();
-        
+
         if (userManager.login(userID, password)) {
             String role = userManager.getRole(userID);
             if (role != null) {
                 System.out.println("Login successful! Your role: " + role);
-                
+
                 if (userManager.isFirstLogin(userID)) {
-                    System.out.print("Do you want to change your password? (yes/no): ");
-                    String changePasswordChoice = scanner.nextLine();
-                    if (changePasswordChoice.equalsIgnoreCase("yes")) {
-                        System.out.print("Enter new password: ");
-                        String newPassword = scanner.nextLine();
-                        userManager.changePassword(userID, newPassword);
+                    boolean passwordChanged = false;
+                    while (!passwordChanged) {
+                        System.out.print("Do you want to change your password? (yes/no): ");
+                        String changePasswordChoice = scanner.nextLine();
+                        if (changePasswordChoice.equalsIgnoreCase("yes")) {
+                            System.out.print("Enter new password: ");
+                            String newPassword = scanner.nextLine();
+                            passwordChanged = userManager.changePassword(userID, newPassword);
+
+                            if (!passwordChanged) {
+                                System.out.println("Please try again.");
+                            }
+                        } else {
+                            break;
+                        }
                     }
                 }
 
@@ -212,12 +221,10 @@ public class Main {
                     String newEmail = scanner.nextLine();
                     patient.updatePersonalInfo(newPhoneNumber, newEmail);
                     userManager.writeUsersToCSV(); //updates csv also
-                    System.out.println("Personal information updated successfully.");
                     break;
                 case 3:
                     Schedule.viewAvailableSlots(userManager.getStaffUsers(), scheduleManager.getSchedules());
                     break;
-
                 case 4:
                     Schedule.scheduleAppointment(userManager.getStaffUsers(), scheduleManager.getSchedules(), patient.getPatientID());
                     break;
