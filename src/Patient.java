@@ -90,4 +90,8 @@ public class Patient extends User {
     public String getPhoneNumber() {
         return phoneNumber;
     }
+
+    public String getPatientID() {
+        return patientID;
+    }
 }

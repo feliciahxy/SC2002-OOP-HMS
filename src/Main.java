@@ -219,16 +219,16 @@ public class Main {
                     break;
 
                 case 4:
-                    //implement logic to schedule an appointment
+                    Schedule.scheduleAppointment(userManager.getStaffUsers(), scheduleManager.getSchedules(), patient.getPatientID());
                     break;
                 case 5:
-                    //implement logic to reschedule an appointment
+                    Schedule.rescheduleAppointment(patient.getPatientID(), scheduleManager.getSchedules(),userManager.getStaffUsers());
                     break;
                 case 6:
-                    //implement logic to cancel an appointment
+                    Schedule.cancelAppointment(patient.getPatientID(), scheduleManager.getSchedules(), userManager.getStaffUsers());
                     break;
                 case 7:
-                    //implement logic to view scheduled appointments
+                    Schedule.displaySchedules(patient.getPatientID(), scheduleManager.getSchedules(), userManager.getStaffUsers());
                     break;
                 case 8:
                     //Implement logic to view past appointment outcome records
