@@ -1,4 +1,3 @@
-import java.util.*;
 
 public class AppointmentOutcome {
 
@@ -6,16 +5,14 @@ public class AppointmentOutcome {
     private String diagnosis;
     private String serviceType;
     private String date;
-    private ArrayList<PrescribedMedication> PrescribedMedications;
     private String notes;
 
 
-    public AppointmentOutcome(String appointmentID, String diagnosis, String serviceType, String date, ArrayList<PrescribedMedication> PrescribedMedications, String notes){
+    public AppointmentOutcome(String appointmentID, String diagnosis, String serviceType, String date, String notes){
         this.appointmentID = appointmentID;
         this.diagnosis = diagnosis;
         this.serviceType = serviceType;
         this.date = date;
-        this.PrescribedMedications = PrescribedMedications;
         this.notes = notes;
     }
 
@@ -33,10 +30,6 @@ public class AppointmentOutcome {
 
     public String getDate() {
         return this.date;
-    }
-
-    public ArrayList<PrescribedMedication> getPrescribedMedications() {
-        return this.PrescribedMedications;
     }
 
     public String getNotes() {

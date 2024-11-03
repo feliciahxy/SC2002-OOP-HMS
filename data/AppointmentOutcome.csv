@@ -1,1 +1,1 @@
-appointmentID,serviceType,diagnosis,notes
+appointmentID,diagnosis,serviceType,date,notes

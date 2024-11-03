@@ -97,9 +97,10 @@ public class Doctor extends User {
                 String appointmentID = fields[0];
                 String diagnosis = fields[1];
                 String serviceType = fields[2];
-                String notes = fields[3];
+                String date = fields[3];
+                String notes = fields[4];
 
-                AppointmentOutcome appointmentOutcome = new AppointmentOutcome(appointmentID, diagnosis, serviceType, notes);
+                AppointmentOutcome appointmentOutcome = new AppointmentOutcome(appointmentID, diagnosis, serviceType, date, notes);
                 appointmentOutcomesList.add(appointmentOutcome);
             }
         } catch (IOException e) {
