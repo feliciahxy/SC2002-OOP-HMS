@@ -17,9 +17,9 @@ public class PrescribedMedication {
         return this.medicationName;
     }
 
-    // public void setMedicationName(String name) {
-    //     return;
-    // }
+    public void setMedicationName(String name) {
+        this.medicationName = name;
+    }
 
     public String getMedicationStatus() {
         return this.medicationStatus;
