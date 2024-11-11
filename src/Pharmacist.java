@@ -55,10 +55,16 @@ public class Pharmacist extends User{
     
     public void viewInventory(){
         ArrayList<Medication> medlist = inventory.getMedicines();
-        for (int i = 0; i<medlist.size(); i++){
-            Medication med = medlist.get(i);
-            System.out.printf("Medicine Name: %s, Quantity: %d, Low Stock Level: %d\n", med.getMedicineName(), med.getQuantity(), med.getLowStockLevel());
+        if (medlist.size() == 0){
+            System.out.println("No medicine in inventory.");
         }
+        else{
+            for (int i = 0; i<medlist.size(); i++){
+                Medication med = medlist.get(i);
+                System.out.printf("Medicine Name: %s, Quantity: %d, Low Stock Level: %d\n", med.getMedicineName(), med.getQuantity(), med.getLowStockLevel());
+            }
+        }
+        
     }
     
     public ArrayList<ReplenishmentRequest> requestReplenishment(String requestID, ArrayList<ReplenishmentRequest> requestList){//return all low stock medicine
