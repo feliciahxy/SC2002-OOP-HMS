@@ -18,6 +18,10 @@ public class UserManager {
         return staffUsers;
     } 
 
+    public ArrayList<Patient> getPatientUsers() {
+        return patientUsers;
+    }
+
     private void loadUsersFromCSV(String filePath, boolean isStaff) {
         try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
             String line;
