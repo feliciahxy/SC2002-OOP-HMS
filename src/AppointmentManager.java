@@ -1,9 +1,8 @@
 import java.io.*;
 import java.util.ArrayList;
-import java.util.List;
 
 public class AppointmentManager {
-    private final List<Appointment> appointmentList;
+    private final ArrayList<Appointment> appointmentList;
 
     public AppointmentManager() {
         appointmentList = new ArrayList<>();
@@ -52,7 +51,7 @@ public class AppointmentManager {
         }
     }
 
-    public List<Appointment> getAppointmentList() {
+    public ArrayList<Appointment> getAppointmentList() {
         return appointmentList;
     }
 }
