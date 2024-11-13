@@ -1,4 +1,3 @@
-import java.io.*;
 import java.util.*;
 
 public class Schedule { 
@@ -396,7 +395,7 @@ public class Schedule {
                 System.out.println("Invalid input. Try Again.");
             }
         }
-          String doctorName = doctorNames.get(doctorChoice - 1);
+        String doctorName = doctorNames.get(doctorChoice - 1);
         String doctorID = getDoctorIDFromName(staffUsers, doctorName);
         ArrayList<Integer> availableDates = getAvailableDates(doctorID, schedules);
         displayAvailableDates(availableDates);
