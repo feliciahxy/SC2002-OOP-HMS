@@ -21,7 +21,7 @@ public class Medication {
     // }
 
     public String getMedicineName() {
-        return medicineName;
+        return this.medicineName;
     }
 
     public void setMedicineName(String medicineName) {
@@ -29,11 +29,11 @@ public class Medication {
     }
 
     public int getQuantity() {
-        return quantity;
+        return this.quantity;
     }
 
     public boolean  quantityChange(int change) {
-        if (quantity+change>=0){
+        if (this.quantity+change>=0){
             this.quantity = this.quantity+change;
             return true;
         }
@@ -41,7 +41,7 @@ public class Medication {
     }
 
     public int getLowStockLevel() {
-        return lowStockLevel;
+        return this.lowStockLevel;
     }
 
     public void setLowStockLevel(int lowStockLevel) {

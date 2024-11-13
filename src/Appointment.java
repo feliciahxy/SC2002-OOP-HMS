@@ -21,29 +21,30 @@ public class Appointment {
         this.time = newTime;
     }
 
-    public String getAppointmentID() { 
-        return appointmentID; 
-    }
+//     public String getAppointmentID() { 
+//         return appointmentID; 
+//     }
 
-    public void setAppointmentID(String appointmentID) { 
-        this.appointmentID = appointmentID;
-    }
+//     public void setAppointmentID(String appointmentID) { 
+//         this.appointmentID = appointmentID;
+//     }
 
-    public String getPatientID() { 
-        return patientID; 
-    }
+//     public String getPatientID() { 
+//         return patientID; 
+//     }
 
-    public void setPatientID(String patientID) { 
-        this.patientID = patientID; 
-    }
+//     public void setPatientID(String patientID) { 
+//         this.patientID = patientID; 
+//     }
 
-    public String getDoctorID() { 
-        return doctorID; 
-    }
+//     public String getDoctorID() { 
+//         return doctorID; 
+//     }
 
-    public void setDoctorID(String doctorID) { 
-        this.doctorID = doctorID; 
-    }
+//     public void setDoctorID(String doctorID) { 
+//         this.doctorID = doctorID; 
+//     }
+
 
     public String getDate() { 
         return date; 
@@ -61,13 +62,14 @@ public class Appointment {
         this.time = time; 
     }
 
-    public String getStatus() { 
-        return status; 
-    }
 
-    public void setStatus(String status) { 
-        this.status = status; 
-    }
+//     public String getStatus() { 
+//         return status; 
+//     }
+
+//     public void setStatus(String status) { 
+//         this.status = status; 
+//     }
 
     public void cancel(){
         this.status = "canceled";
@@ -83,3 +85,4 @@ public class Appointment {
 
 
 }
+

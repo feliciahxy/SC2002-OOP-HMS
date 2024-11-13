@@ -1,8 +1,4 @@
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class AppointmentOutcome {
 
@@ -10,36 +6,16 @@ public class AppointmentOutcome {
     private String diagnosis;
     private String serviceType;
     private String date;
+    private ArrayList<PrescribedMedication> PrescribedMedications;
     private String notes;
-    private final List<PrescribedMedication> prescribedMedicationList;
 
-
-    public AppointmentOutcome(String appointmentID, String diagnosis, String serviceType, String date, String notes) {
+    public AppointmentOutcome(String appointmentID, String diagnosis,String serviceType, String date, ArrayList<PrescribedMedication> PrescribedMedications, String notes){
         this.appointmentID = appointmentID;
         this.diagnosis = diagnosis;
         this.serviceType = serviceType;
         this.date = date;
+        this.PrescribedMedications = PrescribedMedications;
         this.notes = notes;
-        prescribedMedicationList = new ArrayList<>();
-        loadPrescribedMedicationFromCSV("../data/PrescribedMedication.csv");
-    }
-
-    private void loadPrescribedMedicationFromCSV(String filePath) {
-        try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
-            String line;
-            br.readLine();
-            while ((line = br.readLine()) != null) {
-                String[] fields = line.split(",");
-                String appointmentID = fields[0];
-                String medicine = fields[1];
-                String status = fields[2];
-                
-                PrescribedMedication prescribedMedication = new PrescribedMedication(appointmentID, medicine, status);
-                prescribedMedicationList.add(prescribedMedication);
-            }
-        } catch (IOException e) {
-            System.out.println("Error reading file: " + e.getMessage());
-        }
     }
 
     public String getAppointmentID() {
@@ -49,32 +25,53 @@ public class AppointmentOutcome {
     public String getDiagnosis(){
         return this.diagnosis;
     }
-
-    public void setDiagnosis(String diagnosis){
-        this.diagnosis = diagnosis;
-    }
-
     public String getServiceType() {
         return this.serviceType;
-    }
-
-    public void setServiceType(String serviceType){
-        this.serviceType = serviceType;
     }
 
     public String getDate() {
         return this.date;
     }
 
-    public String getNotes() {
+    // public void setDate(Date date) {
+    //     return;
+    // }
+
+    public ArrayList<PrescribedMedication> getPrescribedMedicationList() {
+        return this.PrescribedMedications;
+    }
+    
+    // public PrescribedMedication getPrescribedMedication(String medicationName){
+    //     boolean found = false;
+    //     for (int i = 0; i<this.PrescribedMedications.size(); i++){
+    //         PrescribedMedication med = PrescribedMedications.get(i);
+    //         if (medicationName.equals(med.getMedicationName())){
+    //             found = true;
+    //             return med;
+    //         }
+    //     }
+    //     if (found == false){
+    //         System.out.println("Medication not found.");
+    //         return null;
+    //     }
+    //     return null;
+    // }
+
+    public void setMedicationStatus(PrescribedMedication med, String status){
+        med.setMedicationStatus(status);
+        // for (int i = 0; i<this.PrescribedMedications.size(); i++){
+        //     PrescribedMedication med = PrescribedMedications.get(i);
+        //     if (medicationName.equals(med.getMedicationName())){
+        //         med.setMedicationStatus(status);
+        //     }
+        // }
+    }
+
+    public String getNotes(){
         return this.notes;
     }
 
     public void setNotes(String notes) {
         this.notes = notes;
-    }
-
-    public List<PrescribedMedication> getPrescribedMedicationList() {
-        return this.prescribedMedicationList;
     }
 }
