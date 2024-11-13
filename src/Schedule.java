@@ -33,7 +33,7 @@ public class Schedule {
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    public static void displaySchedules(String patientID, ArrayList<Schedule> schedules, List<User> staffUsers) {
+    public static void displaySchedules(String patientID, ArrayList<Schedule> schedules, ArrayList<Doctor> doctors) {
         Map<String, ArrayList<Integer>> pendingAppointmentsByDoctor = getPendingAppointments(patientID, schedules);
         Map<String, ArrayList<Integer>> confirmedAppointmentsByDoctor = getConfirmedAppointments(patientID, schedules);
 
@@ -42,12 +42,12 @@ public class Schedule {
             return; 
         }
 
-        displayPendingAppointment(staffUsers, pendingAppointmentsByDoctor);
-        displayConfirmedAppointment(staffUsers, confirmedAppointmentsByDoctor);
+        displayPendingAppointment(doctors, pendingAppointmentsByDoctor);
+        displayConfirmedAppointment(doctors, confirmedAppointmentsByDoctor);
     }
 
     
-    public static void rescheduleAppointment(String patientID, ArrayList<Schedule> schedules, List<User> staffUsers) {
+    public static void rescheduleAppointment(String patientID, ArrayList<Schedule> schedules, ArrayList<Doctor> doctors) {
         Map<String, ArrayList<Integer>> pendingAppointmentsByDoctor = getPendingAppointments(patientID, schedules);
         Map<String, ArrayList<Integer>> confirmedAppointmentsByDoctor = getConfirmedAppointments(patientID, schedules);
 
@@ -56,8 +56,8 @@ public class Schedule {
             return; 
         }
 
-        displayPendingAppointment(staffUsers, pendingAppointmentsByDoctor);
-        displayConfirmedAppointment(staffUsers, confirmedAppointmentsByDoctor);
+        displayPendingAppointment(doctors, pendingAppointmentsByDoctor);
+        displayConfirmedAppointment(doctors, confirmedAppointmentsByDoctor);
 
         Scanner scanner = new Scanner(System.in);
         System.out.println("[1] Pending");
@@ -84,7 +84,7 @@ public class Schedule {
 
         if (typeChoice == 1) {
             System.out.println("\nYou have pending appointments with the following doctors.");
-            displayDoctorsPending(staffUsers, pendingAppointmentsByDoctor);
+            displayDoctorsPending(doctors, pendingAppointmentsByDoctor);
 
             int doctorChoice = -1;
             while (doctorChoice < 1 || doctorChoice > appointmentsToDisplay.size()) {
@@ -98,7 +98,7 @@ public class Schedule {
             }   
             
             String doctorID = new ArrayList<>(pendingAppointmentsByDoctor.keySet()).get(doctorChoice - 1);
-            String doctorName = getDoctorNameFromID(staffUsers, doctorID);
+            String doctorName = getDoctorNameFromID(doctors, doctorID);
             System.out.println("\nAppointments with Dr " + doctorName + ":");
 
             for (Map.Entry<String, ArrayList<Integer>> entry : pendingAppointmentsByDoctor.entrySet()) {
@@ -162,7 +162,7 @@ public class Schedule {
         }
         else if (typeChoice == 2) {
             System.out.println("\nYou have confirmed appointments with the following doctors.");
-            displayDoctorsConfirmed(staffUsers, confirmedAppointmentsByDoctor);
+            displayDoctorsConfirmed(doctors, confirmedAppointmentsByDoctor);
 
             int doctorChoice = -1;
             while (doctorChoice < 1 || doctorChoice > appointmentsToDisplay.size()) {
@@ -176,7 +176,7 @@ public class Schedule {
             }   
             
             String doctorID = new ArrayList<>(confirmedAppointmentsByDoctor.keySet()).get(doctorChoice - 1);
-            String doctorName = getDoctorNameFromID(staffUsers, doctorID);
+            String doctorName = getDoctorNameFromID(doctors, doctorID);
             System.out.println("\nAppointments with Dr " + doctorName + ":");
 
             for (Map.Entry<String, ArrayList<Integer>> entry : confirmedAppointmentsByDoctor.entrySet()) {
@@ -241,7 +241,7 @@ public class Schedule {
 
     }
 
-    public static void cancelAppointment(String patientID, ArrayList<Schedule> schedules, List<User> staffUsers) {
+    public static void cancelAppointment(String patientID, ArrayList<Schedule> schedules, ArrayList<Doctor> doctors) {
         Map<String, ArrayList<Integer>> pendingAppointmentsByDoctor = getPendingAppointments(patientID, schedules);
         Map<String, ArrayList<Integer>> confirmedAppointmentsByDoctor = getConfirmedAppointments(patientID, schedules);
 
@@ -250,8 +250,8 @@ public class Schedule {
             return; 
         }
 
-        displayPendingAppointment(staffUsers, pendingAppointmentsByDoctor);
-        displayConfirmedAppointment(staffUsers, confirmedAppointmentsByDoctor);
+        displayPendingAppointment(doctors, pendingAppointmentsByDoctor);
+        displayConfirmedAppointment(doctors, confirmedAppointmentsByDoctor);
 
         Scanner scanner = new Scanner(System.in);
         System.out.println("[1] Pending");
@@ -278,7 +278,7 @@ public class Schedule {
 
         if (typeChoice == 1) {
             System.out.println("\nYou have pending appointments with the following doctors.");
-            displayDoctorsPending(staffUsers, pendingAppointmentsByDoctor);
+            displayDoctorsPending(doctors, pendingAppointmentsByDoctor);
 
             int doctorChoice = -1;
             while (doctorChoice < 1 || doctorChoice > appointmentsToDisplay.size()) {
@@ -292,7 +292,7 @@ public class Schedule {
             }   
             
             String doctorID = new ArrayList<>(pendingAppointmentsByDoctor.keySet()).get(doctorChoice - 1);
-            String doctorName = getDoctorNameFromID(staffUsers, doctorID);
+            String doctorName = getDoctorNameFromID(doctors, doctorID);
             System.out.println("\nAppointments with Dr " + doctorName + ":");
 
             for (Map.Entry<String, ArrayList<Integer>> entry : pendingAppointmentsByDoctor.entrySet()) {
@@ -329,7 +329,7 @@ public class Schedule {
         }
         else if (typeChoice == 2) {
             System.out.println("\nYou have confirmed appointments with the following doctors.");
-            displayDoctorsConfirmed(staffUsers, confirmedAppointmentsByDoctor);
+            displayDoctorsConfirmed(doctors, confirmedAppointmentsByDoctor);
 
             int doctorChoice = -1;
             while (doctorChoice < 1 || doctorChoice > appointmentsToDisplay.size()) {
@@ -343,7 +343,7 @@ public class Schedule {
             }   
             
             String doctorID = new ArrayList<>(confirmedAppointmentsByDoctor.keySet()).get(doctorChoice - 1);
-            String doctorName = getDoctorNameFromID(staffUsers, doctorID);
+            String doctorName = getDoctorNameFromID(doctors, doctorID);
             System.out.println("\nAppointments with Dr " + doctorName + ":");
 
             for (Map.Entry<String, ArrayList<Integer>> entry : confirmedAppointmentsByDoctor.entrySet()) {
@@ -377,11 +377,11 @@ public class Schedule {
         }
     }
 
-    public static void scheduleAppointment(List<User> staffUsers, ArrayList<Schedule> schedules, String patientID){
+    public static void scheduleAppointment(ArrayList<Doctor> doctors, ArrayList<Schedule> schedules, String patientID){
         Scanner scanner = new Scanner(System.in);
 
         System.out.println("\nSchedule An Appointment");
-        ArrayList<String> doctorNames = getDoctorNames(staffUsers);
+        ArrayList<String> doctorNames = getDoctorNames(doctors);
         displayDoctorNames(doctorNames);
         int numDoctors = doctorNames.size();
 
@@ -396,7 +396,7 @@ public class Schedule {
             }
         }
         String doctorName = doctorNames.get(doctorChoice - 1);
-        String doctorID = getDoctorIDFromName(staffUsers, doctorName);
+        String doctorID = getDoctorIDFromName(doctors, doctorName);
         ArrayList<Integer> availableDates = getAvailableDates(doctorID, schedules);
         displayAvailableDates(availableDates);
 
@@ -432,11 +432,11 @@ public class Schedule {
         System.out.println("Appointment successfully scheduled with Dr " + doctorName + " on " + dateChoice + " November from " + slotToTime(slot));
     }
 
-    public static void viewAvailableSlots(List<User> staffUsers, ArrayList<Schedule> schedules) {
+    public static void viewAvailableSlots(ArrayList<Doctor> doctors, ArrayList<Schedule> schedules) {
         Scanner scanner = new Scanner(System.in);
 
         System.out.println("\nView Available Slots");
-        ArrayList<String> doctorNames = getDoctorNames(staffUsers);
+        ArrayList<String> doctorNames = getDoctorNames(doctors);
         displayDoctorNames(doctorNames);
         int numDoctors = doctorNames.size();
 
@@ -452,7 +452,7 @@ public class Schedule {
         }
 
         String doctorName = doctorNames.get(doctorChoice - 1);
-        String doctorID = getDoctorIDFromName(staffUsers, doctorName);
+        String doctorID = getDoctorIDFromName(doctors, doctorName);
         ArrayList<Integer> availableDates = getAvailableDates(doctorID, schedules);
         displayAvailableDates(availableDates);
 
@@ -485,32 +485,32 @@ public class Schedule {
                 
     }
 
-    public static void displayDoctorsPending(List<User> staffUsers, Map<String, ArrayList<Integer>> pendingAppointmentsByDoctor) {
+    public static void displayDoctorsPending(ArrayList<Doctor> doctors, Map<String, ArrayList<Integer>> pendingAppointmentsByDoctor) {
         int count = 1;
         for (Map.Entry<String, ArrayList<Integer>> entry : pendingAppointmentsByDoctor.entrySet()) {
             String doctorID = entry.getKey();
-            System.out.println("[" + count + "] " + "Dr " + getDoctorNameFromID(staffUsers, doctorID));
+            System.out.println("[" + count + "] " + "Dr " + getDoctorNameFromID(doctors, doctorID));
             count ++;
         }
     }
 
-    public static void displayDoctorsConfirmed(List<User> staffUsers, Map<String, ArrayList<Integer>> confirmedAppointmentsByDoctor) {
+    public static void displayDoctorsConfirmed(ArrayList<Doctor> doctors, Map<String, ArrayList<Integer>> confirmedAppointmentsByDoctor) {
         int count = 1;
         for (Map.Entry<String, ArrayList<Integer>> entry : confirmedAppointmentsByDoctor.entrySet()) {
             String doctorID = entry.getKey();
-            System.out.println("[" + count + "] " + "Dr " + getDoctorNameFromID(staffUsers, doctorID));
+            System.out.println("[" + count + "] " + "Dr " + getDoctorNameFromID(doctors, doctorID));
             count ++;
         }
     }
 
-    public static void displayPendingAppointment(List<User> staffUsers, Map<String, ArrayList<Integer>> pendingAppointmentsByDoctor) {
+    public static void displayPendingAppointment(ArrayList<Doctor> doctors, Map<String, ArrayList<Integer>> pendingAppointmentsByDoctor) {
         System.out.println("\nPending Appointments:");
         System.out.println();
 
         for (Map.Entry<String, ArrayList<Integer>> entry : pendingAppointmentsByDoctor.entrySet()) {
             String doctorID = entry.getKey();
             ArrayList<Integer> pendingSlots = entry.getValue();
-            String doctorName = getDoctorNameFromID(staffUsers, doctorID);
+            String doctorName = getDoctorNameFromID(doctors, doctorID);
             System.out.println("Dr " + doctorName);
             
             int count = 1;
@@ -525,14 +525,14 @@ public class Schedule {
         }
     }
 
-    public static void displayConfirmedAppointment(List<User> staffUsers, Map<String, ArrayList<Integer>> confirmedAppointmentsByDoctor) {
+    public static void displayConfirmedAppointment(ArrayList<Doctor> doctors, Map<String, ArrayList<Integer>> confirmedAppointmentsByDoctor) {
         System.out.println("\nConfirmed Appointments:");
         System.out.println();
 
         for (Map.Entry<String, ArrayList<Integer>> entry : confirmedAppointmentsByDoctor.entrySet()) {
             String doctorID = entry.getKey();
             ArrayList<Integer> pendingSlots = entry.getValue();
-            String doctorName = getDoctorNameFromID(staffUsers, doctorID);
+            String doctorName = getDoctorNameFromID(doctors, doctorID);
             System.out.println("Dr " + doctorName);
             
             int count = 1;
@@ -607,12 +607,10 @@ public class Schedule {
          return availableDates;
     }
 
-    public static ArrayList<String> getDoctorNames (List<User> staffUsers) {
+    public static ArrayList<String> getDoctorNames (ArrayList<Doctor> doctors) {
         ArrayList<String> doctorNames = new ArrayList<>();
-        for (User user : staffUsers) {
-            if ("Doctor".equalsIgnoreCase(user.getRole())) { 
-                doctorNames.add(user.getName());
-            }
+        for (Doctor doctor : doctors) {
+                doctorNames.add(doctor.getName());
         }
         return doctorNames;
     }
@@ -620,23 +618,23 @@ public class Schedule {
     public static void displayDoctorNames(ArrayList<String> doctorNames) {
         System.out.println("List of Doctors:");
         for (int i = 0; i < doctorNames.size(); i++) {
-            System.out.println("[" + (i + 1) + "] Dr " + doctorNames.get(i)); // Display with index starting from 1
+            System.out.println("[" + (i + 1) + "] Dr " + doctorNames.get(i)); 
         }
     }
 
-    public static String getDoctorIDFromName (List<User> staffUsers, String doctorName) {
-        for (User user : staffUsers) {
-            if (doctorName.equalsIgnoreCase(user.getName())) {
-                return user.getId();
+    public static String getDoctorIDFromName (ArrayList<Doctor> doctors, String doctorName) {
+        for (Doctor doctor : doctors) {
+            if (doctorName.equalsIgnoreCase(doctor.getName())) {
+                return doctor.getId();
             }
         }
         return null;
     }
 
-    public static String getDoctorNameFromID (List<User> staffUsers, String doctorID) {
-        for (User user : staffUsers) {
-            if (doctorID.equalsIgnoreCase(user.getId())) {
-                return user.getName();
+    public static String getDoctorNameFromID (ArrayList<Doctor> doctors, String doctorID) {
+        for (Doctor doctor : doctors) {
+            if (doctorID.equalsIgnoreCase(doctor.getId())) {
+                return doctor.getName();
             }
         }
         return null;
