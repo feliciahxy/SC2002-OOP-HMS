@@ -1,135 +1,127 @@
+import java.io.*;
+import java.time.LocalDate;
 import java.util.*;
-import java.time.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Patient extends User {
-    private String patientID;
-    private String name;
-    private LocalDate dob;
-    private String gender;
-    private ContactInfo contactInfo;
-    private String bloodType;
-    private MedicalRecord medicalRecord;
-    private ArrayList<Appointment> appointments;
+    private final String patientID;
+    private final String name;
+    private final LocalDate dob;
+    private final String gender;
+    private String phoneNumber;
+    private String email;
+    private final String bloodType;
+    private final List<String> pastDiagnosesAndTreatments;
 
-    // Constructor
-
-    public Patient(
-        String patientID,
-        String name,
-        LocalDate dob,
-        String gender,
-        ContactInfo contactInfo,
-        String bloodType,
-        MedicalRecord medicalRecord,
-        String userID,
-        String password,
-        String role,
-        ArrayList<Appointment> appointments
-    ) {
-        super(userID, password, role);
+    public Patient(String patientID, String name, LocalDate dob, String gender, String bloodType, String phoneNumber, String email, String password) {
+        super(patientID, name, "Patient", gender, 0, password);
         this.patientID = patientID;
         this.name = name;
         this.dob = dob;
         this.gender = gender;
-        this.contactInfo = contactInfo;
         this.bloodType = bloodType;
-        this.medicalRecord = medicalRecord;
-        this.appointments = appointments;
+        this.phoneNumber = phoneNumber;
+        this.email = email;
+        this.pastDiagnosesAndTreatments = new ArrayList<>();
     }
-
-    // Functions
-    // Update Personal Info in Getters & Setters
 
     public void viewMedicalRecord() {
-        System.out.println(this.getMedicalRecord());
+        System.out.println("Patient ID: " + patientID);
+        System.out.println("Name: " + name);
+        System.out.println("Date of Birth: " + dob);
+        System.out.println("Gender: " + gender);
+        System.out.println("Blood Type: " + bloodType);
+        System.out.println("Phone Number: " + phoneNumber);
+        System.out.println("Email: " + email);
+        System.out.println("Past Diagnoses and Treatments: " + pastDiagnosesAndTreatments);
     }
 
-    public void scheduleAppointment(Doctor doctor, LocalDate date, LocalTime time) {
-        return;
+    private boolean isValidPhoneNumber(String phoneNumber) {
+        return phoneNumber.matches("^[689]\\d{7}$"); //validator for phone no. format in accordance to starting digit or 6,8, or 9, and length of no. to be 8
     }
 
-    public void rescheduleAppointment(Appointment appointment, LocalDate newDate, LocalTime newTime) {
-        return;
+    private boolean isValidEmail(String email) {
+        String emailRegex = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$"; //validator for email format
+        Pattern pattern = Pattern.compile(emailRegex);
+        Matcher matcher = pattern.matcher(email);
+        return matcher.matches();
     }
 
-    public void cancelAppointment(Appointment appointment) {
-        return;
+    public void updatePersonalInfo(String newPhoneNumber, String newEmail) {
+        boolean isPhoneNumberValid = isValidPhoneNumber(newPhoneNumber);
+        boolean isEmailValid = isValidEmail(newEmail);
+        
+        if (!isPhoneNumberValid) {
+            System.out.println("Invalid phone number format.");
+        }
+        
+        if (!isEmailValid) {
+            System.out.println("Invalid email format.");
+        }
+
+        // Only update if both are valid
+        if (isPhoneNumberValid && isEmailValid) {
+            this.phoneNumber = newPhoneNumber;
+            this.email = newEmail;
+            updatePatientInfoInCSV();
+            System.out.println("Personal information updated successfully.");
+        } else {
+            System.out.println("Personal information not updated due to invalid inputs.");
+        }
     }
 
-    public void viewAppointments() {
-        System.out.println(this.getAppointments());
+    private void updatePatientInfoInCSV() {
+        String filePath = "../data/Patient_List.csv";
+        
+        List<String> lines = new ArrayList<>();
+        String line;
+        
+        try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
+            while ((line = reader.readLine()) != null) {
+                String[] values = line.split(",");
+                if (values[0].equals(patientID)) {
+                    values[5] = phoneNumber;
+                    values[6] = email;
+                    line = String.join(",", values);
+                }
+                lines.add(line);
+            }
+        } catch (IOException e) {
+            System.err.println("Error reading file: " + e.getMessage());
+        }
+
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {
+            for (String outputLine : lines) {
+                writer.write(outputLine);
+                writer.newLine();
+            }
+        } catch (IOException e) {
+            System.err.println("Error writing file: " + e.getMessage());
+        }
     }
 
-    public void viewAppointmentOutcome(String appointmentID) {
-        return;
+    public void addDiagnosisAndTreatment(String diagnosisAndTreatment) {
+        this.pastDiagnosesAndTreatments.add(diagnosisAndTreatment);
     }
 
-
-
-
-    // Getter and Setter
-    public String getPatientID() {
-        return patientID;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public LocalDate getDOB() {
+    public LocalDate getDob() {
         return dob;
-    }
-
-    public String getGender() {
-        return gender;
-    }
-
-    public ContactInfo getContactInfo() {
-        return contactInfo;
     }
 
     public String getBloodType() {
         return bloodType;
     }
 
-    public MedicalRecord getMedicalRecord() {
-        return medicalRecord;
+    public String getEmail() {
+        return email;
     }
 
-    public ArrayList<Appointment> getAppointments() {
-        return appointments;
+    public String getPhoneNumber() {
+        return phoneNumber;
     }
 
-    public void setPatientID(String patientID) {
-        this.patientID = patientID;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setDob(LocalDate dob) {
-        this.dob = dob;
-    }
-
-    public void setGender(String gender) {
-        this.gender = gender;
-    }
-
-    // Update personal Info
-    public void setContactInfo(ContactInfo contactInfo) {
-        this.contactInfo = contactInfo;
-    }
-
-    public void setBloodType(String bloodType) {
-        this.bloodType = bloodType;
-    }
-    
-    public void setMedicalRecord(MedicalRecord medicalRecord) {
-        this.medicalRecord = medicalRecord;
-    }
-
-    public void setAppointments(ArrayList<Appointment> appointments) {
-        this.appointments = appointments;
+    public String getPatientID() {
+        return patientID;
     }
 }
