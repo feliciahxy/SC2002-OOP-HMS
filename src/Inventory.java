@@ -5,6 +5,19 @@ public class Inventory {
     public Inventory(ArrayList<Medication> medications){
         this.medications = medications;
     }
+    public void viewInventory(){
+        ArrayList<Medication> medlist = this.getMedicines();
+        if (medlist.isEmpty()){
+            System.out.println("No medicine in inventory.");
+        }
+        else{
+            for (int i = 0; i<medlist.size(); i++){
+                Medication med = medlist.get(i);
+                System.out.printf("Medicine Name: %s, Quantity: %d, Low Stock Level: %d\n", med.getMedicineName(), med.getQuantity(), med.getLowStockLevel());
+            }
+        }
+        
+    }
 
     public void newMedication(String medicineName, int quantity, int lowStockLevel){
         Medication med = new Medication(medicineName, quantity, lowStockLevel);

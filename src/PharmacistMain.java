@@ -10,7 +10,7 @@ public class PharmacistMain {
         ArrayList<AppointmentOutcome> appointmentOutcomes = appointmentOutcomeManager.getAppointmentOutcomes();
         MedicationManager medicationManager = new MedicationManager();
         Inventory inventory = new Inventory(medicationManager.getMedications());
-        Pharmacist pharmacist = new Pharmacist("P001","Mark Lee","Pharmacist","Male",29,"password", inventory);
+        Pharmacist pharmacist = new Pharmacist("P001","Mark Lee","Pharmacist","Male",29,"password");
         ReplenishmentRequestManager replenishmentRequestManager = new ReplenishmentRequestManager();
         ArrayList<ReplenishmentRequest> replenishmentRequest = replenishmentRequestManager.getReplenishmentRequests();
         //
@@ -27,47 +27,24 @@ public class PharmacistMain {
 
             switch (choice) {
                 case 1:
+
+                    pharmacist.viewAppointmentOutcomeRecord(appointmentOutcomes);
                     //implement logic to view appointment outcome record
-                    scanner.nextLine();
-                    System.out.print("Enter appointment ID: ");
-                    String appointmentID = scanner.nextLine(); 
-                    AppointmentOutcome apptOutcome = pharmacist.findAppointmentOutcomeRecord(appointmentID, appointmentOutcomes);
-                    if (apptOutcome != null){
-                        pharmacist.viewAppointmentOutcomeRecord(apptOutcome);
-                    }   
-                    
+                     
                     break;
                 case 2:
+                    pharmacist.updatePrescription(appointmentOutcomes, inventory);
+
                     //implement logic to update prescription status
-                    scanner.nextLine();
-                    System.out.print("Enter appointment ID: ");
-                    String appointmentID1 = scanner.nextLine(); 
-                    AppointmentOutcome apptOutcome1 = pharmacist.findAppointmentOutcomeRecord(appointmentID1, appointmentOutcomes);
-                    if (apptOutcome1 != null){
-                        System.out.print("Enter medication name: ");
-                        String medicationName = scanner.nextLine();
-                        System.out.print("Enter updated status: ");
-                        String status = scanner.nextLine();
-                        pharmacist.updatePrescription(apptOutcome1, medicationName, status);
-                    }
                     break;
                 case 3:
                     //implement logic to view medication inventory
-                    pharmacist.viewInventory();
+                    inventory.viewInventory();
                     break;
                 case 4:
                     //implement logic to submit replenishment request
-                    scanner.nextLine();
-                    System.out.println("Enter RequestID: ");
-                    String requestID = scanner.nextLine();
-                    replenishmentRequest = pharmacist.requestReplenishment(requestID, replenishmentRequest);
-                    
-                    //for sending to admin
-                    //test printing 
-                    for (int i = 0; i<replenishmentRequest.size(); i++){
-                        System.out.printf("%s\n", (replenishmentRequest.get(i)).getMedicine());
-                    }
-                    //
+                    pharmacist.requestReplenishment(replenishmentRequest, inventory);
+
                     break;
                 case 5:
                     System.out.println("Logging out...");
