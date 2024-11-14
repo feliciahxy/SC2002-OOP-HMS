@@ -155,7 +155,7 @@ public class Main {
         } while (choice != 5);
     }
 
-    public static void displayAdminMenu() {
+    public static void displayAdminMenu(UserManager userManager, StaffManager staffManager) {
         Scanner scanner = new Scanner(System.in);
         int choice;
 
@@ -171,7 +171,7 @@ public class Main {
 
             switch (choice) {
                 case 1:
-                    //implement logic to view and manage hospital staff
+                    Administrator.manageStaff(staffManager, userManager);
                     break;
                 case 2:
                     //implement logic to view appointment details
