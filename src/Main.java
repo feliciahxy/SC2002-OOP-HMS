@@ -56,7 +56,7 @@ public class Main {
                         displayPharmacistMenu();
                         break;
                     case "Administrator":
-                        displayAdminMenu(userID, staffManager, appointmentManager.getAppointmentList(), appointmentOutcomeManager.getAppointmentOutcomes());
+                        displayAdminMenu(userID, staffManager, appointmentManager.getAppointmentList(), appointmentOutcomeManager.getAppointmentOutcomes(), userManager);
                         break;
                     case "Patient":
                         displayPatientMenu(userManager, staffManager, userID, scheduleManager, appointmentManager, appointmentOutcomeManager);
