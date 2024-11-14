@@ -44,6 +44,13 @@ public class StaffManager {
         return null;
     }
 
+    public Pharmacist findPharmacistByID(String pharmacistID){
+        for(Pharmacist pharmacist : pharmacists){
+            if (pharmacist.getId().equals(pharmacistID)) return pharmacist;
+        }
+        return null;
+    }
+
     public ArrayList<Doctor> getDoctors() {
         return doctors;
     }
