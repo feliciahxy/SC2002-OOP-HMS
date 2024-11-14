@@ -1,2 +1,2 @@
 appointmentID,patientID,doctorID,date,time,status
-AP0001,P1001,D001,01,0900,completed
+AP0001,P1001,D001,01,0900-1000,pending

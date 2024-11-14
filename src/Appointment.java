@@ -1,3 +1,4 @@
+import java.util.*;
 
 public class Appointment {
     private String appointmentID;
@@ -16,10 +17,70 @@ public class Appointment {
         this.status = status;
     }
 
-    public void reschedule(String newDate, String newTime) {
-        this.date = newDate;
-        this.time = newTime;
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    // Main Functions
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    public static void createAppointment(ArrayList<Appointment> appointmentList, String patientID, String doctorID, int dateChoice, int slot) {
+        int size = appointmentList.size();
+        String formattedSize = String.format("%04d", size);
+        String formattedDate = String.format("%02d", dateChoice);
+        String appointmentID = "AP" + formattedSize;
+        Appointment appointment = new Appointment(appointmentID,patientID,doctorID,formattedDate,Schedule.slotToTime(slot),"pending");
+        appointmentList.add(appointment);
     }
+
+    public static void changeAppointment(ArrayList<Appointment> appointmentList, String appointmentID, int newDate, int newSlot) {
+        String formattedDate = String.format("%02d", newDate);
+        for (Appointment appointment : appointmentList) {
+            if (appointment.getAppointmentID().equals(appointmentID)) {
+                appointment.setDate(formattedDate);
+                appointment.setTime(Schedule.slotToTime(newSlot));
+                appointment.setStatus("pending");
+                break;
+            }
+        }
+    }
+
+    public static void cancelAppointment(ArrayList<Appointment> appointmentList, String appointmentID) {
+        for (Appointment appointment : appointmentList) {
+            if (appointment.getAppointmentID().equals(appointmentID)) {
+                appointment.setStatus("cancelled");
+            }
+        }
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    // Helper Functions
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    // Format of AppointmentID
+    public static boolean isValidAppointmentID(String appointmentID) {
+        return appointmentID.matches("^AP\\d{4}$");
+    }
+
+    // AppointmentID matches patientID
+    public static boolean belongToPatient(ArrayList<Appointment> appointmentList, String appointmentID, String patientID) {
+        for (Appointment appointment : appointmentList) {
+            if (appointment.getAppointmentID().equals(appointmentID)) {
+                if (appointment.getPatientID().equals(patientID)) return true;
+            }
+        }
+        return false;
+    }
+
+    public static int timeToSlot(String time) {
+        if (time.equals("0900-1000")) return 1;
+        else if (time.equals("1000-1100")) return 2;
+        else if (time.equals("1100-1200")) return 3;
+
+        else return -1;
+    }
+
 
     public String getAppointmentID() { 
         return appointmentID; 
@@ -44,7 +105,6 @@ public class Appointment {
     public void setDoctorID(String doctorID) { 
         this.doctorID = doctorID; 
     }
-
 
     public String getDate() { 
         return date; 

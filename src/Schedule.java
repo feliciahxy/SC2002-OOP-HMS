@@ -38,7 +38,7 @@ public class Schedule {
         Map<String, ArrayList<Integer>> confirmedAppointmentsByDoctor = getConfirmedAppointments(patientID, schedules);
 
         if (pendingAppointmentsByDoctor.isEmpty() && confirmedAppointmentsByDoctor.isEmpty()) {
-            System.out.println("You have no appointment to cancel.");
+            System.out.println("You have no appointment.");
             return; 
         }
 
@@ -47,337 +47,120 @@ public class Schedule {
     }
 
     
-    public static void rescheduleAppointment(String patientID, ArrayList<Schedule> schedules, ArrayList<Doctor> doctors) {
-        Map<String, ArrayList<Integer>> pendingAppointmentsByDoctor = getPendingAppointments(patientID, schedules);
-        Map<String, ArrayList<Integer>> confirmedAppointmentsByDoctor = getConfirmedAppointments(patientID, schedules);
+    public static void rescheduleAppointment(String patientID, ArrayList<Appointment> appointmentList, ArrayList<Doctor> doctors, ArrayList<Schedule> schedules) {
+        Scanner sc = new Scanner(System.in);
 
-        if (pendingAppointmentsByDoctor.isEmpty() && confirmedAppointmentsByDoctor.isEmpty()) {
-            System.out.println("You have no appointment to reschedule.");
-            return; 
-        }
-
-        displayPendingAppointment(doctors, pendingAppointmentsByDoctor);
-        displayConfirmedAppointment(doctors, confirmedAppointmentsByDoctor);
-
-        Scanner scanner = new Scanner(System.in);
-        System.out.println("[1] Pending");
-        System.out.println("[2] Confirmed");
-        
-        int typeChoice;
+        System.out.print("The format should be AP followed by 4 digits (e.g., AP0001).\nEnter AppointmentID to reschedule: ");
+        String appointmentID;
         while (true) {
-            System.out.print("Type of appointment to reschedule: ");
-            typeChoice = scanner.nextInt();
-            if (typeChoice == 1 || typeChoice == 2) {
-                break; 
-            } 
+            appointmentID = sc.nextLine();
+            if (Appointment.isValidAppointmentID(appointmentID)) {
+                if (Appointment.belongToPatient(appointmentList, appointmentID, patientID)) break;
+                else {
+                    System.out.println("You do not have access to this AppointmentID.");
+                }
+            }
             else {
-                System.out.println("Invalid Choice.");
+                System.out.println("Invalid Input Format.");
+            }
+        }
+        Appointment inputAppointment = null;
+        for (Appointment appointment : appointmentList) {
+            if (appointment.getAppointmentID().equals(appointmentID)) {
+                inputAppointment = appointment;
+                break;
+            }
+        }
+        if (inputAppointment == null) {
+            System.out.println("Appointment not found.");
+            return;
+        }
+        String doctorID = inputAppointment.getDoctorID();
+        String doctorName = getDoctorNameFromID(doctors, doctorID);
+        System.out.println("\nAppointment selected with: Dr " + doctorName);
+        System.out.println("Timing: " + inputAppointment.getDate() + " November " + inputAppointment.getTime());
+        int originalSlot = Appointment.timeToSlot(inputAppointment.getTime());
+        int originalDate = Integer.parseInt(inputAppointment.getDate());
+
+        ArrayList<Integer> availableDates = getAvailableDates(doctorID, schedules);
+        displayAvailableDates(availableDates);
+
+        int dateChoice;
+        while (true) {
+            System.out.print("Select a New Date: ");
+            dateChoice = sc.nextInt();
+            if (availableDates.contains(dateChoice)) {
+                break; 
+            } else {
+                System.out.println("Invalid date choice. Please choose from the available dates.");
             }
         }
 
-        Map<String, ArrayList<Integer>> appointmentsToDisplay = (typeChoice == 1) ? pendingAppointmentsByDoctor : confirmedAppointmentsByDoctor;
+        int slotChoice;
+        ArrayList<Integer> availableSlots = displayAvailableSlotsForDate(doctorID, dateChoice, schedules);
+        while (true) {
+            System.out.print("Select a Slot: ");
+            slotChoice = sc.nextInt();
+            if (availableSlots.contains(slotChoice)) {
+                break;
+            } else {
+                System.out.println("Invalid slot choice. Please choose from the available slots.");
+            }
+        }
 
-        if (appointmentsToDisplay.isEmpty()) {
-            System.out.println("No appointments to display.");
+        int slot = addSchedule(patientID, doctorID, dateChoice, slotChoice, schedules);
+        if (slot == -1) System.out.println("An error has occured.");
+                    
+        int originalSlotIndex = (originalDate - 1)* 3 + originalSlot - 1;
+        cancelSlot(schedules, originalSlotIndex, doctorID);
+
+        Appointment.changeAppointment(appointmentList, appointmentID, dateChoice, slot);
+        System.out.println("Appointment with Dr " + doctorName + " successfully rescheduled to " + inputAppointment.getDate() + " November " + inputAppointment.getTime()); 
+    }
+
+
+    public static void cancelAppointment(String patientID, ArrayList<Appointment> appointmentList, ArrayList<Schedule> schedules, ArrayList<Doctor> doctors) {
+        Scanner sc = new Scanner(System.in);
+
+        System.out.print("The format should be AP followed by 4 digits (e.g., AP0001).\nEnter AppointmentID to cancel: ");
+        String appointmentID;
+        while (true) {
+            appointmentID = sc.nextLine();
+            if (Appointment.isValidAppointmentID(appointmentID)) {
+                if (Appointment.belongToPatient(appointmentList, appointmentID, patientID)) break;
+                else {
+                    System.out.println("You do not have access to this AppointmentID.");
+                }
+            }
+            else {
+                System.out.println("Invalid Input Format.");
+            }
+        }
+
+        Appointment inputAppointment = null;
+        for (Appointment appointment : appointmentList) {
+            if (appointment.getAppointmentID().equals(appointmentID)) {
+                inputAppointment = appointment;
+                break;
+            }
+        }
+        if (inputAppointment == null) {
+            System.out.println("Appointment not found.");
             return;
         }
 
-        if (typeChoice == 1) {
-            System.out.println("\nYou have pending appointments with the following doctors.");
-            displayDoctorsPending(doctors, pendingAppointmentsByDoctor);
+        Appointment.cancelAppointment(appointmentList, appointmentID);
 
-            int doctorChoice = -1;
-            while (doctorChoice < 1 || doctorChoice > appointmentsToDisplay.size()) {
-                System.out.print("Select a Doctor (1 - " + appointmentsToDisplay.size() + "): ");
-                if (scanner.hasNextInt()) {
-                    doctorChoice = scanner.nextInt();
-                } else {
-                    scanner.next(); 
-                    System.out.println("Invalid input. Try Again.");
-                }
-            }   
-            
-            String doctorID = new ArrayList<>(pendingAppointmentsByDoctor.keySet()).get(doctorChoice - 1);
-            String doctorName = getDoctorNameFromID(doctors, doctorID);
-            System.out.println("\nAppointments with Dr " + doctorName + ":");
+        int date = Integer.parseInt(inputAppointment.getDate());
+        int slot = Appointment.timeToSlot(inputAppointment.getTime());
+        int slotIndex = (date - 1) * 3 + slot - 1;
+        cancelSlot(schedules, slotIndex, inputAppointment.getDoctorID());
 
-            for (Map.Entry<String, ArrayList<Integer>> entry : pendingAppointmentsByDoctor.entrySet()) {
-                if (entry.getKey() == doctorID) {
-                    ArrayList<Integer> pendingSlots = entry.getValue();
-        
-                    int count = 1;
-                    for (Integer slot : pendingSlots) {
-                        int date = slot / 3 + 1;
-                        int actualSlot = slot % 3 + 1;
-                        System.out.println("[" + count + "] " + date + " November " + slotToTime(actualSlot));
-                        count ++;
-                    }
-
-                    int rescheduleChoice = -1;
-                    while (true) {
-                        System.out.print("Select an appointment to reschedule (1 - " + pendingSlots.size() + "): ");
-                        rescheduleChoice = scanner.nextInt();
-                        if (rescheduleChoice >= 1 && rescheduleChoice <= pendingSlots.size()) {
-                            break; 
-                        } else {
-                            System.out.println("Invalid choice. Please select a valid appointment.");
-                        }
-                    }
-
-                    ArrayList<Integer> availableDates = getAvailableDates(doctorID, schedules);
-                    displayAvailableDates(availableDates);
-
-                    int dateChoice;
-                    while (true) {
-                        System.out.print("Select a Date: ");
-                        dateChoice = scanner.nextInt();
-                        if (availableDates.contains(dateChoice)) {
-                            break; 
-                        } else {
-                            System.out.println("Invalid date choice. Please choose from the available dates.");
-                        }
-                    }
-
-                    int slotChoice;
-                    ArrayList<Integer> availableSlots = displayAvailableSlotsForDate(doctorID, dateChoice, schedules);
-                    while (true) {
-                        System.out.print("Select a Slot: ");
-                        slotChoice = scanner.nextInt();
-                        if (availableSlots.contains(slotChoice)) {
-                            break;
-                        } else {
-                            System.out.println("Invalid slot choice. Please choose from the available slots.");
-                        }
-                    }
-
-                    int slot = addSchedule(patientID, doctorID, dateChoice, slotChoice, schedules);
-                    if (slot == -1) System.out.println("An error has occured.");
-                                
-                    int selectedSlot = pendingSlots.get(rescheduleChoice - 1);
-                    cancelSlot(schedules, selectedSlot, doctorID);
-                }
-            }
-
-            System.out.println("Appointment rescheduled successfully.");
-        }
-        else if (typeChoice == 2) {
-            System.out.println("\nYou have confirmed appointments with the following doctors.");
-            displayDoctorsConfirmed(doctors, confirmedAppointmentsByDoctor);
-
-            int doctorChoice = -1;
-            while (doctorChoice < 1 || doctorChoice > appointmentsToDisplay.size()) {
-                System.out.print("Select a Doctor (1 - " + appointmentsToDisplay.size() + "): ");
-                if (scanner.hasNextInt()) {
-                    doctorChoice = scanner.nextInt();
-                } else {
-                    scanner.next(); 
-                    System.out.println("Invalid input. Try Again.");
-                }
-            }   
-            
-            String doctorID = new ArrayList<>(confirmedAppointmentsByDoctor.keySet()).get(doctorChoice - 1);
-            String doctorName = getDoctorNameFromID(doctors, doctorID);
-            System.out.println("\nAppointments with Dr " + doctorName + ":");
-
-            for (Map.Entry<String, ArrayList<Integer>> entry : confirmedAppointmentsByDoctor.entrySet()) {
-                if (entry.getKey() == doctorID) {
-                    ArrayList<Integer> confirmedSlots = entry.getValue();
-        
-                    int count = 1;
-                    for (Integer slot : confirmedSlots) {
-                        int date = slot / 3 + 1;
-                        int actualSlot = slot % 3 + 1;
-                        System.out.println("[" + count + "] " + date + " November " + slotToTime(actualSlot));
-                        count ++;
-                    }
-
-                    int rescheduleChoice = -1;
-                    while (true) {
-                        System.out.print("Select an appointment to reschedule (1 - " + confirmedSlots.size() + "): ");
-                        rescheduleChoice = scanner.nextInt();
-                        if (rescheduleChoice >= 1 && rescheduleChoice <= confirmedSlots.size()) {
-                            break; 
-                        } else {
-                            System.out.println("Invalid choice. Please select a valid appointment.");
-                        }
-                    }
-
-                    ArrayList<Integer> availableDates = getAvailableDates(doctorID, schedules);
-                    displayAvailableDates(availableDates);
-
-                    int dateChoice;
-                    while (true) {
-                        System.out.print("Select a Date: ");
-                        dateChoice = scanner.nextInt();
-                        if (availableDates.contains(dateChoice)) {
-                            break; 
-                        } else {
-                            System.out.println("Invalid date choice. Please choose from the available dates.");
-                        }
-                    }
-
-                    int slotChoice;
-                    ArrayList<Integer> availableSlots = displayAvailableSlotsForDate(doctorID, dateChoice, schedules);
-                    while (true) {
-                        System.out.print("Select a Slot: ");
-                        slotChoice = scanner.nextInt();
-                        if (availableSlots.contains(slotChoice)) {
-                            break;
-                        } else {
-                            System.out.println("Invalid slot choice. Please choose from the available slots.");
-                        }
-                    }
-
-                    int slot = addSchedule(patientID, doctorID, dateChoice, slotChoice, schedules);
-                    if (slot == -1) System.out.println("An error has occured.");
-                    
-                    int selectedSlot = confirmedSlots.get(rescheduleChoice - 1);
-                    cancelSlot(schedules, selectedSlot, doctorID);
-                }
-            }
-            System.out.println("Appointment rescheduled successfully.");
-        }
-
-
+        String doctorName = Schedule.getDoctorNameFromID(doctors, inputAppointment.getDoctorID());
+        System.out.println("Appointment with Dr " + doctorName + " (" + inputAppointment.getDate() + " November " + inputAppointment.getTime() + ") successfully cancelled."); 
     }
 
-    public static void cancelAppointment(String patientID, ArrayList<Schedule> schedules, ArrayList<Doctor> doctors) {
-        Map<String, ArrayList<Integer>> pendingAppointmentsByDoctor = getPendingAppointments(patientID, schedules);
-        Map<String, ArrayList<Integer>> confirmedAppointmentsByDoctor = getConfirmedAppointments(patientID, schedules);
-
-        if (pendingAppointmentsByDoctor.isEmpty() && confirmedAppointmentsByDoctor.isEmpty()) {
-            System.out.println("You have no appointment to cancel.");
-            return; 
-        }
-
-        displayPendingAppointment(doctors, pendingAppointmentsByDoctor);
-        displayConfirmedAppointment(doctors, confirmedAppointmentsByDoctor);
-
-        Scanner scanner = new Scanner(System.in);
-        System.out.println("[1] Pending");
-        System.out.println("[2] Confirmed");
-        
-        int typeChoice;
-        while (true) {
-            System.out.print("Type of appointment to cancel: ");
-            typeChoice = scanner.nextInt();
-            if (typeChoice == 1 || typeChoice == 2) {
-                break; 
-            } 
-            else {
-                System.out.println("Invalid Choice.");
-            }
-        }
-
-        Map<String, ArrayList<Integer>> appointmentsToDisplay = (typeChoice == 1) ? pendingAppointmentsByDoctor : confirmedAppointmentsByDoctor;
-
-        if (appointmentsToDisplay.isEmpty()) {
-            System.out.println("No appointments to display.");
-            return;
-        }
-
-        if (typeChoice == 1) {
-            System.out.println("\nYou have pending appointments with the following doctors.");
-            displayDoctorsPending(doctors, pendingAppointmentsByDoctor);
-
-            int doctorChoice = -1;
-            while (doctorChoice < 1 || doctorChoice > appointmentsToDisplay.size()) {
-                System.out.print("Select a Doctor (1 - " + appointmentsToDisplay.size() + "): ");
-                if (scanner.hasNextInt()) {
-                    doctorChoice = scanner.nextInt();
-                } else {
-                    scanner.next(); 
-                    System.out.println("Invalid input. Try Again.");
-                }
-            }   
-            
-            String doctorID = new ArrayList<>(pendingAppointmentsByDoctor.keySet()).get(doctorChoice - 1);
-            String doctorName = getDoctorNameFromID(doctors, doctorID);
-            System.out.println("\nAppointments with Dr " + doctorName + ":");
-
-            for (Map.Entry<String, ArrayList<Integer>> entry : pendingAppointmentsByDoctor.entrySet()) {
-                if (entry.getKey() == doctorID) {
-                    ArrayList<Integer> pendingSlots = entry.getValue();
-        
-                    int count = 1;
-                    for (Integer slot : pendingSlots) {
-                        int date = slot / 3 + 1;
-                        int actualSlot = slot % 3 + 1;
-                        System.out.println("[" + count + "] " + date + " November " + slotToTime(actualSlot));
-                        count ++;
-                    }
-
-                    int cancelChoice = -1;
-                    while (true) {
-                        System.out.print("Select an appointment to cancel (1 - " + pendingSlots.size() + "): ");
-                        cancelChoice = scanner.nextInt();
-                        if (cancelChoice >= 1 && cancelChoice <= pendingSlots.size()) {
-                            break; 
-                        } else {
-                            System.out.println("Invalid choice. Please select a valid appointment.");
-                        }
-                    }
-
-                    ArrayList<Integer> availableDates = getAvailableDates(doctorID, schedules);
-                    displayAvailableDates(availableDates);
-                    
-                    int selectedSlot = pendingSlots.get(cancelChoice - 1);
-                    cancelSlot(schedules, selectedSlot, doctorID);
-                }
-            }
-            System.out.println("Appointment cancelled successfully.");
-        }
-        else if (typeChoice == 2) {
-            System.out.println("\nYou have confirmed appointments with the following doctors.");
-            displayDoctorsConfirmed(doctors, confirmedAppointmentsByDoctor);
-
-            int doctorChoice = -1;
-            while (doctorChoice < 1 || doctorChoice > appointmentsToDisplay.size()) {
-                System.out.print("Select a Doctor (1 - " + appointmentsToDisplay.size() + "): ");
-                if (scanner.hasNextInt()) {
-                    doctorChoice = scanner.nextInt();
-                } else {
-                    scanner.next(); 
-                    System.out.println("Invalid input. Try Again.");
-                }
-            }   
-            
-            String doctorID = new ArrayList<>(confirmedAppointmentsByDoctor.keySet()).get(doctorChoice - 1);
-            String doctorName = getDoctorNameFromID(doctors, doctorID);
-            System.out.println("\nAppointments with Dr " + doctorName + ":");
-
-            for (Map.Entry<String, ArrayList<Integer>> entry : confirmedAppointmentsByDoctor.entrySet()) {
-                if (entry.getKey() == doctorID) {
-                    ArrayList<Integer> confirmedSlots = entry.getValue();
-        
-                    int count = 1;
-                    for (Integer slot : confirmedSlots) {
-                        int date = slot / 3 + 1;
-                        int actualSlot = slot % 3 + 1;
-                        System.out.println("[" + count + "] " + date + " November " + slotToTime(actualSlot));
-                        count ++;
-                    }
-
-                    int cancelChoice = -1;
-                    while (true) {
-                        System.out.print("Select an appointment to cancel (1 - " + confirmedSlots.size() + "): ");
-                        cancelChoice = scanner.nextInt();
-                        if (cancelChoice >= 1 && cancelChoice <= confirmedSlots.size()) {
-                            break; 
-                        } else {
-                            System.out.println("Invalid choice. Please select a valid appointment.");
-                        }
-                    }
-                    
-                    int selectedSlot = confirmedSlots.get(cancelChoice - 1);
-                    cancelSlot(schedules, selectedSlot, doctorID);
-                }
-            }
-            System.out.println("Appointment rescheduled successfully.");
-        }
-    }
-
-    public static void scheduleAppointment(ArrayList<Doctor> doctors, ArrayList<Schedule> schedules, String patientID){
+    public static void scheduleAppointment(ArrayList<Doctor> doctors, ArrayList<Schedule> schedules, ArrayList<Appointment> appointmentList, String patientID){
         Scanner scanner = new Scanner(System.in);
 
         System.out.println("\nSchedule An Appointment");
@@ -426,8 +209,7 @@ public class Schedule {
 
         int slot = addSchedule(patientID, doctorID, dateChoice, slotChoice, schedules);
         if (slot == -1) System.out.println("An error has occured.");
-
-
+        Appointment.createAppointment(appointmentList, patientID, doctorID, dateChoice, slot);
 
         System.out.println("Appointment successfully scheduled with Dr " + doctorName + " on " + dateChoice + " November from " + slotToTime(slot));
     }
@@ -504,6 +286,10 @@ public class Schedule {
     }
 
     public static void displayPendingAppointment(ArrayList<Doctor> doctors, Map<String, ArrayList<Integer>> pendingAppointmentsByDoctor) {
+        if (pendingAppointmentsByDoctor.size() == 0) {
+            System.out.println("\nPending Appointments: NIL"); return;
+        }
+
         System.out.println("\nPending Appointments:");
         System.out.println();
 
@@ -526,17 +312,21 @@ public class Schedule {
     }
 
     public static void displayConfirmedAppointment(ArrayList<Doctor> doctors, Map<String, ArrayList<Integer>> confirmedAppointmentsByDoctor) {
+        if (confirmedAppointmentsByDoctor.size() == 0) {
+            System.out.println("\nConfirmed Appointments: NIL"); return;
+        }
+
         System.out.println("\nConfirmed Appointments:");
         System.out.println();
 
         for (Map.Entry<String, ArrayList<Integer>> entry : confirmedAppointmentsByDoctor.entrySet()) {
             String doctorID = entry.getKey();
-            ArrayList<Integer> pendingSlots = entry.getValue();
+            ArrayList<Integer> confirmedSlots = entry.getValue();
             String doctorName = getDoctorNameFromID(doctors, doctorID);
             System.out.println("Dr " + doctorName);
             
             int count = 1;
-            for (Integer slot : pendingSlots) {
+            for (Integer slot : confirmedSlots) {
                 int date = slot / 3 + 1;
                 int actualSlot = slot % 3 + 1;
                 System.out.println("[" + count + "] " + date + " November " + slotToTime(actualSlot));

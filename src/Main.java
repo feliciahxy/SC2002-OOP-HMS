@@ -20,6 +20,7 @@ public class Main {
         UserManager userManager = new UserManager();
         StaffManager staffManager = new StaffManager();
         staffManager.categorizeStaff(userManager.getStaffUsers(),scheduleManager.getSchedules());
+        AppointmentManager appointmentManager = new AppointmentManager();
 
         if (userManager.login(userID, password)) {
             String role = userManager.getRole(userID);
@@ -56,7 +57,7 @@ public class Main {
                         displayAdminMenu();
                         break;
                     case "Patient":
-                        displayPatientMenu(userManager, staffManager, userID, scheduleManager);
+                        displayPatientMenu(userManager, staffManager, userID, scheduleManager, appointmentManager);
                         break;
                     default:
                         System.out.println("Role not recognized.");
@@ -190,7 +191,7 @@ public class Main {
         } while (choice != 5);
     }
 
-    public static void displayPatientMenu(UserManager userManager, StaffManager staffManager, String userID, ScheduleManager scheduleManager) {
+    public static void displayPatientMenu(UserManager userManager, StaffManager staffManager, String userID, ScheduleManager scheduleManager, AppointmentManager appointmentManager) {
         Scanner scanner = new Scanner(System.in);
         Patient patient = userManager.findPatientByID(userID);
         int choice;
@@ -226,13 +227,22 @@ public class Main {
                     Schedule.viewAvailableSlots(staffManager.getDoctors(), scheduleManager.getSchedules());
                     break;
                 case 4:
-                    Schedule.scheduleAppointment(staffManager.getDoctors(), scheduleManager.getSchedules(), patient.getPatientID());
+                    Schedule.scheduleAppointment(staffManager.getDoctors(), scheduleManager.getSchedules(), appointmentManager.getAppointmentList(), patient.getPatientID());
+                    // // for (Appointment appointment : appointmentManager.getAppointmentList()) {
+                    // //     System.out.println("Appointment ID: " + appointment.getAppointmentID());
+                    // //     System.out.println("Patient ID: " + appointment.getPatientID());
+                    // //     System.out.println("Doctor ID: " + appointment.getDoctorID());
+                    // //     System.out.println("Date: " + appointment.getDate());
+                    // //     System.out.println("Time: " + appointment.getTime());
+                    // //     System.out.println("Status: " + appointment.getStatus());
+                    // //     System.out.println("--------------------------------");
+                    // }
                     break;
                 case 5:
-                    Schedule.rescheduleAppointment(patient.getPatientID(), scheduleManager.getSchedules(),staffManager.getDoctors());
+                    Schedule.rescheduleAppointment(patient.getPatientID(), appointmentManager.getAppointmentList(), staffManager.getDoctors(), scheduleManager.getSchedules());
                     break;
                 case 6:
-                    Schedule.cancelAppointment(patient.getPatientID(), scheduleManager.getSchedules(), staffManager.getDoctors());
+                    Schedule.cancelAppointment(patient.getPatientID(), appointmentManager.getAppointmentList(), scheduleManager.getSchedules(), staffManager.getDoctors());
                     break;
                 case 7:
                     Schedule.displaySchedules(patient.getPatientID(), scheduleManager.getSchedules(), staffManager.getDoctors());
