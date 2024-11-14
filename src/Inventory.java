@@ -76,7 +76,7 @@ public class Inventory {
             ReplenishmentRequest req = new ReplenishmentRequest(requestID, med.getMedicineName(), quantity, "pending approval");
             requestList.add(req);
         }
-        return requestList;
+        return requestList; //check if need return or if added, global obj changed
     }
 
     // for admin
@@ -100,6 +100,9 @@ public class Inventory {
                     else if (approve.equals("n")){
                         System.out.println("Request rejected.");
                         req.setStatus("Rejected");
+                    }
+                    else{
+                        System.out.println("Invalid input");
                     }
                 }
             }

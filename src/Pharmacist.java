@@ -93,7 +93,7 @@ public class Pharmacist extends User{
             System.out.printf("%s\n", (replenishmentRequest.get(i)).getMedicine());
         }
         /////////////////////////////////////////////////////////////////////////////////////         
-        return inventory.getReplenishmentRequest(requestID, requestList); 
+        return inventory.getReplenishmentRequest(requestID, requestList); // to check if need return 
     }
 
     // public Inventory getInventory(Inventory inven){
