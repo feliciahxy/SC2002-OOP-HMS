@@ -25,8 +25,17 @@ public class AppointmentOutcome {
     public String getDiagnosis(){
         return this.diagnosis;
     }
+
+    public void setDiagnosis(String diagnosis) {
+        this.diagnosis = diagnosis;
+    }
+
     public String getServiceType() {
         return this.serviceType;
+    }
+
+    public void setServiceType(String serviceType) {
+        this.diagnosis = serviceType;
     }
 
     public String getDate() {
