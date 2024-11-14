@@ -50,7 +50,7 @@ public class PharmacistMain {
                     break;
                 
                 case 6: // FOR ADMIN!!!!!!//////
-                    inventory.approveReplenishmentRequest(replenishmentRequest, inventory);
+                    inventory.approveReplenishmentRequest(replenishmentRequest);
                     break;
                 default:
                     System.out.println("Invalid choice, please try again.");

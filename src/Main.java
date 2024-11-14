@@ -24,6 +24,19 @@ public class Main {
         System.out.print("Enter your password: ");
         String password = scanner.nextLine();
 
+        //Initializers
+        UserManager userManager = new UserManager();
+        StaffManager staffManager = new StaffManager();
+        staffManager.categorizeStaff(userManager.getStaffUsers(),scheduleManager.getSchedules());
+        AppointmentManager appointmentManager = new AppointmentManager();
+        AppointmentOutcomeManager appointmentOutcomeManager = new AppointmentOutcomeManager();
+
+        ArrayList<AppointmentOutcome> appointmentOutcomes = appointmentOutcomeManager.getAppointmentOutcomes();
+        MedicationManager medicationManager = new MedicationManager();
+        Inventory inventory = new Inventory(medicationManager.getMedications());
+        ReplenishmentRequestManager replenishmentRequestManager = new ReplenishmentRequestManager();
+        ArrayList<ReplenishmentRequest> replenishmentRequest = replenishmentRequestManager.getReplenishmentRequests();
+
         if (userManager.login(userID, password)) {
             String role = userManager.getRole(userID);
             if (role != null) {
@@ -53,10 +66,10 @@ public class Main {
                         displayDoctorMenu();
                         break;
                     case "Pharmacist":
-                        displayPharmacistMenu();
+                        displayPharmacistMenu(userID, staffManager, appointmentOutcomes,inventory, replenishmentRequest);
                         break;
                     case "Administrator":
-                        displayAdminMenu(userID, staffManager, appointmentManager.getAppointmentList(), appointmentOutcomeManager.getAppointmentOutcomes());
+                        displayAdminMenu(userID, staffManager, appointmentManager.getAppointmentList(), appointmentOutcomeManager.getAppointmentOutcomes(), inventory, replenishmentRequest);
                         break;
                     case "Patient":
                         displayPatientMenu(userManager, staffManager, userID, scheduleManager, appointmentManager, appointmentOutcomeManager);
@@ -121,9 +134,10 @@ public class Main {
         } while (choice != 8);
     }
 
-    public static void displayPharmacistMenu() {
+    public static void displayPharmacistMenu(String userID, StaffManager staffManager, ArrayList<AppointmentOutcome> appointmentOutcomes, Inventory inventory, ArrayList<ReplenishmentRequest> replenishmentRequest) {
         Scanner scanner = new Scanner(System.in);
         int choice;
+        Pharmacist pharmacist = staffManager.findPharmacistByID(userID);
 
         do {
             System.out.println("\nPharmacist Menu:");
@@ -137,16 +151,23 @@ public class Main {
 
             switch (choice) {
                 case 1:
+                    pharmacist.viewAppointmentOutcomeRecord(appointmentOutcomes);
                     //implement logic to view appointment outcome record
+                     
                     break;
                 case 2:
+                    pharmacist.updatePrescription(appointmentOutcomes, inventory);
+
                     //implement logic to update prescription status
                     break;
                 case 3:
                     //implement logic to view medication inventory
+                    inventory.viewInventory();
                     break;
                 case 4:
                     //implement logic to submit replenishment request
+                    pharmacist.requestReplenishment(replenishmentRequest, inventory);
+
                     break;
                 case 5:
                     System.out.println("Logging out...");
@@ -157,8 +178,8 @@ public class Main {
         } while (choice != 5);
     }
 
+    public static void displayAdminMenu(String userID, StaffManager staffManager, ArrayList<Appointment> appointmentList, ArrayList<AppointmentOutcome> appointmentOutcomes, Inventory inventory, ArrayList<ReplenishmentRequest> replenishmentRequest) {
 
-    public static void displayAdminMenu(String userID, StaffManager staffManager, ArrayList<Appointment> appointmentList, ArrayList<AppointmentOutcome> appointmentOutcomes, UserManager userManager) {
         Scanner scanner = new Scanner(System.in);
         Administrator administrator = staffManager.findAdministratorByID(userID);
         int choice;
@@ -182,9 +203,11 @@ public class Main {
                     break;
                 case 3:
                     //implement logic to view and manage medication inventory
+                    inventory.manageInventory();
                     break;
                 case 4:
                     // implement logic to approve replenishment requests
+                    inventory.approveReplenishmentRequest(replenishmentRequest);
                     break;
                 case 5:
                     System.out.println("Logging out...");
