@@ -9,6 +9,14 @@ public class Main {
         ScheduleInitializer.main(args);
 
         ScheduleManager scheduleManager = new ScheduleManager();
+        scheduleManager.loadSchedulesFromCSV("../data/Schedule.csv");
+
+        UserManager userManager = new UserManager();
+        StaffManager staffManager = new StaffManager();
+        staffManager.categorizeStaff(userManager.getStaffUsers());
+        
+        AppointmentManager appointmentManager = new AppointmentManager();
+        AppointmentOutcomeManager appointmentOutcomeManager = new AppointmentOutcomeManager();
 
         System.out.print("Enter your ID: ");
         String userID = scanner.nextLine();
@@ -171,6 +179,7 @@ public class Main {
     }
 
     public static void displayAdminMenu(String userID, StaffManager staffManager, ArrayList<Appointment> appointmentList, ArrayList<AppointmentOutcome> appointmentOutcomes, Inventory inventory, ArrayList<ReplenishmentRequest> replenishmentRequest) {
+
         Scanner scanner = new Scanner(System.in);
         Administrator administrator = staffManager.findAdministratorByID(userID);
         int choice;
@@ -187,7 +196,7 @@ public class Main {
 
             switch (choice) {
                 case 1:
-                    //implement logic to view and manage hospital staff
+                    Administrator.manageStaff(staffManager, userManager);
                     break;
                 case 2:
                     Appointment.displayAppointments(appointmentList, appointmentOutcomes);
