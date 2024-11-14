@@ -1,5 +1,5 @@
 
-public class Doctor extends User {
+public class Doctor extends Staff {
     
     private Schedule schedule;
     // private final List<Patient> patientList;

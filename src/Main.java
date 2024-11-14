@@ -9,18 +9,20 @@ public class Main {
         ScheduleInitializer.main(args);
 
         ScheduleManager scheduleManager = new ScheduleManager();
+        scheduleManager.loadSchedulesFromCSV("../data/Schedule.csv");
+
+        UserManager userManager = new UserManager();
+        StaffManager staffManager = new StaffManager();
+        staffManager.categorizeStaff(userManager.getStaffUsers());
+        
+        AppointmentManager appointmentManager = new AppointmentManager();
+        AppointmentOutcomeManager appointmentOutcomeManager = new AppointmentOutcomeManager();
 
         System.out.print("Enter your ID: ");
         String userID = scanner.nextLine();
 
         System.out.print("Enter your password: ");
         String password = scanner.nextLine();
-
-        UserManager userManager = new UserManager();
-        StaffManager staffManager = new StaffManager();
-        staffManager.categorizeStaff(userManager.getStaffUsers(),scheduleManager.getSchedules());
-        AppointmentManager appointmentManager = new AppointmentManager();
-        AppointmentOutcomeManager appointmentOutcomeManager = new AppointmentOutcomeManager();
 
         if (userManager.login(userID, password)) {
             String role = userManager.getRole(userID);

@@ -1,6 +1,6 @@
 import java.util.*;
 
-public class Pharmacist extends User{
+public class Pharmacist extends Staff{
     Scanner scanner = new Scanner(System.in);
     
     public Pharmacist(String staffID, String name, String role, String gender, int age, String password){
