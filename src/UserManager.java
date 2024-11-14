@@ -5,13 +5,18 @@ import java.util.*;
 public class UserManager {
     private final ArrayList<Staff> staffUsers;
     private final ArrayList<Patient> patientUsers;
+    private final ArrayList<Schedule> schedules;
 
     public UserManager() {
         staffUsers = new ArrayList<>();
         patientUsers = new ArrayList<>();
-       
-        loadUsersFromCSV("../data/Staff_List.csv", true);
-        loadUsersFromCSV("../data/Patient_List.csv", false);
+
+        ScheduleManager scheduleManager = new ScheduleManager();
+        scheduleManager.loadSchedulesFromCSV("../data/Schedule.csv");
+        schedules = scheduleManager.getSchedules();
+        
+        loadUsersFromCSV("../data/Staff_List.csv", true, schedules);
+        loadUsersFromCSV("../data/Patient_List.csv", false, null);
     }
 
     public ArrayList<Staff> getStaffUsers() {
@@ -22,10 +27,18 @@ public class UserManager {
         return patientUsers;
     }
 
-    private void loadUsersFromCSV(String filePath, boolean isStaff) {
+    private void loadUsersFromCSV(String filePath, boolean isStaff, ArrayList<Schedule> schedules) {
         try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
             String line;
             br.readLine();
+
+            Map<String, Schedule> scheduleMap = new HashMap<>();
+            if (schedules != null) {
+                for (Schedule schedule : schedules) {
+                    scheduleMap.put(schedule.getDoctorID(), schedule);
+                }
+            }
+
             while ((line = br.readLine()) != null) {
                 String[] fields = line.split(",");
                 if (isStaff) {
@@ -35,8 +48,17 @@ public class UserManager {
                     String gender = fields[3];
                     int age = Integer.parseInt(fields[4]);
                     String password = fields[5];
-                    Staff staff = new Staff(id, name, role, gender, age, password);
-                    staffUsers.add(staff);
+                    
+                    if (role.equals("Doctor")) {
+                        Schedule doctorSchedule = scheduleMap.get(id);
+                        staffUsers.add(new Doctor(id, name, role, gender, age, password, doctorSchedule));
+                    }
+                    else if (role.equals("Pharmacist")) {
+                        staffUsers.add(new Pharmacist(id, name, role, gender, age, password));
+                    }
+                    else if (role.equals("Administrator")) {
+                        staffUsers.add(new Administrator(id, name, role, gender, age, password));
+                    }       
                 } else {
                     String id = fields[0];
                     String name = fields[1];
