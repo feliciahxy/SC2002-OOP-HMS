@@ -27,7 +27,7 @@ public class Patient extends User {
     }
 
     public void viewMedicalRecord(ArrayList<AppointmentOutcome> appointmentOutcomes, ArrayList<Appointment> appointments) {
-        System.out.println("Patient ID: " + patientID);
+        System.out.println("\nPatient ID: " + patientID);
         System.out.println("Name: " + name);
         System.out.println("Date of Birth: " + dob);
         System.out.println("Gender: " + gender);
@@ -50,26 +50,33 @@ public class Patient extends User {
     }
 
     public void updatePersonalInfo(String newPhoneNumber, String newEmail) {
-        boolean isPhoneNumberValid = isValidPhoneNumber(newPhoneNumber);
-        boolean isEmailValid = isValidEmail(newEmail);
-        
-        if (!isPhoneNumberValid) {
-            System.out.println("Invalid phone number format.");
+        Scanner sc = new Scanner(System.in);
+    
+        while (true) {
+            boolean isPhoneNumberValid = isValidPhoneNumber(newPhoneNumber);
+            if (isPhoneNumberValid) {
+                break; 
+            } else {
+                System.out.print("Invalid phone number format. Please enter a valid phone number:");
+                newPhoneNumber = sc.nextLine(); 
+            }
         }
-        
-        if (!isEmailValid) {
-            System.out.println("Invalid email format.");
+    
+        // Loop for email validation
+        while (true) {
+            boolean isEmailValid = isValidEmail(newEmail);
+            if (isEmailValid) {
+                break; 
+            } else {
+                System.out.print("Invalid email format. Please enter a valid email:");
+                newEmail = sc.nextLine();
+            }
         }
-
-        // Only update if both are valid
-        if (isPhoneNumberValid && isEmailValid) {
-            this.phoneNumber = newPhoneNumber;
-            this.email = newEmail;
-            updatePatientInfoInCSV();
-            System.out.println("Personal information updated successfully.");
-        } else {
-            System.out.println("Personal information not updated due to invalid inputs.");
-        }
+    
+        this.phoneNumber = newPhoneNumber;
+        this.email = newEmail;
+        updatePatientInfoInCSV();
+        System.out.println("Personal information updated successfully.");
     }
 
     private void updatePatientInfoInCSV() {

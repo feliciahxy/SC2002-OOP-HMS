@@ -109,6 +109,15 @@ public class Appointment {
         return false;
     }
 
+    public static boolean canReschedule(ArrayList<Appointment> appointmentList, String appointmentID) {
+        for (Appointment appointment : appointmentList) {
+            if (appointment.getStatus().equals("pending")) return true;
+            else if (appointment.getStatus().equals("confirmed")) return true;
+        }
+
+        return false;
+    }
+
     public static int timeToSlot(String time) {
         if (time.equals("0900-1000")) return 1;
         else if (time.equals("1000-1100")) return 2;

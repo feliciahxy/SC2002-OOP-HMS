@@ -55,7 +55,12 @@ public class Schedule {
         while (true) {
             appointmentID = sc.nextLine();
             if (Appointment.isValidAppointmentID(appointmentID)) {
-                if (Appointment.belongToPatient(appointmentList, appointmentID, patientID)) break;
+                if (Appointment.belongToPatient(appointmentList, appointmentID, patientID)) {
+                    if (Appointment.canReschedule(appointmentList, appointmentID)) break;
+                    else {
+                        System.out.println("This appointment cannot be rescheduled.");
+                    }
+                }
                 else {
                     System.out.println("You do not have access to this AppointmentID.");
                 }
