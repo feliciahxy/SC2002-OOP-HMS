@@ -3,8 +3,8 @@ import java.time.LocalDate;
 import java.util.*;
 
 public class UserManager {
-    private final List<User> staffUsers;
-    private final List<Patient> patientUsers;
+    private final ArrayList<Staff> staffUsers;
+    private final ArrayList<Patient> patientUsers;
 
     public UserManager() {
         staffUsers = new ArrayList<>();
@@ -14,9 +14,13 @@ public class UserManager {
         loadUsersFromCSV("../data/Patient_List.csv", false);
     }
 
-    public List<User> getStaffUsers() {
+    public ArrayList<Staff> getStaffUsers() {
         return staffUsers;
     } 
+
+    public ArrayList<Patient> getPatientUsers() {
+        return patientUsers;
+    }
 
     private void loadUsersFromCSV(String filePath, boolean isStaff) {
         try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
@@ -31,8 +35,8 @@ public class UserManager {
                     String gender = fields[3];
                     int age = Integer.parseInt(fields[4]);
                     String password = fields[5];
-                    User user = new User(id, name, role, gender, age, password);
-                    staffUsers.add(user);
+                    Staff staff = new Staff(id, name, role, gender, age, password);
+                    staffUsers.add(staff);
                 } else {
                     String id = fields[0];
                     String name = fields[1];
@@ -52,7 +56,7 @@ public class UserManager {
         }
     }
 
-    private User findUser(String userID, List<? extends User> users) {
+    private User findUser(String userID, ArrayList<? extends User> users) {
         for (User user : users) {
             if (user.getId().equals(userID)) {
                 return user;
