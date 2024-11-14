@@ -17,6 +17,16 @@ public class Appointment {
         this.status = status;
     }
 
+    public String toString() {
+        return "Appointment Details:\n" +
+               "Appointment ID: " + appointmentID + "\n" +
+               "Patient ID: " + patientID + "\n" +
+               "Doctor ID: " + doctorID + "\n" +
+               "Date: " + date + "\n" +
+               "Time: " + time + "\n" +
+               "Status: " + status;
+    }
+
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     // Main Functions
@@ -87,6 +97,23 @@ public class Appointment {
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    // Doctor
+
+    public static boolean doctorCanWriteOutcome(ArrayList<Appointment> appointments, String appointmentID, String doctorID) {
+        for (Appointment appointment : appointments) {
+            if (appointment.getAppointmentID().equals(appointmentID)) {
+                if (appointment.getDoctorID().equals(doctorID) && appointment.getStatus().equals("confirmed")) return true;
+                else return false;
+            }
+        }
+
+        return false;
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -97,6 +124,14 @@ public class Appointment {
     // Format of AppointmentID
     public static boolean isValidAppointmentID(String appointmentID) {
         return appointmentID.matches("^AP\\d{4}$");
+    }
+
+    // AppointmentID found in Appointments
+    public static boolean inAppointments(ArrayList<Appointment> appointments, String appointmentID) {
+        for (Appointment appointment : appointments) {
+            if (appointment.getAppointmentID().equals(appointmentID)) return true;
+        }
+        return false;
     }
 
     // AppointmentID matches patientID
