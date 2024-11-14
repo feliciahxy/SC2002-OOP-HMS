@@ -18,7 +18,6 @@ public class Pharmacist extends User{
     }
     
     public void viewAppointmentOutcomeRecord(ArrayList<AppointmentOutcome> appointmentOutcome){
-        scanner.nextLine();
         System.out.print("Enter appointment ID: ");
         String appointmentID = scanner.nextLine(); 
         AppointmentOutcome apptOutcome = this.findAppointmentOutcomeRecord(appointmentID, appointmentOutcome);
@@ -32,57 +31,61 @@ public class Pharmacist extends User{
         }        
     }
 
-    // public void updatePrescription(AppointmentOutcome appointmentOutcome, String medicationName, String status){
+    public AppointmentOutcome viewAppointmentOutcomeRecord(ArrayList<AppointmentOutcome> appointmentOutcome, String appointmentID){
+        AppointmentOutcome apptOutcome = this.findAppointmentOutcomeRecord(appointmentID, appointmentOutcome);
+        if (apptOutcome != null){
+            ArrayList<PrescribedMedication> PrescribedMedications = apptOutcome.getPrescribedMedicationList();
+            System.out.printf("AppointmentID: %s\n", apptOutcome.getAppointmentID());
+            for (int i = 0; i<PrescribedMedications.size(); i++){
+                PrescribedMedication med = PrescribedMedications.get(i);
+                System.out.printf("Medication Name: %s, status: %s\n", med.getMedicationName(), med.getMedicationStatus());
+            }
+        }
+        return apptOutcome;        
+    }
+
     public void updatePrescription(ArrayList<AppointmentOutcome> appointmentOutcomes, Inventory inventory){
-        scanner.nextLine();
         System.out.print("Enter appointment ID: ");
-        String appointmentID1 = scanner.nextLine(); 
-        AppointmentOutcome appointmentOutcome = this.findAppointmentOutcomeRecord(appointmentID1, appointmentOutcomes);
+        String appointmentID = scanner.nextLine(); 
+        AppointmentOutcome appointmentOutcome = viewAppointmentOutcomeRecord(appointmentOutcomes, appointmentID);
         if (appointmentOutcome != null){
-            System.out.print("Enter medication name: ");
-            String medicationName = scanner.nextLine();
-            System.out.print("Enter updated status: ");
-            String status = scanner.nextLine();
             ArrayList<PrescribedMedication> medlist = appointmentOutcome.getPrescribedMedicationList();
-            boolean found = false;
-            for (int i = 0; i<medlist.size(); i++){
-                PrescribedMedication med = medlist.get(i);
-                if (med.getMedicationName().equals(medicationName)){
-                    found = true;
-                    if (status.equals("dispensed")){
-                        if(inventory.updateStock(medicationName, -1)){
-                            appointmentOutcome.setMedicationStatus(med, status);
+            for (int i = 1; i<=medlist.size();i++){
+                PrescribedMedication med = medlist.get(i-1);
+                System.out.printf("(%d): %s: %s\n", i, med.getMedicationName(), med.getMedicationStatus());
+            }
+            System.out.print("Select medication no.: ");
+            int mednum = scanner.nextInt();
+            if (mednum <= 0 || mednum > medlist.size()){
+                System.out.println("Invalid option");
+            }
+            else{
+                PrescribedMedication med = medlist.get(mednum-1);
+                if (med.getMedicationStatus().equals("dispensed")){
+                    System.out.println("Unsuccessful, already dispensed!");
+                }
+                else{
+                    System.out.print("Enter (1) to dispense. Choice: ");
+                    int choice = scanner.nextInt();
+                    if (choice ==  1){
+                        if(inventory.updateStock(med.getMedicationName(), -1)){
+                            appointmentOutcome.setMedicationStatus(med, "dispensed");
                             System.out.println("Medication dispensed. Status updated.");
-                            break;
                         }
                     }
                     else{
-                        appointmentOutcome.setMedicationStatus(med, status);
-                        System.out.println("Status updated.");
-                        break;
+                        // appointmentOutcome.setMedicationStatus(med, status);
+                        System.out.println("Invalid input.");
                     }
                 }
-            }
-            if (found == false){
-                System.out.println("Medication not found.");
-            }
+            }  
         }
     }
     
-    
-    public ArrayList<ReplenishmentRequest> requestReplenishment(ArrayList<ReplenishmentRequest> requestList, Inventory inventory){//return all low stock medicine
-        scanner.nextLine();
-        System.out.println("Enter RequestID: ");
+    public void requestReplenishment(ArrayList<ReplenishmentRequest> requestList, Inventory inventory){//return all low stock medicine
+        System.out.print("Enter RequestID: ");
         String requestID = scanner.nextLine();
-        ArrayList<ReplenishmentRequest> replenishmentRequest = inventory.getReplenishmentRequest(requestID, requestList);
-       
-        //for sending to admin
-        //test printing///////////////////////////////////////////////////////////////////////
-        for (int i = 0; i<replenishmentRequest.size(); i++){
-            System.out.printf("%s\n", (replenishmentRequest.get(i)).getMedicine());
-        }
-        /////////////////////////////////////////////////////////////////////////////////////         
-        return inventory.getReplenishmentRequest(requestID, requestList); 
+        inventory.getReplenishmentRequest(requestID, requestList);       
     }
 
     // public Inventory getInventory(Inventory inven){
