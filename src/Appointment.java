@@ -52,6 +52,14 @@ public class Appointment {
         }
     }
 
+    public static ArrayList<String> patientAppointmentIDs(String patientID, ArrayList<Appointment> appointmentList) {
+        ArrayList<String> patientAppointmentIDs = new ArrayList<>();
+        for (Appointment appointment : appointmentList) {
+            if (appointment.getPatientID().equals(patientID)) patientAppointmentIDs.add(appointment.getAppointmentID());
+        }
+        return patientAppointmentIDs;
+    } 
+
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     // Helper Functions
@@ -85,8 +93,7 @@ public class Appointment {
     public String getAppointmentID() { 
         return appointmentID; 
     }
-
-    public void setAppointmentID(String appointmentID) { 
+public void setAppointmentID(String appointmentID) { 
         this.appointmentID = appointmentID;
     }
 
