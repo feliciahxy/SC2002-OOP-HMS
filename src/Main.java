@@ -157,7 +157,8 @@ public class Main {
         } while (choice != 5);
     }
 
-    public static void displayAdminMenu(String userID, StaffManager staffManager, ArrayList<Appointment> appointmentList, ArrayList<AppointmentOutcome> appointmentOutcomes) {
+
+    public static void displayAdminMenu(String userID, StaffManager staffManager, ArrayList<Appointment> appointmentList, ArrayList<AppointmentOutcome> appointmentOutcomes, UserManager userManager) {
         Scanner scanner = new Scanner(System.in);
         Administrator administrator = staffManager.findAdministratorByID(userID);
         int choice;
@@ -174,7 +175,7 @@ public class Main {
 
             switch (choice) {
                 case 1:
-                    //implement logic to view and manage hospital staff
+                    Administrator.manageStaff(staffManager, userManager);
                     break;
                 case 2:
                     Appointment.displayAppointments(appointmentList, appointmentOutcomes);

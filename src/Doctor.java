@@ -1,6 +1,5 @@
 
-public class Doctor extends Staff {
-    
+public class Doctor extends Staff{    
     private Schedule schedule;
     // private final List<Patient> patientList;
     // private final List<Appointment> appointmentList;
