@@ -9,7 +9,7 @@ public class ScheduleManager {
         loadSchedulesFromCSV("../data/Schedule.csv");
     }
     
-    private void loadSchedulesFromCSV(String filePath) {
+    public void loadSchedulesFromCSV(String filePath) {
         try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
             String line;
             br.readLine();

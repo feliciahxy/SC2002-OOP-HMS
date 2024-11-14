@@ -48,7 +48,7 @@ public class Inventory {
             if (medications.get(i).getQuantity() < medications.get(i).getLowStockLevel()){
                 low = true;
                 Medication med = medications.get(i);
-                System.out.printf("Medication Name: %s, Current Quantity: %s, Low Stock Level Alert:%s ", med.getMedicineName(), med.getQuantity(), med.getLowStockLevel());
+                System.out.printf("Medication Name: %s, Current Quantity: %s, Low Stock Level Alert:%s \n", med.getMedicineName(), med.getQuantity(), med.getLowStockLevel());
             }
         }
         if (low == false){
@@ -56,7 +56,7 @@ public class Inventory {
         }
     }
 
-    public void getReplenishmentRequest(String requestID, ArrayList<ReplenishmentRequest> requestList){
+    public void getReplenishmentRequest(ArrayList<ReplenishmentRequest> requestList){
         Scanner sc = new Scanner(System.in);
         ArrayList<Medication> replenishmentList = new ArrayList<>();
         for (int i = 0; i<medications.size(); i++){
@@ -65,14 +65,35 @@ public class Inventory {
             }
         }
         if (replenishmentList.isEmpty()){
-            System.out.println("No medications require replenishment.\n");
+            System.out.println("No medications require replenishment.");
+            return;
         }
-        
-        for (int i = 0; i<replenishmentList.size(); i++){
-            Medication med = replenishmentList.get(i);
-            System.out.printf("Current quantity: %d, Low stock level: %d, %s quantity requested: ", med.getQuantity(), med.getLowStockLevel(), med.getMedicineName());
+        else{
+            for (int i = 0; i<replenishmentList.size(); i++){
+                Medication med = replenishmentList.get(i);
+                System.out.printf("(%d) Medication: %s, Current quantity: %d, Low stock level: %d\n", i+1, med.getMedicineName(), med.getQuantity(), med.getLowStockLevel());
+            }
+        }
+
+        while(true){ 
+            int choice;
+            
+            System.out.println("Enter 0 to exit.");
+            System.out.print("Select medication to replenish (no.): ");
+            choice = sc.nextInt();
+            if (choice == 0){
+                break;
+            }
+            if (choice>replenishmentList.size()){
+                System.out.println("Invalid input");
+                break;
+            }
+            Medication med = replenishmentList.get(choice-1);
+            System.out.printf("Medication: %s, Current quantity: %d, Low stock level: %d, quantity requested: ", med.getMedicineName(), med.getQuantity(), med.getLowStockLevel());
             int quantity = sc.nextInt();
-            ReplenishmentRequest req = new ReplenishmentRequest(requestID, med.getMedicineName(), quantity, "pending approval"); 
+            String formattedSize = String.format("%04d", requestList.size()+1);
+            String requestID = "R" + formattedSize;
+            ReplenishmentRequest req = new ReplenishmentRequest(requestID, med.getMedicineName(), quantity, "pending");
             requestList.add(req);
             System.out.println("Medication requested.");   
         }
@@ -84,41 +105,48 @@ public class Inventory {
         Scanner sc = new Scanner(System.in);
         for (int i = 0; i<requestList.size(); i++){
             ReplenishmentRequest Req = requestList.get(i);
-            System.out.printf("(%d) RequestID: %s, Medicine: %s, Quantity: %d\n", i+1, Req.getRequestID(), Req.getMedicine(), Req.getQuantity());
+            System.out.printf("RequestID: %s, Medicine: %s, Quantity: %d, Status: %s\n", Req.getRequestID(), Req.getMedicine(), Req.getQuantity(), Req.getStatus());
         }
-        System.out.print("Enter requestID: ");
-        String requestID = sc.nextLine();
-        boolean reqIDfound = false;
-        boolean anypending = false;
-        for (int i = 0; i < requestList.size(); i++){
-            if(requestID.equals(requestList.get(i).getRequestID())){
-                reqIDfound = true;
-                ReplenishmentRequest req = requestList.get(i);
-                if (req.getStatus().equals("pending approval")){
-                    anypending = true;
-                    System.out.printf("Medication: %s, quantitiy requested: %d. Approve? (y/n): ", req.getMedicine(), req.getQuantity());
-                    String approve = sc.nextLine();
-                    if (approve.equals("y")){
-                        System.out.println("Request approved.");
-                        req.setStatus("Approved");
-
-                        inventory.updateStock(req.getMedicine(),req.getQuantity());
+        while(true){
+            System.out.print("Enter 0 to exit. \nEnter requestID: ");
+            String requestID = sc.nextLine();
+            if (requestID.equals("0")){
+                return;
+            }
+            boolean reqIDfound = false;
+            for (int i = 0; i < requestList.size(); i++){
+                if(requestID.equals(requestList.get(i).getRequestID())){
+                    reqIDfound = true;
+                    ReplenishmentRequest req = requestList.get(i);
+                    if (req.getStatus().equals("approved")){
+                        System.out.println("Already approved!");
                     }
-                    else if (approve.equals("n")){
-                        System.out.println("Request rejected.");
-                        req.setStatus("Rejected");
+                    if (req.getStatus().equals("rejected")){
+                        System.out.println("Already rejected!");
                     }
-                    else{
-                        System.out.println("Invalid input");
+                    
+                    if (req.getStatus().equals("pending")){
+                        System.out.printf("Medication: %s, quantitiy requested: %d. Approve? (y/n): ", req.getMedicine(), req.getQuantity());
+                        String approve = sc.nextLine();
+                        if (approve.equals("y")){
+                            System.out.println("Request approved.");
+                            req.setStatus("approved");
+                            inventory.updateStock(req.getMedicine(),req.getQuantity());
+                        }
+                        else if (approve.equals("n")){
+                            System.out.println("Request rejected.");
+                            req.setStatus("rejected");
+                        }
+                        else{
+                            System.out.println("Invalid input");
+                        }
                     }
                 }
             }
-        }
-        if (reqIDfound == false){
-            System.out.println("No requestID found.");
-        }
-        if (anypending == false){
-            System.out.println("No requests pending approval.");
+            if (reqIDfound == false){
+                System.out.println("No requestID found.");
+                break;
+            }
         }
     }
 

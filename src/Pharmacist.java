@@ -34,12 +34,12 @@ public class Pharmacist extends Staff{
     public AppointmentOutcome viewAppointmentOutcomeRecord(ArrayList<AppointmentOutcome> appointmentOutcome, String appointmentID){
         AppointmentOutcome apptOutcome = this.findAppointmentOutcomeRecord(appointmentID, appointmentOutcome);
         if (apptOutcome != null){
-            ArrayList<PrescribedMedication> PrescribedMedications = apptOutcome.getPrescribedMedicationList();
-            System.out.printf("AppointmentID: %s\n", apptOutcome.getAppointmentID());
-            for (int i = 0; i<PrescribedMedications.size(); i++){
-                PrescribedMedication med = PrescribedMedications.get(i);
-                System.out.printf("Medication Name: %s, status: %s\n", med.getMedicationName(), med.getMedicationStatus());
-            }
+            apptOutcome.getPrescribedMedicationList();
+            // System.out.printf("AppointmentID: %s\n", apptOutcome.getAppointmentID());
+            // for (int i = 0; i<PrescribedMedications.size(); i++){
+            //     PrescribedMedication med = PrescribedMedications.get(i);
+            //     System.out.printf("Medication Name: %s, status: %s\n", med.getMedicationName(), med.getMedicationStatus());
+            // }
         }
         return apptOutcome;        
     }
@@ -50,9 +50,16 @@ public class Pharmacist extends Staff{
         AppointmentOutcome appointmentOutcome = viewAppointmentOutcomeRecord(appointmentOutcomes, appointmentID);
         if (appointmentOutcome != null){
             ArrayList<PrescribedMedication> medlist = appointmentOutcome.getPrescribedMedicationList();
+            int numdispensed = 0;
             for (int i = 1; i<=medlist.size();i++){
                 PrescribedMedication med = medlist.get(i-1);
                 System.out.printf("(%d): %s: %s\n", i, med.getMedicationName(), med.getMedicationStatus());
+                if (med.getMedicationStatus().equals("dispensed")){
+                    numdispensed++;
+                }
+            }
+            if (numdispensed == medlist.size()){
+                return;
             }
             System.out.print("Select medication no.: ");
             int mednum = scanner.nextInt();
@@ -83,9 +90,7 @@ public class Pharmacist extends Staff{
     }
     
     public void requestReplenishment(ArrayList<ReplenishmentRequest> requestList, Inventory inventory){//return all low stock medicine
-        System.out.print("Enter RequestID: ");
-        String requestID = scanner.nextLine();
-        inventory.getReplenishmentRequest(requestID, requestList);       
+        inventory.getReplenishmentRequest(requestList);       
     }
 
     // public Inventory getInventory(Inventory inven){

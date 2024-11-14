@@ -1,1 +1,14 @@
 appointmentID,medicine,status
+AP0001,Paracetamol,dispensed
+AP0001,Ibuprofen,dispensed
+AP0001,Amoxicillin,dispensed
+AP0002,Paracetamol,dispensed
+AP0002,Ibuprofen,dispensed
+AP0003,Paracetamol,dispensed
+AP0003,Ibuprofen,dispensed
+AP0004,Ibuprofen,dispensed
+AP0004,Amoxicillin,dispensed
+AP0005,Ibuprofen,dispensed
+AP0005,Amoxicillin,dispensed
+AP0006,Ibuprofen,dispensed
+AP0006,Amoxicillin,dispensed

@@ -27,7 +27,6 @@ public class PharmacistMain {
 
             switch (choice) {
                 case 1:
-
                     pharmacist.viewAppointmentOutcomeRecord(appointmentOutcomes);
                     //implement logic to view appointment outcome record
                      

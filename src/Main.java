@@ -1,7 +1,6 @@
 import java.util.*;
 
 public class Main {
-    private static Patient currentPatient;
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
@@ -10,17 +9,20 @@ public class Main {
         ScheduleInitializer.main(args);
 
         ScheduleManager scheduleManager = new ScheduleManager();
+        scheduleManager.loadSchedulesFromCSV("../data/Schedule.csv");
+
+        UserManager userManager = new UserManager();
+        StaffManager staffManager = new StaffManager();
+        staffManager.categorizeStaff(userManager.getStaffUsers());
+        
+        AppointmentManager appointmentManager = new AppointmentManager();
+        AppointmentOutcomeManager appointmentOutcomeManager = new AppointmentOutcomeManager();
 
         System.out.print("Enter your ID: ");
         String userID = scanner.nextLine();
 
         System.out.print("Enter your password: ");
         String password = scanner.nextLine();
-
-        UserManager userManager = new UserManager();
-        StaffManager staffManager = new StaffManager();
-        staffManager.categorizeStaff(userManager.getStaffUsers(),scheduleManager.getSchedules());
-        AppointmentManager appointmentManager = new AppointmentManager();
 
         if (userManager.login(userID, password)) {
             String role = userManager.getRole(userID);
@@ -54,10 +56,10 @@ public class Main {
                         displayPharmacistMenu();
                         break;
                     case "Administrator":
-                        displayAdminMenu();
+                        displayAdminMenu(userID, staffManager, appointmentManager.getAppointmentList(), appointmentOutcomeManager.getAppointmentOutcomes());
                         break;
                     case "Patient":
-                        displayPatientMenu(userManager, staffManager, userID, scheduleManager, appointmentManager);
+                        displayPatientMenu(userManager, staffManager, userID, scheduleManager, appointmentManager, appointmentOutcomeManager);
                         break;
                     default:
                         System.out.println("Role not recognized.");
@@ -155,8 +157,10 @@ public class Main {
         } while (choice != 5);
     }
 
-    public static void displayAdminMenu(UserManager userManager, StaffManager staffManager) {
+
+    public static void displayAdminMenu(String userID, StaffManager staffManager, ArrayList<Appointment> appointmentList, ArrayList<AppointmentOutcome> appointmentOutcomes, UserManager userManager) {
         Scanner scanner = new Scanner(System.in);
+        Administrator administrator = staffManager.findAdministratorByID(userID);
         int choice;
 
         do {
@@ -174,7 +178,7 @@ public class Main {
                     Administrator.manageStaff(staffManager, userManager);
                     break;
                 case 2:
-                    //implement logic to view appointment details
+                    Appointment.displayAppointments(appointmentList, appointmentOutcomes);
                     break;
                 case 3:
                     //implement logic to view and manage medication inventory
@@ -191,7 +195,7 @@ public class Main {
         } while (choice != 5);
     }
 
-    public static void displayPatientMenu(UserManager userManager, StaffManager staffManager, String userID, ScheduleManager scheduleManager, AppointmentManager appointmentManager) {
+    public static void displayPatientMenu(UserManager userManager, StaffManager staffManager, String userID, ScheduleManager scheduleManager, AppointmentManager appointmentManager, AppointmentOutcomeManager appointmentOutcomeManager) {
         Scanner scanner = new Scanner(System.in);
         Patient patient = userManager.findPatientByID(userID);
         int choice;
@@ -213,7 +217,7 @@ public class Main {
 
             switch (choice) {
                 case 1:
-                    patient.viewMedicalRecord();
+                    patient.viewMedicalRecord(appointmentOutcomeManager.getAppointmentOutcomes(), appointmentManager.getAppointmentList());
                     break;
                 case 2:
                     System.out.print("Enter new phone number: ");
@@ -228,15 +232,6 @@ public class Main {
                     break;
                 case 4:
                     Schedule.scheduleAppointment(staffManager.getDoctors(), scheduleManager.getSchedules(), appointmentManager.getAppointmentList(), patient.getPatientID());
-                    // // for (Appointment appointment : appointmentManager.getAppointmentList()) {
-                    // //     System.out.println("Appointment ID: " + appointment.getAppointmentID());
-                    // //     System.out.println("Patient ID: " + appointment.getPatientID());
-                    // //     System.out.println("Doctor ID: " + appointment.getDoctorID());
-                    // //     System.out.println("Date: " + appointment.getDate());
-                    // //     System.out.println("Time: " + appointment.getTime());
-                    // //     System.out.println("Status: " + appointment.getStatus());
-                    // //     System.out.println("--------------------------------");
-                    // }
                     break;
                 case 5:
                     Schedule.rescheduleAppointment(patient.getPatientID(), appointmentManager.getAppointmentList(), staffManager.getDoctors(), scheduleManager.getSchedules());
@@ -248,7 +243,7 @@ public class Main {
                     Schedule.displaySchedules(patient.getPatientID(), scheduleManager.getSchedules(), staffManager.getDoctors());
                     break;
                 case 8:
-                    //Implement logic to view past appointment outcome records
+                    AppointmentOutcome.displayAppointmentHistory(patient.getPatientID(), appointmentOutcomeManager.getAppointmentOutcomes(), appointmentManager.getAppointmentList());
                     break;
                 case 9:
                     System.out.println("Logging out...");
