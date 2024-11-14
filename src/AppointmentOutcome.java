@@ -21,33 +21,31 @@ public class AppointmentOutcome {
     public String toString() {
         StringBuilder medications = new StringBuilder();
         for (PrescribedMedication medication : PrescribedMedications) {
-            medications.append(medication.toString()).append(", ");
+            medications.append(medication.getMedicationName()).append(", ");
         }
         
         if (medications.length() > 0) {
             medications.setLength(medications.length() - 2);
         }
     
-        return "AppointmentOutcome {" +
-               "\n  Appointment ID: " + appointmentID +
-               "\n  Date: " + date +
-               "\n  Diagnosis: " + diagnosis +
-               "\n  Service Type: " + serviceType +
-               "\n  Notes: " + notes +
-               "\n  Prescribed Medications: " + (medications.length() > 0 ? medications.toString() : "None") +
-               "\n}";
+        return "\nAppointment ID: " + appointmentID +
+               "\nDate: " + date + " November" +
+               "\nDiagnosis: " + diagnosis +
+               "\nService Type: " + serviceType +
+               "\nNotes: " + notes +
+               "\nPrescribed Medications: " + (medications.length() > 0 ? medications.toString() : "None");
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     // Patient
 
-    public void displayAppointmentHistory(String patientID, ArrayList<AppointmentOutcome> appointmentOutcomes, ArrayList<Appointment> appointments) {
+    public static void displayAppointmentHistory(String patientID, ArrayList<AppointmentOutcome> appointmentOutcomes, ArrayList<Appointment> appointments) {
         ArrayList<String> patientAppointmentIDs = Appointment.patientAppointmentIDs(patientID, appointments);
         for (String appointmentID : patientAppointmentIDs) {
             for (AppointmentOutcome appointmentOutcome : appointmentOutcomes) {
                 if (appointmentOutcome.getAppointmentID().equals(appointmentID)) {
-                    System.out.println();
+                    System.out.println(appointmentOutcome);
                 }
             }
         }

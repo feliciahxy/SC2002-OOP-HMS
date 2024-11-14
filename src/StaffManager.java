@@ -36,6 +36,14 @@ public class StaffManager {
         }
     }
 
+    public Administrator findAdministratorByID(String administratorID) {
+        for (Administrator administrator : administrators) {
+            if (administrator.getId().equals(administratorID)) return administrator;
+        }
+
+        return null;
+    }
+
     public ArrayList<Doctor> getDoctors() {
         return doctors;
     }
