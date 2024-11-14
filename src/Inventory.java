@@ -56,7 +56,7 @@ public class Inventory {
         }
     }
 
-    public ArrayList<ReplenishmentRequest> getReplenishmentRequest(String requestID, ArrayList<ReplenishmentRequest> requestList){
+    public void getReplenishmentRequest(String requestID, ArrayList<ReplenishmentRequest> requestList){
         Scanner sc = new Scanner(System.in);
         ArrayList<Medication> replenishmentList = new ArrayList<>();
         for (int i = 0; i<medications.size(); i++){
@@ -66,22 +66,28 @@ public class Inventory {
         }
         if (replenishmentList.isEmpty()){
             System.out.println("No medications require replenishment.\n");
-            return null;
         }
         
         for (int i = 0; i<replenishmentList.size(); i++){
             Medication med = replenishmentList.get(i);
-            System.out.printf("%s quantity requested: ", med.getMedicineName());
+            System.out.printf("Current quantity: %d, Low stock level: %d, %s quantity requested: ", med.getQuantity(), med.getLowStockLevel(), med.getMedicineName());
             int quantity = sc.nextInt();
-            ReplenishmentRequest req = new ReplenishmentRequest(requestID, med.getMedicineName(), quantity, "pending approval");
+            ReplenishmentRequest req = new ReplenishmentRequest(requestID, med.getMedicineName(), quantity, "pending approval"); 
             requestList.add(req);
+            System.out.println("Medication requested.");   
         }
-        return requestList; //check if need return or if added, global obj changed
+        // return requestList; //check if need return or if added, global obj changed
     }
 
-    // for admin
-    public void approveReplenishmentRequest(String requestID, ArrayList<ReplenishmentRequest> requestList, Inventory inventory){
+    // for admin!!!!!
+    public void approveReplenishmentRequest(ArrayList<ReplenishmentRequest> requestList, Inventory inventory){
         Scanner sc = new Scanner(System.in);
+        for (int i = 0; i<requestList.size(); i++){
+            ReplenishmentRequest Req = requestList.get(i);
+            System.out.printf("(%d) RequestID: %s, Medicine: %s, Quantity: %d\n", i+1, Req.getRequestID(), Req.getMedicine(), Req.getQuantity());
+        }
+        System.out.print("Enter requestID: ");
+        String requestID = sc.nextLine();
         boolean reqIDfound = false;
         boolean anypending = false;
         for (int i = 0; i < requestList.size(); i++){
@@ -90,11 +96,12 @@ public class Inventory {
                 ReplenishmentRequest req = requestList.get(i);
                 if (req.getStatus().equals("pending approval")){
                     anypending = true;
-                    System.out.printf("%s, quantitiy requested: %d. Approve? (y/n) \n", req.getMedicine(), req.getQuantity());
+                    System.out.printf("Medication: %s, quantitiy requested: %d. Approve? (y/n): ", req.getMedicine(), req.getQuantity());
                     String approve = sc.nextLine();
                     if (approve.equals("y")){
                         System.out.println("Request approved.");
                         req.setStatus("Approved");
+
                         inventory.updateStock(req.getMedicine(),req.getQuantity());
                     }
                     else if (approve.equals("n")){

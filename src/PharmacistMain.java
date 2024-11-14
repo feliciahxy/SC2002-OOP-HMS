@@ -49,6 +49,10 @@ public class PharmacistMain {
                 case 5:
                     System.out.println("Logging out...");
                     break;
+                
+                case 6: // FOR ADMIN!!!!!!//////
+                    inventory.approveReplenishmentRequest(replenishmentRequest, inventory);
+                    break;
                 default:
                     System.out.println("Invalid choice, please try again.");
             }

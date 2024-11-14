@@ -82,18 +82,10 @@ public class Pharmacist extends User{
         }
     }
     
-    public ArrayList<ReplenishmentRequest> requestReplenishment(ArrayList<ReplenishmentRequest> requestList, Inventory inventory){//return all low stock medicine
-        System.out.println("Enter RequestID: ");
+    public void requestReplenishment(ArrayList<ReplenishmentRequest> requestList, Inventory inventory){//return all low stock medicine
+        System.out.print("Enter RequestID: ");
         String requestID = scanner.nextLine();
-        ArrayList<ReplenishmentRequest> replenishmentRequest = inventory.getReplenishmentRequest(requestID, requestList);
-       
-        //for sending to admin
-        //test printing///////////////////////////////////////////////////////////////////////
-        for (int i = 0; i<replenishmentRequest.size(); i++){
-            System.out.printf("%s\n", (replenishmentRequest.get(i)).getMedicine());
-        }
-        /////////////////////////////////////////////////////////////////////////////////////         
-        return inventory.getReplenishmentRequest(requestID, requestList); // to check if need return 
+        inventory.getReplenishmentRequest(requestID, requestList);       
     }
 
     // public Inventory getInventory(Inventory inven){
