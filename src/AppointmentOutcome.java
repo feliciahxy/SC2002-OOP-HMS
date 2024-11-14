@@ -70,6 +70,18 @@ public class AppointmentOutcome {
         return this.date;
     }
 
+    public void setDiagnosis(String diagnosis) {
+        this.diagnosis = diagnosis;
+    }
+
+    public void setServiceType(String serviceType) {
+        this.serviceType = serviceType;
+    }
+
+    public void setNotes(String notes) {
+        this.notes = notes;
+    }
+
     // public void setDate(Date date) {
     //     return;
     // }
@@ -106,9 +118,5 @@ public class AppointmentOutcome {
 
     public String getNotes(){
         return this.notes;
-    }
-
-    public void setNotes(String notes) {
-        this.notes = notes;
     }
 }

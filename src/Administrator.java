@@ -5,7 +5,7 @@ public class Administrator extends Staff {
     public Administrator(String id, String name, String role, String gender, int age, String password) {
         super(id, name, role, gender, age, password);
     }
-
+  
     public static void manageStaff(StaffManager staffManager, UserManager userManager){
         Scanner scanner = new Scanner(System.in);
         System.out.println("View and manage staff");
@@ -169,8 +169,6 @@ public class Administrator extends Staff {
                     staff.getGender(), staff.getAge());
         }
     }
-
-
 
     public static void addStaff(StaffManager staffManager, UserManager userManager) {
         Scanner scanner = new Scanner(System.in);

@@ -27,242 +27,6 @@ public class Schedule {
         }
     }
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-    // Main Functions
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-    public static void displaySchedules(String patientID, ArrayList<Schedule> schedules, ArrayList<Doctor> doctors) {
-        Map<String, ArrayList<Integer>> pendingAppointmentsByDoctor = getPendingAppointments(patientID, schedules);
-        Map<String, ArrayList<Integer>> confirmedAppointmentsByDoctor = getConfirmedAppointments(patientID, schedules);
-
-        if (pendingAppointmentsByDoctor.isEmpty() && confirmedAppointmentsByDoctor.isEmpty()) {
-            System.out.println("You have no appointment.");
-            return; 
-        }
-
-        displayPendingAppointment(doctors, pendingAppointmentsByDoctor);
-        displayConfirmedAppointment(doctors, confirmedAppointmentsByDoctor);
-    }
-
-    
-    public static void rescheduleAppointment(String patientID, ArrayList<Appointment> appointmentList, ArrayList<Doctor> doctors, ArrayList<Schedule> schedules) {
-        Scanner sc = new Scanner(System.in);
-
-        System.out.print("The format should be AP followed by 4 digits (e.g., AP0001).\nEnter AppointmentID to reschedule: ");
-        String appointmentID;
-        while (true) {
-            appointmentID = sc.nextLine();
-            if (Appointment.isValidAppointmentID(appointmentID)) {
-                if (Appointment.belongToPatient(appointmentList, appointmentID, patientID)) {
-                    if (Appointment.canReschedule(appointmentList, appointmentID)) break;
-                    else {
-                        System.out.println("This appointment cannot be rescheduled.");
-                    }
-                }
-                else {
-                    System.out.println("You do not have access to this AppointmentID.");
-                }
-            }
-            else {
-                System.out.println("Invalid Input Format.");
-            }
-        }
-        Appointment inputAppointment = null;
-        for (Appointment appointment : appointmentList) {
-            if (appointment.getAppointmentID().equals(appointmentID)) {
-                inputAppointment = appointment;
-                break;
-            }
-        }
-        if (inputAppointment == null) {
-            System.out.println("Appointment not found.");
-            return;
-        }
-        String doctorID = inputAppointment.getDoctorID();
-        String doctorName = getDoctorNameFromID(doctors, doctorID);
-        System.out.println("\nAppointment selected with: Dr " + doctorName);
-        System.out.println("Timing: " + inputAppointment.getDate() + " November " + inputAppointment.getTime());
-        int originalSlot = Appointment.timeToSlot(inputAppointment.getTime());
-        int originalDate = Integer.parseInt(inputAppointment.getDate());
-
-        ArrayList<Integer> availableDates = getAvailableDates(doctorID, schedules);
-        displayAvailableDates(availableDates);
-
-        int dateChoice;
-        while (true) {
-            System.out.print("Select a New Date: ");
-            dateChoice = sc.nextInt();
-            if (availableDates.contains(dateChoice)) {
-                break; 
-            } else {
-                System.out.println("Invalid date choice. Please choose from the available dates.");
-            }
-        }
-
-        int slotChoice;
-        ArrayList<Integer> availableSlots = displayAvailableSlotsForDate(doctorID, dateChoice, schedules);
-        while (true) {
-            System.out.print("Select a Slot: ");
-            slotChoice = sc.nextInt();
-            if (availableSlots.contains(slotChoice)) {
-                break;
-            } else {
-                System.out.println("Invalid slot choice. Please choose from the available slots.");
-            }
-        }
-
-        int slot = addSchedule(patientID, doctorID, dateChoice, slotChoice, schedules);
-        if (slot == -1) System.out.println("An error has occured.");
-                    
-        int originalSlotIndex = (originalDate - 1)* 3 + originalSlot - 1;
-        cancelSlot(schedules, originalSlotIndex, doctorID);
-
-        Appointment.changeAppointment(appointmentList, appointmentID, dateChoice, slot);
-        System.out.println("Appointment with Dr " + doctorName + " successfully rescheduled to " + inputAppointment.getDate() + " November " + inputAppointment.getTime()); 
-    }
-
-
-    public static void cancelAppointment(String patientID, ArrayList<Appointment> appointmentList, ArrayList<Schedule> schedules, ArrayList<Doctor> doctors) {
-        Scanner sc = new Scanner(System.in);
-
-        System.out.print("The format should be AP followed by 4 digits (e.g., AP0001).\nEnter AppointmentID to cancel: ");
-        String appointmentID;
-        while (true) {
-            appointmentID = sc.nextLine();
-            if (Appointment.isValidAppointmentID(appointmentID)) {
-                if (Appointment.belongToPatient(appointmentList, appointmentID, patientID)) break;
-                else {
-                    System.out.println("You do not have access to this AppointmentID.");
-                }
-            }
-            else {
-                System.out.println("Invalid Input Format.");
-            }
-        }
-
-        Appointment inputAppointment = null;
-        for (Appointment appointment : appointmentList) {
-            if (appointment.getAppointmentID().equals(appointmentID)) {
-                inputAppointment = appointment;
-                break;
-            }
-        }
-        if (inputAppointment == null) {
-            System.out.println("Appointment not found.");
-            return;
-        }
-
-        Appointment.cancelAppointment(appointmentList, appointmentID);
-
-        int date = Integer.parseInt(inputAppointment.getDate());
-        int slot = Appointment.timeToSlot(inputAppointment.getTime());
-        int slotIndex = (date - 1) * 3 + slot - 1;
-        cancelSlot(schedules, slotIndex, inputAppointment.getDoctorID());
-
-        String doctorName = Schedule.getDoctorNameFromID(doctors, inputAppointment.getDoctorID());
-        System.out.println("Appointment with Dr " + doctorName + " (" + inputAppointment.getDate() + " November " + inputAppointment.getTime() + ") successfully cancelled."); 
-    }
-
-    public static void scheduleAppointment(ArrayList<Doctor> doctors, ArrayList<Schedule> schedules, ArrayList<Appointment> appointmentList, String patientID){
-        Scanner scanner = new Scanner(System.in);
-
-        System.out.println("\nSchedule An Appointment");
-        ArrayList<String> doctorNames = getDoctorNames(doctors);
-        displayDoctorNames(doctorNames);
-        int numDoctors = doctorNames.size();
-
-        int doctorChoice = -1;
-        while (doctorChoice < 1 || doctorChoice > numDoctors) { 
-            System.out.print("Select a Doctor (1 - " + numDoctors + "): ");
-            if (scanner.hasNextInt()) {
-                doctorChoice = scanner.nextInt();
-            } else {
-                scanner.next(); 
-                System.out.println("Invalid input. Try Again.");
-            }
-        }
-        String doctorName = doctorNames.get(doctorChoice - 1);
-        String doctorID = getDoctorIDFromName(doctors, doctorName);
-        ArrayList<Integer> availableDates = getAvailableDates(doctorID, schedules);
-        displayAvailableDates(availableDates);
-
-        int dateChoice;
-        while (true) {
-            System.out.print("Select a Date: ");
-            dateChoice = scanner.nextInt();
-            if (availableDates.contains(dateChoice)) {
-                break; 
-            } else {
-                System.out.println("Invalid date choice. Please choose from the available dates.");
-            }
-            displayAvailableSlotsForDate(doctorID, dateChoice, schedules);
-        }
-
-        int slotChoice;
-        ArrayList<Integer> availableSlots = displayAvailableSlotsForDate(doctorID, dateChoice, schedules);
-        while (true) {
-            System.out.print("Select a Slot: ");
-            slotChoice = scanner.nextInt();
-            if (availableSlots.contains(slotChoice)) {
-                break;
-            } else {
-                System.out.println("Invalid slot choice. Please choose from the available slots.");
-            }
-        }
-
-        int slot = addSchedule(patientID, doctorID, dateChoice, slotChoice, schedules);
-        if (slot == -1) System.out.println("An error has occured.");
-        Appointment.createAppointment(appointmentList, patientID, doctorID, dateChoice, slot);
-
-        System.out.println("Appointment successfully scheduled with Dr " + doctorName + " on " + dateChoice + " November from " + slotToTime(slot));
-    }
-
-    public static void viewAvailableSlots(ArrayList<Doctor> doctors, ArrayList<Schedule> schedules) {
-        Scanner scanner = new Scanner(System.in);
-
-        System.out.println("\nView Available Slots");
-        ArrayList<String> doctorNames = getDoctorNames(doctors);
-        displayDoctorNames(doctorNames);
-        int numDoctors = doctorNames.size();
-
-        int doctorChoice = -1;
-        while (doctorChoice < 1 || doctorChoice > numDoctors) { 
-            System.out.print("Select a Doctor (1 - " + numDoctors + "): ");
-            if (scanner.hasNextInt()) {
-                doctorChoice = scanner.nextInt();
-            } else {
-                scanner.next(); 
-                System.out.println("Invalid input. Try Again.");
-            }
-        }
-
-        String doctorName = doctorNames.get(doctorChoice - 1);
-        String doctorID = getDoctorIDFromName(doctors, doctorName);
-        ArrayList<Integer> availableDates = getAvailableDates(doctorID, schedules);
-        displayAvailableDates(availableDates);
-
-        int dateChoice;
-        while (true) {
-            System.out.print("Select a Date: ");
-            dateChoice = scanner.nextInt();
-            if (availableDates.contains(dateChoice)) {
-                break; 
-            } else {
-                System.out.println("Invalid date choice. Please choose from the available dates.");
-            }
-        }
-
-        ArrayList<Integer> availableSlots = displayAvailableSlotsForDate(doctorID, dateChoice, schedules);
-    }
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-    // Helper Functions
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
     public static void cancelSlot(ArrayList<Schedule> schedules, int slot, String doctorID) {
         for (Schedule schedule : schedules) {
             if (schedule.getDoctorID().equals(doctorID)) {
@@ -276,7 +40,7 @@ public class Schedule {
         int count = 1;
         for (Map.Entry<String, ArrayList<Integer>> entry : pendingAppointmentsByDoctor.entrySet()) {
             String doctorID = entry.getKey();
-            System.out.println("[" + count + "] " + "Dr " + getDoctorNameFromID(doctors, doctorID));
+            System.out.println("[" + count + "] " + "Dr " + Patient.getDoctorNameFromID(doctors, doctorID));
             count ++;
         }
     }
@@ -285,7 +49,7 @@ public class Schedule {
         int count = 1;
         for (Map.Entry<String, ArrayList<Integer>> entry : confirmedAppointmentsByDoctor.entrySet()) {
             String doctorID = entry.getKey();
-            System.out.println("[" + count + "] " + "Dr " + getDoctorNameFromID(doctors, doctorID));
+            System.out.println("[" + count + "] " + "Dr " + Patient.getDoctorNameFromID(doctors, doctorID));
             count ++;
         }
     }
@@ -301,7 +65,7 @@ public class Schedule {
         for (Map.Entry<String, ArrayList<Integer>> entry : pendingAppointmentsByDoctor.entrySet()) {
             String doctorID = entry.getKey();
             ArrayList<Integer> pendingSlots = entry.getValue();
-            String doctorName = getDoctorNameFromID(doctors, doctorID);
+            String doctorName = Patient.getDoctorNameFromID(doctors, doctorID);
             System.out.println("Dr " + doctorName);
             
             int count = 1;
@@ -327,7 +91,7 @@ public class Schedule {
         for (Map.Entry<String, ArrayList<Integer>> entry : confirmedAppointmentsByDoctor.entrySet()) {
             String doctorID = entry.getKey();
             ArrayList<Integer> confirmedSlots = entry.getValue();
-            String doctorName = getDoctorNameFromID(doctors, doctorID);
+            String doctorName = Patient.getDoctorNameFromID(doctors, doctorID);
             System.out.println("Dr " + doctorName);
             
             int count = 1;
@@ -402,38 +166,6 @@ public class Schedule {
          return availableDates;
     }
 
-    public static ArrayList<String> getDoctorNames (ArrayList<Doctor> doctors) {
-        ArrayList<String> doctorNames = new ArrayList<>();
-        for (Doctor doctor : doctors) {
-                doctorNames.add(doctor.getName());
-        }
-        return doctorNames;
-    }
-
-    public static void displayDoctorNames(ArrayList<String> doctorNames) {
-        System.out.println("List of Doctors:");
-        for (int i = 0; i < doctorNames.size(); i++) {
-            System.out.println("[" + (i + 1) + "] Dr " + doctorNames.get(i)); 
-        }
-    }
-
-    public static String getDoctorIDFromName (ArrayList<Doctor> doctors, String doctorName) {
-        for (Doctor doctor : doctors) {
-            if (doctorName.equalsIgnoreCase(doctor.getName())) {
-                return doctor.getId();
-            }
-        }
-        return null;
-    }
-
-    public static String getDoctorNameFromID (ArrayList<Doctor> doctors, String doctorID) {
-        for (Doctor doctor : doctors) {
-            if (doctorID.equalsIgnoreCase(doctor.getId())) {
-                return doctor.getName();
-            }
-        }
-        return null;
-    }
 
 
     public static String slotToTime(int slot) {
@@ -508,11 +240,14 @@ public class Schedule {
 
         return -1;
     }
+
 }
 
-   
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+    // Main Functions
 
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
 /* public class Schedule {

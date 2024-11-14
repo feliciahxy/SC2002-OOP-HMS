@@ -11,6 +11,10 @@ public class PrescribedMedication {
         this.medicationStatus = medicationStatus;
     }
 
+    public String toString() {
+        return medicationName + " (" + medicationStatus + ")";
+    }
+
     public String getAppointmentID(){
         return this.appointmentID;
     }

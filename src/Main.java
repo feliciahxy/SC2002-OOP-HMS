@@ -56,7 +56,7 @@ public class Main {
 
                 switch (role) {
                     case "Doctor":
-                        displayDoctorMenu();
+                        displayDoctorMenu(userID, staffManager, userManager.getPatientUsers(), appointmentOutcomes, appointmentManager.getAppointmentList());
                         break;
                     case "Pharmacist":
                         displayPharmacistMenu(userID, staffManager, appointmentOutcomes,inventory, replenishmentRequest);
@@ -79,8 +79,9 @@ public class Main {
         scanner.close();
     }
 
-    public static void displayDoctorMenu() {
+    public static void displayDoctorMenu(String userID, StaffManager staffManager, ArrayList<Patient> patientUsers, ArrayList<AppointmentOutcome> appointmentOutcomes, ArrayList<Appointment> appointments) {
         Scanner scanner = new Scanner(System.in);
+        Doctor doctor = staffManager.findDoctorByID(userID);
         int choice;
 
         do {
@@ -98,25 +99,25 @@ public class Main {
 
             switch (choice) {
                 case 1:
-                    //implement logic to view patient medical records
+                    doctor.viewPatientRecords(patientUsers, appointmentOutcomes, appointments);
                     break;
                 case 2:
-                    //implement logic to update patient medical records
+                    doctor.updatePatientRecord(patientUsers, appointmentOutcomes, appointments);
                     break;
                 case 3:
-                    //implement logic to view personal schedule
+                    doctor.viewPersonalSchedule();
                     break;
                 case 4:
-                    //implement logic to set availability for appointments
+                    doctor.setAvailability();
                     break;
                 case 5:
-                    //implement logic to accept or decline appointment requests
+                    doctor.acceptOrDeclineAppointment(appointments);
                     break;
                 case 6:
-                    //implement logic to view upcoming appointments
+                    doctor.viewUpcomingAppointments();
                     break;
                 case 7:
-                    //implement logic to record appointment outcome
+                    doctor.recordAppointmentOutcome(appointments, appointmentOutcomes);
                     break;
                 case 8:
                     System.out.println("Logging out...");
@@ -189,7 +190,7 @@ public class Main {
 
             switch (choice) {
                 case 1:
-                    Administrator.manageStaff(staffManager, userManager);
+                    // Administrator.manageStaff(staffManager, userManager);
                     break;
                 case 2:
                     Appointment.displayAppointments(appointmentList, appointmentOutcomes);
@@ -244,19 +245,19 @@ public class Main {
                     userManager.writeUsersToCSV(); //updates csv also
                     break;
                 case 3:
-                    Schedule.viewAvailableSlots(staffManager.getDoctors(), scheduleManager.getSchedules());
+                    patient.viewAvailableSlots(staffManager.getDoctors(), scheduleManager.getSchedules());
                     break;
                 case 4:
-                    Schedule.scheduleAppointment(staffManager.getDoctors(), scheduleManager.getSchedules(), appointmentManager.getAppointmentList(), patient.getPatientID());
+                    patient.scheduleAppointment(staffManager.getDoctors(), scheduleManager.getSchedules(), appointmentManager.getAppointmentList(), patient.getPatientID());
                     break;
                 case 5:
-                    Schedule.rescheduleAppointment(patient.getPatientID(), appointmentManager.getAppointmentList(), staffManager.getDoctors(), scheduleManager.getSchedules());
+                    patient.rescheduleAppointment(patient.getPatientID(), appointmentManager.getAppointmentList(), staffManager.getDoctors(), scheduleManager.getSchedules());
                     break;
                 case 6:
-                    Schedule.cancelAppointment(patient.getPatientID(), appointmentManager.getAppointmentList(), scheduleManager.getSchedules(), staffManager.getDoctors());
+                    patient.cancelAppointment(patient.getPatientID(), appointmentManager.getAppointmentList(), scheduleManager.getSchedules(), staffManager.getDoctors());
                     break;
                 case 7:
-                    Schedule.displaySchedules(patient.getPatientID(), scheduleManager.getSchedules(), staffManager.getDoctors());
+                    patient.displaySchedules(patient.getPatientID(), scheduleManager.getSchedules(), staffManager.getDoctors());
                     break;
                 case 8:
                     AppointmentOutcome.displayAppointmentHistory(patient.getPatientID(), appointmentOutcomeManager.getAppointmentOutcomes(), appointmentManager.getAppointmentList());

@@ -38,6 +38,13 @@ public class StaffManager {
         return null;
     }
 
+    public Doctor findDoctorByID(String doctorID){
+        for(Doctor doctor : doctors){
+            if (doctor.getId().equals(doctorID)) return doctor;
+        }
+        return null;
+    }
+
     public ArrayList<Doctor> getDoctors() {
         return doctors;
     }
