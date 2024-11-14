@@ -63,6 +63,7 @@ public class Pharmacist extends Staff{
             }
             System.out.print("Select medication no.: ");
             int mednum = scanner.nextInt();
+            scanner.nextLine();
             if (mednum <= 0 || mednum > medlist.size()){
                 System.out.println("Invalid option");
             }
@@ -74,6 +75,7 @@ public class Pharmacist extends Staff{
                 else{
                     System.out.print("Enter (1) to dispense. Choice: ");
                     int choice = scanner.nextInt();
+                    scanner.nextLine();
                     if (choice ==  1){
                         if(inventory.updateStock(med.getMedicationName(), -1)){
                             appointmentOutcome.setMedicationStatus(med, "dispensed");

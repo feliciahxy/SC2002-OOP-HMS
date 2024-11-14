@@ -196,6 +196,7 @@ public class Inventory {
         System.out.println("(5) Change low stock level");
         System.out.print("Enter choice: ");
         int choice = sc.nextInt();
+        sc.nextLine();
 
         switch(choice){
             case 1:
@@ -207,8 +208,10 @@ public class Inventory {
                 String medicineName = sc.nextLine(); 
                 System.out.print("Quantity: ");
                 int quantity = sc.nextInt();
+                sc.nextLine();
                 System.out.println("Low stock level: ");
                 int lowstock = sc.nextInt();
+                sc.nextLine();
                 this.newMedication(medicineName, quantity, lowstock);
                 break;
 
@@ -216,12 +219,14 @@ public class Inventory {
                 this.viewInventory(1);
                 System.out.print("Select medication (no.): ");
                 int mednum = sc.nextInt();
+                sc.nextLine();
                 if (mednum<= 0 || mednum>medications.size()){
                     System.out.println("Invalid input");
                 }
                 else{
                     System.out.print("Quantity to be added (input -x to remove): ");
                     int quantity1 = sc.nextInt();
+                    sc.nextLine();
                     this.updateStock(medications.get(mednum-1).getMedicineName(), quantity1);
                 }
                 break;
@@ -230,6 +235,7 @@ public class Inventory {
                 this.viewInventory(1);
                 System.out.print("Select medication (no.): ");
                 int mednum1 = sc.nextInt();
+                sc.nextLine();
                 if (mednum1<= 0 || mednum1>medications.size()){
                     System.out.println("Invalid input");
                 }
@@ -242,11 +248,13 @@ public class Inventory {
                 this.viewInventory(1);
                 System.out.print("Select medication (no.): ");
                 int mednum2 = sc.nextInt();
+                sc.nextLine();
                 if (mednum2<= 0 || mednum2>medications.size()){
                     System.out.println("Invalid input");
                 }
                 System.out.print("New low stock level: ");
                 int lowstockqty = sc.nextInt();
+                sc.nextLine();
                 this.updateLowStockLevel(medications.get(mednum2-1).getMedicineName(), lowstockqty);
                 break;
 
