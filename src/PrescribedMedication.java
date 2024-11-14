@@ -10,6 +10,7 @@ public class PrescribedMedication {
         this.medicationName = medicationName;
         this.medicationStatus = medicationStatus;
     }
+
     public String getAppointmentID(){
         return this.appointmentID;
     }

@@ -26,7 +26,7 @@ public class Patient extends User {
         this.pastDiagnosesAndTreatments = new ArrayList<>();
     }
 
-    public void viewMedicalRecord() {
+    public void viewMedicalRecord(ArrayList<AppointmentOutcome> appointmentOutcomes, ArrayList<Appointment> appointments) {
         System.out.println("Patient ID: " + patientID);
         System.out.println("Name: " + name);
         System.out.println("Date of Birth: " + dob);
@@ -34,7 +34,8 @@ public class Patient extends User {
         System.out.println("Blood Type: " + bloodType);
         System.out.println("Phone Number: " + phoneNumber);
         System.out.println("Email: " + email);
-        System.out.println("Past Diagnoses and Treatments: " + pastDiagnosesAndTreatments);
+        System.out.println("Past Diagnoses and Treatments");
+        AppointmentOutcome.displayAppointmentHistory(patientID, appointmentOutcomes, appointments);
     }
 
     private boolean isValidPhoneNumber(String phoneNumber) {

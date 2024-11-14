@@ -25,7 +25,7 @@ public class Appointment {
 
     public static void createAppointment(ArrayList<Appointment> appointmentList, String patientID, String doctorID, int dateChoice, int slot) {
         int size = appointmentList.size();
-        String formattedSize = String.format("%04d", size);
+        String formattedSize = String.format("%04d", size + 1);
         String formattedDate = String.format("%02d", dateChoice);
         String appointmentID = "AP" + formattedSize;
         Appointment appointment = new Appointment(appointmentID,patientID,doctorID,formattedDate,Schedule.slotToTime(slot),"pending");
@@ -58,7 +58,35 @@ public class Appointment {
             if (appointment.getPatientID().equals(patientID)) patientAppointmentIDs.add(appointment.getAppointmentID());
         }
         return patientAppointmentIDs;
-    } 
+    }
+    
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    // Admin
+
+    public static void displayAppointments(ArrayList<Appointment> appointmentList, ArrayList<AppointmentOutcome> appointmentOutcomes) {
+        for (Appointment appointment : appointmentList) {
+            System.out.println("\nAppointmentID: " + appointment.getAppointmentID());
+            System.out.println("PatientID: " + appointment.getPatientID());
+            System.out.println("DoctorID: " + appointment.getDoctorID());
+            System.out.println("Status: " + appointment.getStatus());
+            System.out.println("Date: " + appointment.getDate() + " November");
+            System.out.println("Time: " + appointment.getTime());
+
+            if (appointment.getStatus().equals("completed")) {
+                System.out.print("\nAppointment Outcome Record");
+                for (AppointmentOutcome appointmentOutcome : appointmentOutcomes) {
+                    if (appointmentOutcome.getAppointmentID().equals(appointment.getAppointmentID())) {
+                        System.out.println(appointmentOutcome);
+                        break;
+                    }
+                }
+            }
+        }
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
