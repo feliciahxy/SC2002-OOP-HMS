@@ -205,7 +205,6 @@ public class Inventory {
                     break;
                 case 2:
                     System.out.print("Medication Name: ");
-                    sc.nextLine();
                     String medicineName = sc.nextLine(); 
                     System.out.print("Quantity: ");
                     int quantity = sc.nextInt();
