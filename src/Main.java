@@ -75,7 +75,13 @@ public class Main {
         } else {
             System.out.println("Invalid login credentials.");
         }
-        scheduleManager.writeSchedulesToCSV("../data/Schedule.csv");
+        
+        //if program quits unexpectedly, data will be saved regardless
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+            userManager.writeUsersToCSV();
+            scheduleManager.writeSchedulesToCSV("../data/Schedule.csv");
+        }));
+
         scanner.close();
     }
 
@@ -242,7 +248,6 @@ public class Main {
                     System.out.print("Enter new email: ");
                     String newEmail = scanner.nextLine();
                     patient.updatePersonalInfo(newPhoneNumber, newEmail);
-                    userManager.writeUsersToCSV(); //updates csv also
                     break;
                 case 3:
                     patient.viewAvailableSlots(staffManager.getDoctors(), scheduleManager.getSchedules());
