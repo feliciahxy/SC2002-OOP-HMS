@@ -209,7 +209,7 @@ public class Inventory {
                     System.out.print("Quantity: ");
                     int quantity = sc.nextInt();
                     sc.nextLine();
-                    System.out.println("Low stock level: ");
+                    System.out.print("Low stock level: ");
                     int lowstock = sc.nextInt();
                     sc.nextLine();
                     this.newMedication(medicineName, quantity, lowstock);
