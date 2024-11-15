@@ -23,10 +23,33 @@ public class ScheduleManager {
 
                 Schedule schedule = new Schedule(doctorID, slots);
                 schedules.add(schedule);
-
             }
         } catch (IOException e) {
             System.out.println("Error reading file: " + e.getMessage());
+        }
+    }
+
+    public void writeSchedulesToCSV(String filePath) {
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(filePath, false))) {
+            StringBuilder header = new StringBuilder("doctorIDs");
+            for (int i = 1; i <= 30; i++) {
+                for (int j = 1; j <= 3; j++) {
+                    header.append(",").append(j).append("/").append(i);
+                }
+            }
+            bw.write(header.toString());
+            bw.newLine(); 
+
+            for (Schedule schedule : schedules) {
+                bw.write(schedule.getDoctorID());  
+                ArrayList<String> slots = schedule.getSlots();
+                for (String slot : slots) {
+                    bw.write("," + slot);  
+                }
+                bw.newLine(); 
+            }
+        } catch (IOException e) {
+            System.out.println("Error writing file: " + e.getMessage());
         }
     }
 
