@@ -9,7 +9,6 @@ public class Main {
         ScheduleInitializer.main(args);
 
         ScheduleManager scheduleManager = new ScheduleManager();
-        scheduleManager.loadSchedulesFromCSV("../data/Schedule.csv");
 
         UserManager userManager = new UserManager();
         StaffManager staffManager = new StaffManager();
@@ -76,6 +75,7 @@ public class Main {
         } else {
             System.out.println("Invalid login credentials.");
         }
+        scheduleManager.writeSchedulesToCSV("../data/Schedule.csv");
         scanner.close();
     }
 
@@ -190,7 +190,7 @@ public class Main {
 
             switch (choice) {
                 case 1:
-                    // Administrator.manageStaff(staffManager, userManager);
+                    Administrator.manageStaff(staffManager, userManager);
                     break;
                 case 2:
                     Appointment.displayAppointments(appointmentList, appointmentOutcomes);
