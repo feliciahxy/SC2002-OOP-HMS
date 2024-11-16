@@ -70,6 +70,16 @@ public class Main {
         } else {
             System.out.println("Invalid login credentials.");
         }
+<<<<<<< Updated upstream
+=======
+        
+        //if program quits unexpectedly, data will be saved regardless
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+            userManager.writeUsersToCSV();
+            scheduleManager.writeSchedulesToCSV("../data/Schedule.csv");
+        }));
+
+>>>>>>> Stashed changes
         scanner.close();
     }
 
@@ -166,6 +176,7 @@ public class Main {
         do {
             System.out.println("\nAdministrator Menu:");
             System.out.println("1. View and Manage Hospital Staff");
+            System.out.println("2. View and Manage Hospital Patients");
             System.out.println("2. View Appointment details");
             System.out.println("3. View and Manage Medication Inventory");
             System.out.println("4. Approve Replenishment Requests");
@@ -178,15 +189,18 @@ public class Main {
                     Administrator.manageStaff(staffManager, userManager);
                     break;
                 case 2:
-                    Appointment.displayAppointments(appointmentList, appointmentOutcomes);
+                    Administrator.managePatient(userManager);
                     break;
                 case 3:
-                    //implement logic to view and manage medication inventory
+                    Appointment.displayAppointments(appointmentList, appointmentOutcomes);
                     break;
                 case 4:
-                    // implement logic to approve replenishment requests
+                    //implement logic to view and manage medication inventory
                     break;
                 case 5:
+                    // implement logic to approve replenishment requests
+                    break;
+                case 6:
                     System.out.println("Logging out...");
                     break;
                 default:
