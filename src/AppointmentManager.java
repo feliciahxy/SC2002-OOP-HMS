@@ -30,26 +30,33 @@ public class AppointmentManager {
         }
     }
 
-    public Appointment findAppointmentByID(String appointmentID) {
-        for (Appointment appointment : appointmentList) {
-            if (appointment.getAppointmentID().equals(appointmentID)) {
-                return appointment;
-            }
-        }
-        return null;
-    }
+    // public Appointment findAppointmentByID(String appointmentID) {
+    //     for (Appointment appointment : appointmentList) {
+    //         if (appointment.getAppointmentID().equals(appointmentID)) {
+    //             return appointment;
+    //         }
+    //     }
+    //     return null;
+    // }
 
-    public void saveAppointmentsToCSV() {
+    public void writeAppointmentsToCSV() {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter("../data/Appointment.csv"))) {
-            writer.write("appointmentID,patientID,doctorID,slot_date,status\n");
+            // Write the header
+            writer.write("appointmentID,patientID,doctorID,date,time,status\n");
+    
+            // Write each appointment
             for (Appointment appointment : appointmentList) {
-                writer.write(appointment.getAppointmentID() + "," + appointment.getPatientID() + "," +
-                        appointment.getDoctorID() + "," + appointment.getDate() + "," + appointment.getStatus() + "\n");
+                writer.write(appointment.getAppointmentID() + "," +
+                    appointment.getPatientID() + "," +
+                    appointment.getDoctorID() + "," +
+                    appointment.getDate() + "," +
+                    appointment.getTime() + "," +
+                    appointment.getStatus() + "\n");
             }
         } catch (IOException e) {
             System.out.println("Error writing to file: " + e.getMessage());
         }
-    }
+    }    
 
     public ArrayList<Appointment> getAppointmentList() {
         return appointmentList;

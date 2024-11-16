@@ -72,6 +72,44 @@ public class AppointmentOutcomeManager {
         }
     }
 
+    public void writeAppointmentOutcomesToCSV() {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter("../data/AppointmentOutcome.csv"))) {
+            // Write the header
+            writer.write("appointmentID,diagnosis,serviceType,date,notes\n");
+    
+            // Write each appointment outcome
+            for (AppointmentOutcome outcome : appointmentOutcomes) {
+                writer.write(outcome.getAppointmentID() + "," +
+                    outcome.getDiagnosis() + "," +
+                    outcome.getServiceType() + "," +
+                    outcome.getDate() + "," +
+                    outcome.getNotes().replace(",", ";") + "\n"); // Replace commas in notes to avoid CSV issues
+            }
+        } catch (IOException e) {
+            System.out.println("Error writing to file: " + e.getMessage());
+        }
+    }
+
+    public void writePrescribedMedicationsToCSV() {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter("../data/PrescribedMedication.csv"))) {
+            // Write the header
+            writer.write("Appointment ID,Medication Name,Medication Status\n");
+    
+            // Write prescribed medications for each appointment
+            for (AppointmentOutcome appointmentOutcome : appointmentOutcomes) {
+                for (PrescribedMedication medication : appointmentOutcome.getPrescribedMedicationList()) {
+                    writer.write(appointmentOutcome.getAppointmentID() + "," +
+                                 medication.getMedicationName() + "," +
+                                 medication.getMedicationStatus() + "\n");
+                }
+            }
+        } catch (IOException e) {
+            System.out.println("Error writing prescribed medications to file: " + e.getMessage());
+        }
+    }
+    
+    
+
     public ArrayList<AppointmentOutcome> getAppointmentOutcomes() {
         return this.appointmentOutcomes;
     }

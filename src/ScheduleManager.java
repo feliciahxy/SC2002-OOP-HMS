@@ -29,8 +29,8 @@ public class ScheduleManager {
         }
     }
 
-    public void writeSchedulesToCSV(String filePath) {
-        try (BufferedWriter bw = new BufferedWriter(new FileWriter(filePath, false))) {
+    public void writeSchedulesToCSV() {
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter("../data/Schedule.csv", false))) {
             StringBuilder header = new StringBuilder("doctorIDs");
             for (int i = 1; i <= 30; i++) {
                 for (int j = 1; j <= 3; j++) {

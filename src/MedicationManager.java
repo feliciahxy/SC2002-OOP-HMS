@@ -33,6 +33,23 @@ public class MedicationManager {
         }
     }
 
+    public void writeMedicationsToCSV() {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter("../data/Medicine_List.csv"))) {
+            // Write the header
+            writer.write("Medicine Name,Initial Stock,Low Stock Level Alert\n");
+    
+            // Write each medication
+            for (Medication medication : medications) {
+                writer.write(medication.getMedicineName() + "," +
+                             medication.getQuantity() + "," +
+                             medication.getLowStockLevel() + "\n");
+            }
+        } catch (IOException e) {
+            System.out.println("Error writing to file: " + e.getMessage());
+        }
+    }
+    
+
     public ArrayList<Medication> getMedications() {
         return this.medications;
     }

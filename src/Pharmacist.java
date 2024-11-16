@@ -7,7 +7,7 @@ public class Pharmacist extends Staff{
         super(staffID, name, role, gender, age, password);
     }
     
-    public AppointmentOutcome findAppointmentOutcomeRecord(String appointmentID, ArrayList<AppointmentOutcome> appointmentOutcomes){
+    private AppointmentOutcome findAppointmentOutcomeRecord(String appointmentID, ArrayList<AppointmentOutcome> appointmentOutcomes){
         for (int i = 0; i<appointmentOutcomes.size(); i++){
             if (appointmentOutcomes.get(i).getAppointmentID().equals(appointmentID)){
                 return appointmentOutcomes.get(i);

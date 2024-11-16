@@ -164,6 +164,34 @@ public class Inventory {
         }
     }
 
+    public void notifyReplenishmentRequest(ArrayList<ReplenishmentRequest> requestList){
+        boolean pending = false;
+        for (int i = 0; i<requestList.size(); i++){
+            if (requestList.get(i).getStatus().equals("pending")){
+                if (pending == false){
+                    System.out.println("Pending replenishment requests awaiting approval.");
+                    pending = true;
+                }
+                ReplenishmentRequest req = requestList.get(i);
+                System.out.printf("Medication: %s, quantitiy requested: %d.\n", req.getMedicine(), req.getQuantity());
+            }
+        }
+    }
+
+    public void notifyLowStock(){
+        boolean low = false;
+        for (int i = 0; i<medications.size(); i++){
+            if (medications.get(i).getQuantity() < medications.get(i).getLowStockLevel()){
+                if (low == false){
+                    System.out.println("Low stock alert!");
+                    low = true;
+                }
+                Medication med = medications.get(i);
+                System.out.printf("Medication Name: %s, Current Quantity: %s, Low Stock Level Alert:%s \n", med.getMedicineName(), med.getQuantity(), med.getLowStockLevel());
+            }
+        }
+    }
+
     public void removeMedication(String medicineName){
         for(int i = 0; i<medications.size(); i++){
             Medication med = medications.get(i);
@@ -205,12 +233,11 @@ public class Inventory {
                     break;
                 case 2:
                     System.out.print("Medication Name: ");
-                    sc.nextLine();
                     String medicineName = sc.nextLine(); 
                     System.out.print("Quantity: ");
                     int quantity = sc.nextInt();
                     sc.nextLine();
-                    System.out.println("Low stock level: ");
+                    System.out.print("Low stock level: ");
                     int lowstock = sc.nextInt();
                     sc.nextLine();
                     this.newMedication(medicineName, quantity, lowstock);
