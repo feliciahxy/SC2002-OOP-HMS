@@ -79,7 +79,12 @@ public class Main {
         //if program quits unexpectedly, data will be saved regardless
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
             userManager.writeUsersToCSV();
-            scheduleManager.writeSchedulesToCSV("../data/Schedule.csv");
+            scheduleManager.writeSchedulesToCSV();
+            appointmentManager.writeAppointmentsToCSV();
+            appointmentOutcomeManager.writeAppointmentOutcomesToCSV();
+            appointmentOutcomeManager.writePrescribedMedicationsToCSV();
+            medicationManager.writeMedicationsToCSV();
+            replenishmentRequestManager.writeReplenishmentRequestsToCSV();
         }));
 
         scanner.close();
@@ -140,6 +145,7 @@ public class Main {
         Pharmacist pharmacist = staffManager.findPharmacistByID(userID);
 
         do {
+            inventory.notifyLowStock();
             System.out.println("\nPharmacist Menu:");
             System.out.println("1. View Appointment Outcome Record");
             System.out.println("2. Update Prescription Status");
@@ -185,6 +191,8 @@ public class Main {
         int choice;
 
         do {
+            inventory.notifyLowStock();
+            inventory.notifyReplenishmentRequest(replenishmentRequest);
             System.out.println("\nAdministrator Menu:");
             System.out.println("1. View and Manage Hospital Staff");
             System.out.println("2. View Appointment details");

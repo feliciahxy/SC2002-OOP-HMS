@@ -34,6 +34,24 @@ public class ReplenishmentRequestManager {
         }
     }
 
+    public void writeReplenishmentRequestsToCSV() {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter("../Data/ReplenishRequest.csv"))) {
+            // Write the header line
+            writer.write("requestID,medicine,quantity,status\n");
+    
+            // Write each replenishment request
+            for (ReplenishmentRequest request : replenishmentRequests) {
+                writer.write(request.getRequestID() + "," +
+                             request.getMedicine() + "," +
+                             request.getQuantity() + "," +
+                             request.getStatus() + "\n");
+            }
+        } catch (IOException e) {
+            System.out.println("Error writing replenishment requests to file: " + e.getMessage());
+        }
+    }
+    
+
     public ArrayList<ReplenishmentRequest> getReplenishmentRequests() {
         return this.replenishmentRequests;
     }
