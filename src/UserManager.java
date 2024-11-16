@@ -158,27 +158,44 @@ public class UserManager {
     }
 
     public void writeUsersToCSV() {
-        try (BufferedWriter staffWriter = new BufferedWriter(new FileWriter("../data/Staff_List.csv"))) {
-            staffWriter.write("Staff ID,Name,Role,Gender,Age,Password\n");
-            for (User staffUser : staffUsers) {
-                staffWriter.write(staffUser.getId() + "," + staffUser.getName() + "," +
-                        staffUser.getRole() + "," + staffUser.getGender() + "," +
-                        staffUser.getAge() + "," + staffUser.getPassword() + "\n");
+        //write to staff.csv
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter("../data/Staff_List.csv"))) {
+            writer.write("Staff ID,Name,Role,Gender,Age,Password");
+            writer.newLine();
+            for (Staff staff : staffUsers) {
+                writer.write(String.join(",",
+                    staff.getId(),
+                    staff.getName(),
+                    staff.getRole(),
+                    staff.getGender(),
+                    String.valueOf(staff.getAge()),
+                    staff.getPassword()
+                ));
+                writer.newLine();
             }
         } catch (IOException e) {
-            System.out.println("Error writing to staff file: " + e.getMessage());
+            System.out.println("Error writing to Staff_List.csv: " + e.getMessage());
         }
 
-        try (BufferedWriter patientWriter = new BufferedWriter(new FileWriter("../data/Patient_List.csv"))) {
-            patientWriter.write("Patient ID,Name,Date of Birth,Gender,Blood Type,Phone Number,Email,Password\n");
+        //write to patient.csv
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter("../data/Patient_List.csv"))) {
+            writer.write("Patient ID,Name,Date of Birth,Gender,Blood Type,Phone Number,Email,Password");
+            writer.newLine();
             for (Patient patient : patientUsers) {
-                patientWriter.write(patient.getId() + "," + patient.getName() + "," +
-                        patient.getDob() + "," + patient.getGender() + "," +
-                        patient.getBloodType() + "," + patient.getPhoneNumber() + "," +
-                        patient.getEmail() + "," + patient.getPassword() + "\n");
+                writer.write(String.join(",",
+                    patient.getId(),
+                    patient.getName(),
+                    patient.getDob().toString(),
+                    patient.getGender(),
+                    patient.getBloodType(),
+                    patient.getPhoneNumber(),
+                    patient.getEmail(),
+                    patient.getPassword()
+                ));
+                writer.newLine();
             }
         } catch (IOException e) {
-            System.out.println("Error writing to patient file: " + e.getMessage());
+            System.out.println("Error writing to Patient_List.csv: " + e.getMessage());
         }
     }
 }
