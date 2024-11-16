@@ -17,12 +17,11 @@ public class AppointmentOutcomeManager {
 
         try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
             String line;
-            br.readLine(); // Skip header line
+            br.readLine(); 
 
             while ((line = br.readLine()) != null) {
                 String[] fields = line.split(",");
                 if (fields.length < 3) {
-                    System.out.println("Invalid data: " + line);
                     continue;
                 }
 

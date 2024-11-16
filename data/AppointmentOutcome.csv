@@ -1,7 +1,1 @@
 appointmentID,diagnosis,serviceType,date,notes
-AP0001,cancer,xray,01,patient is dying
-AP0002,cancer,xray,02,patient is dying2
-AP0003,cancer,xray,03,patient is dying3
-AP0004,cancer,xray,04,patient is dying4
-AP0005,cancer,xray,05,patient is dying5
-AP0006,cancer,xray,06,patient is dying6

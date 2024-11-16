@@ -33,13 +33,14 @@ public class Appointment {
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    public static void createAppointment(ArrayList<Appointment> appointmentList, String patientID, String doctorID, int dateChoice, int slot) {
+    public static Appointment createAppointment(ArrayList<Appointment> appointmentList, String patientID, String doctorID, int dateChoice, int slot) {
         int size = appointmentList.size();
         String formattedSize = String.format("%04d", size + 1);
         String formattedDate = String.format("%02d", dateChoice);
         String appointmentID = "AP" + formattedSize;
         Appointment appointment = new Appointment(appointmentID,patientID,doctorID,formattedDate,Schedule.slotToTime(slot),"pending");
         appointmentList.add(appointment);
+        return appointment;
     }
 
     public static void changeAppointment(ArrayList<Appointment> appointmentList, String appointmentID, int newDate, int newSlot) {

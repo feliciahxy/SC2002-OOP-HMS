@@ -218,7 +218,7 @@ public class Doctor extends Staff {
         System.out.println("Availability Updated Successfully!");
     }
 
-    public void acceptOrDeclineAppointment(ArrayList<Appointment> appointments) {
+    public void acceptOrDeclineAppointment(ArrayList<Appointment> appointments, Doctor doctor, ArrayList<Notification> notifications) {
         Scanner sc = new Scanner(System.in);
         ArrayList<String> slots = this.schedule.getSlots();
         int count = 1;
@@ -262,23 +262,32 @@ public class Doctor extends Staff {
         String formattedDate = String.format("%02d", date);
         String time = Schedule.slotToTime(slot);
         
-        Appointment selecAppointment = null;
+        Appointment selectedAppointment = null;
         for (Appointment appointment : appointments) {
             if (appointment.getDate().equals(formattedDate) && appointment.getTime().equals(time) && appointment.getDoctorID().equals(this.getId())) {
-                selecAppointment = appointment;
+                selectedAppointment = appointment;
                 break;
             }
         }
 
         if (input == 1) {
             slots.set(slotIndex, slots.get(slotIndex).substring(0,5) + "-1");
-            selecAppointment.setStatus("confirmed");
+            selectedAppointment.setStatus("confirmed");
             System.out.println("Appointment confirmed successfully!");
+
+            AppointmentNotificationForPatientCreator notificationWhenDoctorConfirms = new NotificationWhenDoctorConfirms();
+            String message = notificationWhenDoctorConfirms.createMessage(selectedAppointment, doctor);
+            String notificationID = NotificationIDGenerator.generateNotificationID(notifications);
+            notifications.add(NotificationBuilder.buildNotification(notificationID, selectedAppointment.getPatientID(), message));
         }
         else if (input == 2) {
             slots.set(slotIndex, "N/A");
-            selecAppointment.setStatus("cancelled");
+            selectedAppointment.setStatus("cancelled");
             System.out.println("Appointment cancelled successfully!");
+            AppointmentNotificationForPatientCreator notificationWhenDoctorCancels = new NotificationWhenDoctorCancels();
+            String message = notificationWhenDoctorCancels.createMessage(selectedAppointment, doctor);
+            String notificationID = NotificationIDGenerator.generateNotificationID(notifications);
+            notifications.add(NotificationBuilder.buildNotification(notificationID, selectedAppointment.getPatientID(), message));
         } 
     }
 

@@ -1,0 +1,6 @@
+notificationID,receiverID,message,status
+N0001,D001,Patient Alice Brown has scheduled an appointment (ID: AP0001) with you on 01 November at 0900-1000.,sent
+N0002,D001,Patient Alice Brown has rescheduled his/her appointment (ID: AP0001) with you to 01 November at 1000-1100.,sent
+N0003,D001,Patient Alice Brown has cancelled the appointment (ID: AP0001) on 01 November at 1000-1100.,sent
+N0004,D001,Patient Alice Brown has scheduled an appointment (ID: AP0002) with you on 01 November at 1100-1200.,sent
+N0005,P1001,Dr John Smith has confirmed the appointment (ID: AP0002) with you on 01 November at 1100-1200.,sent

@@ -17,11 +17,27 @@ public class Main {
         AppointmentManager appointmentManager = new AppointmentManager();
         AppointmentOutcomeManager appointmentOutcomeManager = new AppointmentOutcomeManager();
 
-        ArrayList<AppointmentOutcome> appointmentOutcomes = appointmentOutcomeManager.getAppointmentOutcomes();
         MedicationManager medicationManager = new MedicationManager();
         Inventory inventory = new Inventory(medicationManager.getMedications());
         ReplenishmentRequestManager replenishmentRequestManager = new ReplenishmentRequestManager();
+
+        NotificationManager notificationManager = new NotificationManager();
+        NotificationReader csvNotificationReader = new CSVNotificationReader();
+        for (Notification notification : csvNotificationReader.readNotifications("../data/Notification.csv")) {
+            notificationManager.addNotification(notification);
+        }
+
+        ArrayList<Patient> patients = userManager.getPatientUsers();
+        ArrayList<Staff> staffs = userManager.getStaffUsers();
+        ArrayList<Doctor> doctors = staffManager.getDoctors();
+        ArrayList<Administrator> administrators = staffManager.getAdministrators();
+        ArrayList<Pharmacist> pharmacists = staffManager.getPharmacists();
+        ArrayList<Schedule> schedules = scheduleManager.getSchedules();
+        ArrayList<AppointmentOutcome> appointmentOutcomes = appointmentOutcomeManager.getAppointmentOutcomes();
+        ArrayList<Appointment> appointments = appointmentManager.getAppointmentList();
         ArrayList<ReplenishmentRequest> replenishmentRequest = replenishmentRequestManager.getReplenishmentRequests();
+        ArrayList<Notification> notifications = notificationManager.getNotifications();
+
 
         System.out.print("Enter your ID: ");
         String userID = scanner.nextLine();
@@ -53,18 +69,26 @@ public class Main {
                     }
                 }
 
+                for (Notification notification : notifications) {
+                    if (notification.getReceiverID().equals(userID) && notification.getStatus().equals("pending")) {
+                        System.out.println("\nLatest Notification");
+                        System.out.println(notification.getMessage());
+                        notification.setStatus("sent");
+                    }
+                }
+
                 switch (role) {
                     case "Doctor":
-                        displayDoctorMenu(userID, staffManager, userManager.getPatientUsers(), appointmentOutcomes, appointmentManager.getAppointmentList());
+                        displayDoctorMenu(userID, staffManager, patients, appointmentOutcomes, appointments, notifications);
                         break;
                     case "Pharmacist":
                         displayPharmacistMenu(userID, staffManager, appointmentOutcomes,inventory, replenishmentRequest);
                         break;
                     case "Administrator":
-                        displayAdminMenu(userID, staffManager, appointmentManager.getAppointmentList(), appointmentOutcomeManager.getAppointmentOutcomes(), inventory, replenishmentRequest, userManager);
+                        displayAdminMenu(userID, staffManager, appointments, appointmentOutcomes, inventory, replenishmentRequest, userManager);
                         break;
                     case "Patient":
-                        displayPatientMenu(userManager, staffManager, userID, scheduleManager, appointmentManager, appointmentOutcomeManager);
+                        displayPatientMenu(userManager, doctors, userID, schedules, appointments, appointmentOutcomes, notifications);
                         break;
                     default:
                         System.out.println("Role not recognized.");
@@ -76,7 +100,6 @@ public class Main {
             System.out.println("Invalid login credentials.");
         }
         
-        //if program quits unexpectedly, data will be saved regardless
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
             userManager.writeUsersToCSV();
             scheduleManager.writeSchedulesToCSV();
@@ -85,12 +108,14 @@ public class Main {
             appointmentOutcomeManager.writePrescribedMedicationsToCSV();
             medicationManager.writeMedicationsToCSV();
             replenishmentRequestManager.writeReplenishmentRequestsToCSV();
+            NotificationWriter csvNotificationWriter = new CSVNotificationWriter();
+            csvNotificationWriter.writeNotifications("../data/Notification.csv", notifications);
         }));
 
         scanner.close();
     }
 
-    public static void displayDoctorMenu(String userID, StaffManager staffManager, ArrayList<Patient> patientUsers, ArrayList<AppointmentOutcome> appointmentOutcomes, ArrayList<Appointment> appointments) {
+    public static void displayDoctorMenu(String userID, StaffManager staffManager, ArrayList<Patient> patientUsers, ArrayList<AppointmentOutcome> appointmentOutcomes, ArrayList<Appointment> appointments, ArrayList<Notification> notifications) {
         Scanner scanner = new Scanner(System.in);
         Doctor doctor = staffManager.findDoctorByID(userID);
         int choice;
@@ -122,7 +147,7 @@ public class Main {
                     doctor.setAvailability();
                     break;
                 case 5:
-                    doctor.acceptOrDeclineAppointment(appointments);
+                    doctor.acceptOrDeclineAppointment(appointments, doctor, notifications);
                     break;
                 case 6:
                     doctor.viewUpcomingAppointments();
@@ -158,22 +183,15 @@ public class Main {
             switch (choice) {
                 case 1:
                     pharmacist.viewAppointmentOutcomeRecord(appointmentOutcomes);
-                    //implement logic to view appointment outcome record
-                     
                     break;
                 case 2:
                     pharmacist.updatePrescription(appointmentOutcomes, inventory);
-
-                    //implement logic to update prescription status
                     break;
                 case 3:
-                    //implement logic to view medication inventory
                     inventory.viewInventory();
                     break;
                 case 4:
-                    //implement logic to submit replenishment request
                     pharmacist.requestReplenishment(replenishmentRequest, inventory);
-
                     break;
                 case 5:
                     System.out.println("Logging out...");
@@ -204,17 +222,15 @@ public class Main {
 
             switch (choice) {
                 case 1:
-                    Administrator.manageStaff(staffManager, userManager);
+                    administrator.manageStaff(staffManager, userManager);
                     break;
                 case 2:
                     Appointment.displayAppointments(appointmentList, appointmentOutcomes);
                     break;
                 case 3:
-                    //implement logic to view and manage medication inventory
                     inventory.manageInventory();
                     break;
                 case 4:
-                    // implement logic to approve replenishment requests
                     inventory.approveReplenishmentRequest(replenishmentRequest);
                     break;
                 case 5:
@@ -226,7 +242,7 @@ public class Main {
         } while (choice != 5);
     }
 
-    public static void displayPatientMenu(UserManager userManager, StaffManager staffManager, String userID, ScheduleManager scheduleManager, AppointmentManager appointmentManager, AppointmentOutcomeManager appointmentOutcomeManager) {
+    public static void displayPatientMenu(UserManager userManager, ArrayList<Doctor> doctors, String userID, ArrayList<Schedule> schedules, ArrayList<Appointment> appointments, ArrayList<AppointmentOutcome> appointmentOutcomes, ArrayList<Notification> notifications) {
         Scanner scanner = new Scanner(System.in);
         Patient patient = userManager.findPatientByID(userID);
         int choice;
@@ -248,7 +264,7 @@ public class Main {
 
             switch (choice) {
                 case 1:
-                    patient.viewMedicalRecord(appointmentOutcomeManager.getAppointmentOutcomes(), appointmentManager.getAppointmentList());
+                    patient.viewMedicalRecord(appointmentOutcomes, appointments);
                     break;
                 case 2:
                     System.out.print("Enter new phone number: ");
@@ -258,22 +274,22 @@ public class Main {
                     patient.updatePersonalInfo(newPhoneNumber, newEmail);
                     break;
                 case 3:
-                    patient.viewAvailableSlots(staffManager.getDoctors(), scheduleManager.getSchedules());
+                    patient.viewAvailableSlots(doctors, schedules);
                     break;
                 case 4:
-                    patient.scheduleAppointment(staffManager.getDoctors(), scheduleManager.getSchedules(), appointmentManager.getAppointmentList(), patient.getPatientID());
+                    patient.scheduleAppointment(doctors, schedules, appointments, patient, notifications);
                     break;
                 case 5:
-                    patient.rescheduleAppointment(patient.getPatientID(), appointmentManager.getAppointmentList(), staffManager.getDoctors(), scheduleManager.getSchedules());
+                    patient.rescheduleAppointment(patient, appointments, doctors, schedules, notifications);
                     break;
                 case 6:
-                    patient.cancelAppointment(patient.getPatientID(), appointmentManager.getAppointmentList(), scheduleManager.getSchedules(), staffManager.getDoctors());
+                    patient.cancelAppointment(patient, appointments, schedules, doctors, notifications);
                     break;
                 case 7:
-                    patient.displaySchedules(patient.getPatientID(), scheduleManager.getSchedules(), staffManager.getDoctors());
+                    patient.displaySchedules(patient.getPatientID(), schedules, doctors);
                     break;
                 case 8:
-                    AppointmentOutcome.displayAppointmentHistory(patient.getPatientID(), appointmentOutcomeManager.getAppointmentOutcomes(), appointmentManager.getAppointmentList());
+                    AppointmentOutcome.displayAppointmentHistory(patient.getPatientID(), appointmentOutcomes, appointments);
                     break;
                 case 9:
                     System.out.println("Logging out...");
