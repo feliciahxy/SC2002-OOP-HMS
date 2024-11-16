@@ -454,4 +454,21 @@ public class Patient extends User {
     public String getPatientID() {
         return patientID;
     }
+    public void setPhoneNumber(String phoneNumber) {
+        if (isValidPhoneNumber(phoneNumber)) {
+            this.phoneNumber = phoneNumber;
+            System.out.println("Phone number updated sucessfully.");
+        } else {
+            System.out.println("Invalid phone number format.");
+        }
+    }
+
+    public void setEmail(String email) {
+        if (isValidEmail(email)) {
+            this.email = email;
+            System.out.println("Email updated sucessfully.");
+        } else {
+            System.out.println("Invalid email format.");
+        }
+    }
 }

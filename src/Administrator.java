@@ -1,3 +1,5 @@
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 public class Administrator extends Staff {
@@ -384,4 +386,155 @@ public class Administrator extends Staff {
         }
         return null;
     }
+
+     public static void managePatient(UserManager userManager){
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("View and Manage Patient");
+        System.out.println("[1] View All Patients");
+        System.out.println("[2] Add Patient");
+        System.out.println("[3] Update Patient Details");
+        System.out.println("[4] Delete Patient");
+        System.out.println("[5] Quit");
+        int choice;
+        choice = scanner.nextInt();
+        switch(choice){
+            case 1:
+                viewPatient(userManager);
+            break;
+        case 2:
+                addPatient(userManager);
+            break;
+        case 3:
+                updatePatient(userManager);
+            break;
+        case 4:
+                deletePatient(userManager);
+            case 5:
+                break;
+        }
+    }
+
+    public static void viewPatient(UserManager userManager) {
+    // Print table headers
+    System.out.printf("%-12s | %-20s | %-15s | %-8s | %-10s | %-12s | %-30s\n", 
+            "Patient ID", "Name", "Date of Birth", "Gender", "Blood Type", "Phone", "Email");
+    System.out.println("------------------------------------------------------------------------------------------------------------");
+    
+    // Loop through all patients in the user manager
+    for (Patient patient : userManager.getPatientUsers()) {
+        System.out.printf("%-12s | %-20s | %-15s | %-8s | %-10s | %-12s | %-30s\n",
+                patient.getPatientID(), 
+                patient.getName(),
+                patient.getDob(),
+                patient.getGender(),
+                patient.getBloodType(),
+                patient.getPhoneNumber(),
+                patient.getEmail());
+    }
+}
+
+    
+
+    public static void addPatient(UserManager userManager){
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Enter the Name of Patient: ");
+        String name = scanner.nextLine();
+        System.out.println("Enter Date of Birth: ");
+        String dobInput = scanner.next();
+        LocalDate dob = LocalDate.parse(dobInput, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+        scanner.nextLine();
+        String gender;
+        while (true) {
+            System.out.println("Enter Gender (M/F):");
+            gender = scanner.nextLine();
+            if (gender.equalsIgnoreCase("M") || gender.equalsIgnoreCase("F")) {
+                break;
+            } else {
+                System.out.println("Invalid gender. Please enter 'M' or 'F'.");
+            }
+        }
+        int size = userManager.getPatientUsers().size();
+        String formattedSize = String.format("%03d",size + 1);
+        String id = "P1" + formattedSize;
+        System.out.println("Enter Phone Number ");
+        String phoneNumber = scanner.nextLine();
+        System.out.println("Enter Email: ");
+        String email = scanner.nextLine();
+        System.out.println("Enter Blood Type: ");
+        String bloodType = scanner.nextLine();
+        Patient patient = new Patient(id, name, dob, gender, bloodType, phoneNumber, email, "password");
+        userManager.getPatientUsers().add(patient);
+    }
+
+    public static void updatePatient(UserManager userManager) {
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Enter Patient ID to update:");
+        String patientId = scanner.nextLine();
+        
+        // Find the patient using the findPatient() method
+        Patient patientToUpdate = findPatient(userManager, patientId);
+        
+        if (patientToUpdate == null) {
+            System.out.println("Patient with ID " + patientId + " not found.");
+            return;
+        }
+    
+        System.out.println("Updating details for: " + patientToUpdate.getName());
+        System.out.println("[1] Update Phone Number");
+        System.out.println("[2] Update Email");
+        System.out.println("[3] Quit");
+        
+        int choice = scanner.nextInt();
+        scanner.nextLine(); // Consume the leftover newline
+    
+        switch (choice) {
+            case 1:
+                // Update Phone Number
+                System.out.println("Enter new Phone Number:");
+                String newPhone = scanner.nextLine();
+                patientToUpdate.setPhoneNumber(newPhone);
+                break;
+    
+            case 2:
+                // Update Email
+                System.out.println("Enter new Email:");
+                String newEmail = scanner.nextLine();
+                patientToUpdate.setEmail(newEmail);
+                break;
+    
+            case 3:
+                System.out.println("Exiting update menu.");
+                break;
+    
+            default:
+                System.out.println("Invalid choice.");
+        }
+    }    
+
+    public static void deletePatient(UserManager userManager) {
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Enter Patient ID to delete:");
+        String patientId = scanner.nextLine();
+    
+        Patient patientToDelete = findPatient(userManager, patientId);
+    
+        if (patientToDelete == null) {
+            System.out.println("Patient with ID " + patientId + " not found.");
+            return;
+        }
+        userManager.getPatientUsers().remove(patientToDelete);
+        System.out.println("Patient with ID " + patientId + " has been successfully deleted.");
+    }
+    
+    
+    public static Patient findPatient(UserManager userManager, String patientId){
+        for (Patient patient : userManager.getPatientUsers()){
+            if (patientId.equalsIgnoreCase(patient.getId())){
+                return patient;
+            }
+        }
+        return null;
+    }
+
+
 }
