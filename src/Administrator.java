@@ -6,7 +6,7 @@ public class Administrator extends Staff {
         super(id, name, role, gender, age, password);
     }
   
-    public static void manageStaff(StaffManager staffManager, UserManager userManager){
+    public void manageStaff(StaffManager staffManager, UserManager userManager){
         Scanner scanner = new Scanner(System.in);
         System.out.println("View and manage staff");
         System.out.println("[1] View All Staff");

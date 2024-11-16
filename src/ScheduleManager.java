@@ -15,6 +15,11 @@ public class ScheduleManager {
             br.readLine();
             while ((line = br.readLine()) != null) {
                 String[] fields = line.split(",");
+
+                if (fields.length < 2) {
+                    continue;
+                }
+
                 String doctorID = fields[0];
 
                 ArrayList<String> slots = new ArrayList<>();

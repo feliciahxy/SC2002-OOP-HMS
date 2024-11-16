@@ -15,6 +15,11 @@ public class AppointmentManager {
             br.readLine(); // Skip header
             while ((line = br.readLine()) != null) {
                 String[] fields = line.split(",");
+
+                if (fields.length < 6) {
+                    continue; 
+                }
+
                 String appointmentID = fields[0];
                 String patientID = fields[1];
                 String doctorID = fields[2];

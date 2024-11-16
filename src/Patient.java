@@ -123,7 +123,7 @@ public class Patient extends User {
     }
 
     
-    public void rescheduleAppointment(String patientID, ArrayList<Appointment> appointmentList, ArrayList<Doctor> doctors, ArrayList<Schedule> schedules) {
+    public void rescheduleAppointment(Patient patient, ArrayList<Appointment> appointmentList, ArrayList<Doctor> doctors, ArrayList<Schedule> schedules, ArrayList<Notification> notifications) {
         Scanner sc = new Scanner(System.in);
 
         System.out.print("The format should be AP followed by 4 digits (e.g., AP0001).\nEnter AppointmentID to reschedule: ");
@@ -135,7 +135,7 @@ public class Patient extends User {
                     System.out.println("Appointment not found. Try Again: ");
                     continue;
                 }
-                if (Appointment.belongToPatient(appointmentList, appointmentID, patientID)) {
+                if (Appointment.belongToPatient(appointmentList, appointmentID, patient.getPatientID())) {
                     if (Appointment.canReschedule(appointmentList, appointmentID)) break;
                     else {
                         System.out.println("This appointment cannot be rescheduled.");
@@ -160,9 +160,18 @@ public class Patient extends User {
             System.out.println("Appointment not found.");
             return;
         }
+
+        Doctor selectedDoctor = null;
+        for (Doctor doctor : doctors) {
+            if (doctor.getId().equals(inputAppointment.getDoctorID())) {
+                selectedDoctor = doctor;
+                break;
+            }
+        }
+
         String doctorID = inputAppointment.getDoctorID();
-        String doctorName = getDoctorNameFromID(doctors, doctorID);
-        System.out.println("\nAppointment selected with: Dr " + doctorName);
+        String doctorName = selectedDoctor.getName();
+        System.out.println("\nAppointment (" + inputAppointment.getStatus() +") selected with: Dr " + doctorName);
         System.out.println("Timing: " + inputAppointment.getDate() + " November " + inputAppointment.getTime());
         int originalSlot = Appointment.timeToSlot(inputAppointment.getTime());
         int originalDate = Integer.parseInt(inputAppointment.getDate());
@@ -193,18 +202,23 @@ public class Patient extends User {
             }
         }
 
-        int slot = Schedule.addSchedule(patientID, doctorID, dateChoice, slotChoice, schedules);
+        int slot = Schedule.addSchedule(patient.getPatientID(), doctorID, dateChoice, slotChoice, schedules);
         if (slot == -1) System.out.println("An error has occured.");
                     
         int originalSlotIndex = (originalDate - 1)* 3 + originalSlot - 1;
         Schedule.cancelSlot(schedules, originalSlotIndex, doctorID);
 
         Appointment.changeAppointment(appointmentList, appointmentID, dateChoice, slot);
-        System.out.println("Appointment with Dr " + doctorName + " successfully rescheduled to " + inputAppointment.getDate() + " November " + inputAppointment.getTime()); 
+        System.out.println("Appointment with Dr " + doctorName + " successfully rescheduled to " + inputAppointment.getDate() + " November " + inputAppointment.getTime());
+        
+        AppointmentNotificationForDoctorCreator notificationWhenPatientReschedules = new NotificationWhenPatientReschedules();
+        String message = notificationWhenPatientReschedules.createMessage(inputAppointment, patient);
+        String notificationID = NotificationIDGenerator.generateNotificationID(notifications);
+        notifications.add(NotificationBuilder.buildNotification(notificationID, selectedDoctor.getId(), message));
     }
 
 
-    public void cancelAppointment(String patientID, ArrayList<Appointment> appointmentList, ArrayList<Schedule> schedules, ArrayList<Doctor> doctors) {
+    public void cancelAppointment(Patient patient, ArrayList<Appointment> appointmentList, ArrayList<Schedule> schedules, ArrayList<Doctor> doctors, ArrayList<Notification> notifications) {
         Scanner sc = new Scanner(System.in);
 
         System.out.print("The format should be AP followed by 4 digits (e.g., AP0001).\nEnter AppointmentID to cancel: ");
@@ -216,7 +230,7 @@ public class Patient extends User {
                     System.out.print("Appointment not found. Try Again: ");
                     continue;
                 }
-                if (Appointment.belongToPatient(appointmentList, appointmentID, patientID)) break;
+                if (Appointment.belongToPatient(appointmentList, appointmentID, patient.getPatientID())) break;
                 else {
                     System.out.print("You do not have access to this AppointmentID. Try Again: ");
                 }
@@ -238,6 +252,14 @@ public class Patient extends User {
             return;
         }
 
+        Doctor selectedDoctor = null;
+        for (Doctor doctor : doctors) {
+            if (doctor.getId().equals(inputAppointment.getDoctorID())) {
+                selectedDoctor = doctor;
+                break;
+            }
+        }
+
         Appointment.cancelAppointment(appointmentList, appointmentID);
 
         int date = Integer.parseInt(inputAppointment.getDate());
@@ -245,11 +267,16 @@ public class Patient extends User {
         int slotIndex = (date - 1) * 3 + slot - 1;
         Schedule.cancelSlot(schedules, slotIndex, inputAppointment.getDoctorID());
 
-        String doctorName = Patient.getDoctorNameFromID(doctors, inputAppointment.getDoctorID());
+        String doctorName = selectedDoctor.getName();
         System.out.println("Appointment with Dr " + doctorName + " (" + inputAppointment.getDate() + " November " + inputAppointment.getTime() + ") successfully cancelled."); 
+
+        AppointmentNotificationForDoctorCreator notificationWhenPatientCancels = new NotificationWhenPatientCancels();
+        String message = notificationWhenPatientCancels.createMessage(inputAppointment, patient);
+        String notificationID = NotificationIDGenerator.generateNotificationID(notifications);
+        notifications.add(NotificationBuilder.buildNotification(notificationID, selectedDoctor.getId(), message));
     }
 
-    public void scheduleAppointment(ArrayList<Doctor> doctors, ArrayList<Schedule> schedules, ArrayList<Appointment> appointmentList, String patientID){
+    public void scheduleAppointment(ArrayList<Doctor> doctors, ArrayList<Schedule> schedules, ArrayList<Appointment> appointmentList, Patient patient, ArrayList<Notification> notifications){
         Scanner scanner = new Scanner(System.in);
 
         System.out.println("\nSchedule An Appointment");
@@ -267,8 +294,17 @@ public class Patient extends User {
                 System.out.println("Invalid input. Try Again.");
             }
         }
+
         String doctorName = doctorNames.get(doctorChoice - 1);
-        String doctorID = getDoctorIDFromName(doctors, doctorName);
+        Doctor selectedDoctor = null;
+        for (Doctor doctor : doctors) {
+            if (doctor.getName().equals(doctorName)) {
+                selectedDoctor = doctor;
+                break;
+            }
+        }
+
+        String doctorID = selectedDoctor.getId();
         ArrayList<Integer> availableDates = Schedule.getAvailableDates(doctorID, schedules);
         Schedule.displayAvailableDates(availableDates);
 
@@ -296,11 +332,16 @@ public class Patient extends User {
             }
         }
 
-        int slot = Schedule.addSchedule(patientID, doctorID, dateChoice, slotChoice, schedules);
+        int slot = Schedule.addSchedule(patient.getPatientID(), doctorID, dateChoice, slotChoice, schedules);
         if (slot == -1) System.out.println("An error has occured.");
-        Appointment.createAppointment(appointmentList, patientID, doctorID, dateChoice, slot);
+        Appointment appointment = Appointment.createAppointment(appointmentList, patient.getPatientID(), doctorID, dateChoice, slot);
 
         System.out.println("Appointment successfully scheduled with Dr " + doctorName + " on " + dateChoice + " November from " + Schedule.slotToTime(slot));
+
+        AppointmentNotificationForDoctorCreator notificationWhenPatientSchedules = new NotificationWhenPatientSchedules();
+        String message = notificationWhenPatientSchedules.createMessage(appointment, patient);
+        String notificationID = NotificationIDGenerator.generateNotificationID(notifications);
+        notifications.add(NotificationBuilder.buildNotification(notificationID, doctorID, message));
     }
 
     public void viewAvailableSlots(ArrayList<Doctor> doctors, ArrayList<Schedule> schedules) {
@@ -323,7 +364,15 @@ public class Patient extends User {
         }
 
         String doctorName = doctorNames.get(doctorChoice - 1);
-        String doctorID = getDoctorIDFromName(doctors, doctorName);
+        Doctor selectedDoctor = null;
+        for (Doctor doctor : doctors) {
+            if (doctor.getName().equals(doctorName)) {
+                selectedDoctor = doctor;
+                break;
+            }
+        }
+
+        String doctorID = selectedDoctor.getId();
         ArrayList<Integer> availableDates = Schedule.getAvailableDates(doctorID, schedules);
         Schedule.displayAvailableDates(availableDates);
 

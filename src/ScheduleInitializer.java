@@ -13,7 +13,7 @@ public class ScheduleInitializer {
         }
 
         updateScheduleFile(scheduleFile, doctorIDs); 
-        System.out.println("Schedule has been updated successfully.");
+        // System.out.println("Schedule has been updated successfully.");
     }
 
     // Method to read doctor IDs from Staff_List.csv
