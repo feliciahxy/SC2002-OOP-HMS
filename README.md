@@ -10,11 +10,11 @@ Hospital Management System(HMS) is a CLI-based application aimed at automating t
 SC2002 Object Oriented Design & Programming SCEB Group 5:
 | Name                   | Email                    |                                                                      GitHub Profile                                                                       |
 | ---------------------- | ------------------------ | :-------------------------------------------------------------------------------------------------------------------------------------------------------: |
-| Heng Xin Yu Felicia  | xheng004@e.ntu.edu.sg |        [![GitHub](https://img.shields.io/badge/gillwong-%23121011.svg?style=flat-square&logo=github&logoColor=white)](https://github.com/feliciahxy)        |
-| Denzel Tan Yong Liang         | denz0007@e.ntu.edu.sg    |         [![GitHub](https://img.shields.io/badge/dreonic-%23121011.svg?style=flat-square&logo=github&logoColor=white)](https://github.com/D1zzy123)         |
-| Chong Wei Thai       | ch0009ai@e.ntu.edu.sg    |      [![GitHub](https://img.shields.io/badge/devlinchau-%23121011.svg?style=flat-square&logo=github&logoColor=white)](https://github.com/weithai)      |
-| Chew Jin Cheng        | jchew051@e.ntu.edu.sg |    [![GitHub](https://img.shields.io/badge/pascalpandey-%23121011.svg?style=flat-square&logo=github&logoColor=white)](https://github.com/ChewJinCheng)    |
-| Chua Yu Hui | ychua056@e.ntu.edu.sg    | [![GitHub](https://img.shields.io/badge/quynhtrangsolar-%23121011.svg?style=flat-square&logo=github&logoColor=white)](https://github.com/chuayhhh) |
+| Heng Xin Yu Felicia  | xheng004@e.ntu.edu.sg |        [![GitHub](https://img.shields.io/badge/feliciahxy-%23121011.svg?style=flat-square&logo=github&logoColor=white)](https://github.com/feliciahxy)        |
+| Denzel Tan Yong Liang         | denz0007@e.ntu.edu.sg    |         [![GitHub](https://img.shields.io/badge/D1zzy123-%23121011.svg?style=flat-square&logo=github&logoColor=white)](https://github.com/D1zzy123)         |
+| Chong Wei Thai       | ch0009ai@e.ntu.edu.sg    |      [![GitHub](https://img.shields.io/badge/weithai-%23121011.svg?style=flat-square&logo=github&logoColor=white)](https://github.com/weithai)      |
+| Chew Jin Cheng        | jchew051@e.ntu.edu.sg |    [![GitHub](https://img.shields.io/badge/ChewJinCheng-%23121011.svg?style=flat-square&logo=github&logoColor=white)](https://github.com/ChewJinCheng)    |
+| Chua Yu Hui | ychua056@e.ntu.edu.sg    | [![GitHub](https://img.shields.io/badge/chuayhhh-%23121011.svg?style=flat-square&logo=github&logoColor=white)](https://github.com/chuayhhh) |
 
 ## Directory Layout
 
