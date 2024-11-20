@@ -181,24 +181,38 @@ public class Patient extends User {
 
         int dateChoice;
         while (true) {
-            System.out.print("Select a New Date: ");
-            dateChoice = sc.nextInt();
-            if (availableDates.contains(dateChoice)) {
-                break; 
-            } else {
-                System.out.println("Invalid date choice. Please choose from the available dates.");
+            try {
+                System.out.print("Select a New Date: ");
+                dateChoice = sc.nextInt();
+                sc.nextLine(); 
+        
+                if (availableDates.contains(dateChoice)) {
+                    break; 
+                } else {
+                    System.out.println("Invalid date choice. Please choose from the available dates.");
+                }
+            } catch (InputMismatchException e) {
+                System.out.println("Invalid input. Please enter a valid number.");
+                sc.nextLine(); 
             }
         }
 
         int slotChoice;
         ArrayList<Integer> availableSlots = Schedule.displayAvailableSlotsForDate(doctorID, dateChoice, schedules);
         while (true) {
-            System.out.print("Select a Slot: ");
-            slotChoice = sc.nextInt();
-            if (availableSlots.contains(slotChoice)) {
-                break;
-            } else {
-                System.out.println("Invalid slot choice. Please choose from the available slots.");
+            try {
+                System.out.print("Select a Slot: ");
+                slotChoice = sc.nextInt();
+                sc.nextLine(); 
+        
+                if (availableSlots.contains(slotChoice)) {
+                    break;
+                } else {
+                    System.out.println("Invalid slot choice. Please choose from the available slots.");
+                }
+            } catch (InputMismatchException e) {
+                System.out.println("Invalid input. Please enter a valid number.");
+                sc.nextLine(); 
             }
         }
 
@@ -285,16 +299,19 @@ public class Patient extends User {
         int numDoctors = doctorNames.size();
 
         int doctorChoice = -1;
-        while (doctorChoice < 1 || doctorChoice > numDoctors) { 
+        while (doctorChoice < 1 || doctorChoice > numDoctors) {
             System.out.print("Select a Doctor (1 - " + numDoctors + "): ");
-            if (scanner.hasNextInt()) {
+            try {
                 doctorChoice = scanner.nextInt();
-            } else {
-                scanner.next(); 
+                if (doctorChoice < 1 || doctorChoice > numDoctors) {
+                    System.out.println("Invalid input. Try Again.");
+                }
+            } catch (InputMismatchException e) {
                 System.out.println("Invalid input. Try Again.");
+                scanner.nextLine();
             }
         }
-
+        
         String doctorName = doctorNames.get(doctorChoice - 1);
         Doctor selectedDoctor = null;
         for (Doctor doctor : doctors) {
@@ -311,26 +328,38 @@ public class Patient extends User {
         int dateChoice;
         while (true) {
             System.out.print("Select a Date: ");
-            dateChoice = scanner.nextInt();
-            if (availableDates.contains(dateChoice)) {
-                break; 
-            } else {
-                System.out.println("Invalid date choice. Please choose from the available dates.");
+            try {
+                dateChoice = scanner.nextInt();
+                if (availableDates.contains(dateChoice)) {
+                    Schedule.displayAvailableSlotsForDate(doctorID, dateChoice, schedules);
+                    break;
+                } else {
+                    System.out.println("Invalid date choice. Please choose from the available dates.");
+                }
+            } catch (InputMismatchException e) {
+                System.out.println("Invalid input. Please enter a valid date.");
+                scanner.nextLine();
             }
-            Schedule.displayAvailableSlotsForDate(doctorID, dateChoice, schedules);
         }
+        
 
         int slotChoice;
         ArrayList<Integer> availableSlots = Schedule.displayAvailableSlotsForDate(doctorID, dateChoice, schedules);
         while (true) {
             System.out.print("Select a Slot: ");
-            slotChoice = scanner.nextInt();
-            if (availableSlots.contains(slotChoice)) {
-                break;
-            } else {
-                System.out.println("Invalid slot choice. Please choose from the available slots.");
+            try {
+                slotChoice = scanner.nextInt();
+                if (availableSlots.contains(slotChoice)) {
+                    break;
+                } else {
+                    System.out.println("Invalid slot choice. Please choose from the available slots.");
+                }
+            } catch (InputMismatchException e) {
+                System.out.println("Invalid input. Please enter a valid slot.");
+                scanner.nextLine();
             }
         }
+        
 
         int slot = Schedule.addSchedule(patient.getPatientID(), doctorID, dateChoice, slotChoice, schedules);
         if (slot == -1) System.out.println("An error has occured.");
@@ -355,14 +384,19 @@ public class Patient extends User {
         int doctorChoice = -1;
         while (doctorChoice < 1 || doctorChoice > numDoctors) { 
             System.out.print("Select a Doctor (1 - " + numDoctors + "): ");
-            if (scanner.hasNextInt()) {
-                doctorChoice = scanner.nextInt();
-            } else {
-                scanner.next(); 
+            try {
+                if (scanner.hasNextInt()) {
+                    doctorChoice = scanner.nextInt();
+                } else {
+                    scanner.next();
+                    System.out.println("Invalid input. Try Again.");
+                }
+            } catch (InputMismatchException e) {
                 System.out.println("Invalid input. Try Again.");
+                scanner.nextLine();
             }
         }
-
+        
         String doctorName = doctorNames.get(doctorChoice - 1);
         Doctor selectedDoctor = null;
         for (Doctor doctor : doctors) {
@@ -379,13 +413,19 @@ public class Patient extends User {
         int dateChoice;
         while (true) {
             System.out.print("Select a Date: ");
-            dateChoice = scanner.nextInt();
-            if (availableDates.contains(dateChoice)) {
-                break; 
-            } else {
-                System.out.println("Invalid date choice. Please choose from the available dates.");
+            try {
+                dateChoice = scanner.nextInt();
+                if (availableDates.contains(dateChoice)) {
+                    break;
+                } else {
+                    System.out.println("Invalid date choice. Please choose from the available dates.");
+                }
+            } catch (InputMismatchException e) {
+                System.out.println("Invalid input. Please enter a valid number.");
+                scanner.nextLine(); 
             }
         }
+        
 
         ArrayList<Integer> availableSlots = Schedule.displayAvailableSlotsForDate(doctorID, dateChoice, schedules);
     }

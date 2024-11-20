@@ -245,20 +245,35 @@ public class Doctor extends Staff {
                 return;
             }
             System.out.print("Enter the pending appointment you would like to accept or decline (1-" + String.valueOf(count - 1) + "): ");
-            choice = sc.nextInt();
-            if (choice >= 1 && choice <= count - 1) break;
-            else System.out.println("Invalid Input. Try Again.");
+            try {
+                choice = sc.nextInt();
+                if (choice >= 1 && choice <= count - 1) {
+                    break;
+                } else {
+                    System.out.println("Invalid Input. Try Again.");
+                }
+            } catch (InputMismatchException e) {
+                sc.next(); 
+                System.out.println("Invalid input. Please enter a valid number.");
+            }
         }
+        
 
         int input = -1;
         while (true) {
             System.out.println("[1] Accept");
             System.out.println("[2] Decline");
             System.out.println("Enter choice: ");
-            input = sc.nextInt();
-            if (input == 1 || input == 2) break;
-            else System.out.println("Invalid Input. Try Again.");
+            try {
+                input = sc.nextInt();
+                if (input == 1 || input == 2) break;
+                else System.out.println("Invalid Input. Try Again.");
+            } catch (InputMismatchException e) {
+                sc.next();
+                System.out.println("Invalid input. Please enter a valid number.");
+            }
         }
+        
 
         int slotIndex = slotIndexes.get(choice - 1);
         int date = slotIndex / 3 + 1;
