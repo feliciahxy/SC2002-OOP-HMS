@@ -51,9 +51,9 @@ public class Pharmacist extends Staff{
     public void updatePrescription(ArrayList<AppointmentOutcome> appointmentOutcomes, Inventory inventory){
         while (true) { 
             try {
-                System.out.print("Enter q to quit.\nEnter appointment ID: ");
+                System.out.print("Enter 0 to quit.\nEnter appointment ID: ");
                 String appointmentID = scanner.nextLine(); 
-                if (appointmentID.equals("q")){
+                if (appointmentID.equals("0")){
                     return;
                 }
                 AppointmentOutcome appointmentOutcome = viewAppointmentOutcomeRecord(appointmentOutcomes, appointmentID);
