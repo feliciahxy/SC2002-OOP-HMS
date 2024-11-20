@@ -343,6 +343,10 @@ public class Doctor extends Staff {
         }
 
         selectedAppointment.setStatus("completed");
+        int date = Integer.parseInt(selectedAppointment.getDate());
+        int slot = Appointment.timeToSlot(selectedAppointment.getTime());
+        int slotIndex = (date -  1) * 3 + slot - 1;
+        this.schedule.getSlots().set(slotIndex, "P1001-2");
 
         System.out.println("What is the diagnosis: ");
         String diagnosis = sc.nextLine();

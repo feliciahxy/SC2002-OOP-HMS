@@ -69,9 +69,15 @@ public class Main {
                     }
                 }
 
+                
+                int firstNotification = 0;
+
                 for (Notification notification : notifications) {
                     if (notification.getReceiverID().equals(userID) && notification.getStatus().equals("pending")) {
-                        System.out.println("\nLatest Notification");
+                        if (firstNotification == 0) {
+                            System.out.println("\nLatest Notification(s)");
+                            firstNotification = 1;
+                        }
                         System.out.println(notification.getMessage());
                         notification.setStatus("sent");
                     }
@@ -82,10 +88,15 @@ public class Main {
                         displayDoctorMenu(userID, staffManager, patients, appointmentOutcomes, appointments, notifications);
                         break;
                     case "Pharmacist":
+                        inventory.notifyLowStock();
                         displayPharmacistMenu(userID, staffManager, appointmentOutcomes,inventory, replenishmentRequest);
                         break;
                     case "Administrator":
-                        displayAdminMenu(userID, staffManager, appointments, appointmentOutcomes, inventory, replenishmentRequest, userManager);
+
+                        inventory.notifyLowStock();
+                        inventory.notifyReplenishmentRequest(replenishmentRequest);
+                        displayAdminMenu(userID, staffManager, appointments, appointmentOutcomes, inventory, replenishmentRequest, userManager, schedules);
+
                         break;
                     case "Patient":
                         displayPatientMenu(userManager, doctors, userID, schedules, appointments, appointmentOutcomes, notifications);
@@ -175,7 +186,6 @@ public class Main {
         int choice = -1;
 
         do {
-            inventory.notifyLowStock();
             System.out.println("\nPharmacist Menu:");
             System.out.println("1. View Appointment Outcome Record");
             System.out.println("2. Update Prescription Status");
@@ -213,13 +223,12 @@ public class Main {
     }
 
     public static void displayAdminMenu(String userID, StaffManager staffManager, ArrayList<Appointment> appointmentList, ArrayList<AppointmentOutcome> appointmentOutcomes, Inventory inventory, ArrayList<ReplenishmentRequest> replenishmentRequest, UserManager userManager) {
+
         Scanner scanner = new Scanner(System.in);
         Administrator administrator = staffManager.findAdministratorByID(userID);
         int choice = -1;
 
         do {
-            inventory.notifyLowStock();
-            inventory.notifyReplenishmentRequest(replenishmentRequest);
             System.out.println("\nAdministrator Menu:");
             System.out.println("1. View and Manage Hospital Staff");
             System.out.println("2. View and Manage Patients");
