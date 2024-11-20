@@ -88,10 +88,15 @@ public class Main {
                         displayDoctorMenu(userID, staffManager, patients, appointmentOutcomes, appointments, notifications);
                         break;
                     case "Pharmacist":
+                        inventory.notifyLowStock();
                         displayPharmacistMenu(userID, staffManager, appointmentOutcomes,inventory, replenishmentRequest);
                         break;
                     case "Administrator":
+
+                        inventory.notifyLowStock();
+                        inventory.notifyReplenishmentRequest(replenishmentRequest);
                         displayAdminMenu(userID, staffManager, appointments, appointmentOutcomes, inventory, replenishmentRequest, userManager, schedules);
+
                         break;
                     case "Patient":
                         displayPatientMenu(userManager, doctors, userID, schedules, appointments, appointmentOutcomes, notifications);
@@ -176,7 +181,6 @@ public class Main {
         Pharmacist pharmacist = staffManager.findPharmacistByID(userID);
 
         do {
-            inventory.notifyLowStock();
             System.out.println("\nPharmacist Menu:");
             System.out.println("1. View Appointment Outcome Record");
             System.out.println("2. Update Prescription Status");
@@ -204,6 +208,7 @@ public class Main {
                     break;
                 default:
                     System.out.println("Invalid choice, please try again.");
+                    
             }
         } while (choice != 5);
     }
@@ -215,8 +220,6 @@ public class Main {
         int choice;
 
         do {
-            inventory.notifyLowStock();
-            inventory.notifyReplenishmentRequest(replenishmentRequest);
             System.out.println("\nAdministrator Menu:");
             System.out.println("1. View and Manage Hospital Staff");
             System.out.println("2. View and Manage Patients");
