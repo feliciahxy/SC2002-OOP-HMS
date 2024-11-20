@@ -92,11 +92,9 @@ public class Main {
                         displayPharmacistMenu(userID, staffManager, appointmentOutcomes,inventory, replenishmentRequest);
                         break;
                     case "Administrator":
-
                         inventory.notifyLowStock();
                         inventory.notifyReplenishmentRequest(replenishmentRequest);
                         displayAdminMenu(userID, staffManager, appointments, appointmentOutcomes, inventory, replenishmentRequest, userManager, schedules);
-
                         break;
                     case "Patient":
                         displayPatientMenu(userManager, doctors, userID, schedules, appointments, appointmentOutcomes, notifications);
@@ -222,7 +220,7 @@ public class Main {
         } while (choice != 5);
     }
 
-    public static void displayAdminMenu(String userID, StaffManager staffManager, ArrayList<Appointment> appointmentList, ArrayList<AppointmentOutcome> appointmentOutcomes, Inventory inventory, ArrayList<ReplenishmentRequest> replenishmentRequest, UserManager userManager) {
+    public static void displayAdminMenu(String userID, StaffManager staffManager, ArrayList<Appointment> appointmentList, ArrayList<AppointmentOutcome> appointmentOutcomes, Inventory inventory, ArrayList<ReplenishmentRequest> replenishmentRequest, UserManager userManager, ArrayList<Schedule> schedules) {
 
         Scanner scanner = new Scanner(System.in);
         Administrator administrator = staffManager.findAdministratorByID(userID);
@@ -242,7 +240,7 @@ public class Main {
                 choice = scanner.nextInt();
                 switch (choice) {
                     case 1:
-                        administrator.manageStaff(staffManager, userManager);
+                        administrator.manageStaff(staffManager, userManager, schedules);
                         break;
                     case 2:
                         Administrator.managePatient(userManager);
