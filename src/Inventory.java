@@ -27,7 +27,7 @@ public class Inventory {
         else{
             for (int i = 0; i<medlist.size(); i++){
                 Medication med = medlist.get(i);
-                System.out.printf("(%d) Medicine Name: %s, Quantity: %d, Low Stock Level: %d\n", i+1, med.getMedicineName(), med.getQuantity(), med.getLowStockLevel());
+                System.out.printf("[%d] Medicine Name: %s, Quantity: %d, Low Stock Level: %d\n", i+1, med.getMedicineName(), med.getQuantity(), med.getLowStockLevel());
             }
         }
         
@@ -86,7 +86,7 @@ public class Inventory {
         else{
             for (int i = 0; i<replenishmentList.size(); i++){
                 Medication med = replenishmentList.get(i);
-                System.out.printf("(%d) Medication: %s, Current quantity: %d, Low stock level: %d\n", i+1, med.getMedicineName(), med.getQuantity(), med.getLowStockLevel());
+                System.out.printf("[%d] Medication: %s, Current quantity: %d, Low stock level: %d\n", i+1, med.getMedicineName(), med.getQuantity(), med.getLowStockLevel());
             }
         }
         
@@ -226,12 +226,12 @@ public class Inventory {
         int choice = 0;
         do{
             try {
-                System.out.println("(1) View inventory");
-                System.out.println("(2) Add new medication");
-                System.out.println("(3) Update stock level of medication");
-                System.out.println("(4) Remove medication");
-                System.out.println("(5) Change low stock level");
-                System.out.println("(6) Exit");
+                System.out.println("[1] View inventory");
+                System.out.println("[2] Add new medication");
+                System.out.println("[3] Update stock level of medication");
+                System.out.println("[4] Remove medication");
+                System.out.println("[5] Change low stock level");
+                System.out.println("[6] Exit");
                 System.out.print("Enter choice: ");
                 choice = sc.nextInt();
                 sc.nextLine();
