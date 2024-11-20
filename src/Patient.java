@@ -126,9 +126,9 @@ public class Patient extends User {
     public void rescheduleAppointment(Patient patient, ArrayList<Appointment> appointmentList, ArrayList<Doctor> doctors, ArrayList<Schedule> schedules, ArrayList<Notification> notifications) {
         Scanner sc = new Scanner(System.in);
 
-        System.out.print("The format should be AP followed by 4 digits (e.g., AP0001).\nEnter AppointmentID to reschedule: ");
         String appointmentID;
         while (true) {
+            System.out.print("The format should be AP followed by 4 digits (e.g., AP0001).\nEnter AppointmentID to reschedule: ");
             appointmentID = sc.nextLine();
             if (Appointment.isValidAppointmentID(appointmentID)) {
                 if (!Appointment.inAppointments(appointmentList, appointmentID)) {
@@ -331,7 +331,6 @@ public class Patient extends User {
             try {
                 dateChoice = scanner.nextInt();
                 if (availableDates.contains(dateChoice)) {
-                    Schedule.displayAvailableSlotsForDate(doctorID, dateChoice, schedules);
                     break;
                 } else {
                     System.out.println("Invalid date choice. Please choose from the available dates.");
@@ -365,7 +364,7 @@ public class Patient extends User {
         if (slot == -1) System.out.println("An error has occured.");
         Appointment appointment = Appointment.createAppointment(appointmentList, patient.getPatientID(), doctorID, dateChoice, slot);
 
-        System.out.println("Appointment successfully scheduled with Dr " + doctorName + " on " + dateChoice + " November from " + Schedule.slotToTime(slot));
+        System.out.println("Appointment (" + appointment.getAppointmentID()+ ") successfully scheduled with Dr " + doctorName + " on " + dateChoice + " November from " + Schedule.slotToTime(slot));
 
         AppointmentNotificationForDoctorCreator notificationWhenPatientSchedules = new NotificationWhenPatientSchedules();
         String message = notificationWhenPatientSchedules.createMessage(appointment, patient);

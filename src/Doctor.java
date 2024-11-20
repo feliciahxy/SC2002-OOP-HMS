@@ -66,11 +66,11 @@ public class Doctor extends Staff {
         String inputPatientID;
 
         System.out.println("View Patient Records");
-        System.out.println("Enter PatientID: ");
 
         String regex = "^P\\d{4}$";
 
         while (true) {
+            System.out.println("Enter PatientID: ");
             inputPatientID = sc.nextLine();
 
             if (!inputPatientID.matches(regex)) {
@@ -105,6 +105,7 @@ public class Doctor extends Staff {
 
             if (!validID) {
                 System.out.print("Invalid Appointment ID. Please try again: ");
+                System.out.print("Which appointment do you want to update? Enter the appointment ID: ");
                 apptID = sc.nextLine(); 
             }
         }
