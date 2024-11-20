@@ -575,7 +575,7 @@ public class Administrator extends Staff {
         return null;
     }
     
-    public static void managePatient(UserManager userManager) {
+    public void managePatient(UserManager userManager) {
         Scanner scanner = new Scanner(System.in);
     
         while (true) {
@@ -669,13 +669,26 @@ public class Administrator extends Staff {
             int size = userManager.getPatientUsers().size();
             String formattedSize = String.format("%03d", size + 1);
             String id = "P1" + formattedSize;
-
+            String phoneNumber;
             System.out.println("Enter Phone Number: ");
-            String phoneNumber = scanner.nextLine();
-
+            while (true) {
+                phoneNumber = scanner.nextLine();
+                if (phoneNumber.matches("\\d{8}")) { 
+                    break;
+                } else {
+                    System.out.println("Invalid phone number. Please enter an 8-digit number:");
+                }
+            }
+            String email;
             System.out.println("Enter Email: ");
-            String email = scanner.nextLine();
-
+            while (true) {
+                email = scanner.nextLine();
+                if (email.matches("^[\\w._%+-]+@[\\w.-]+\\.[a-zA-Z]{2,}$")) {
+                    break;
+                } else {
+                    System.out.println("Invalid email address. Please enter a valid email:");
+                }
+            }
             System.out.println("Enter Blood Type: ");
             String bloodType = scanner.nextLine();
 
@@ -711,16 +724,32 @@ public class Administrator extends Staff {
 
                 switch (choice) {
                     case 1:
-                        System.out.println("Enter new Phone Number:");
-                        String newPhone = scanner.nextLine();
-                        patientToUpdate.setPhoneNumber(newPhone);
-                        System.out.println("Phone number updated successfully.");
+                        // Validate phone number
+                        while (true) {
+                            System.out.println("Enter new Phone Number:");
+                            String newPhone = scanner.nextLine();
+                            if (newPhone.matches("\\d{8}")) { // Checks if the phone number is exactly 8 digits
+                                patientToUpdate.setPhoneNumber(newPhone);
+                                System.out.println("Phone number updated successfully.");
+                                break;
+                            } else {
+                                System.out.println("Invalid phone number. Please enter an 8-digit number.");
+                            }
+                        }
                         break;
                     case 2:
-                        System.out.println("Enter new Email:");
-                        String newEmail = scanner.nextLine();
-                        patientToUpdate.setEmail(newEmail);
-                        System.out.println("Email updated successfully.");
+                        // Validate email address
+                        while (true) {
+                            System.out.println("Enter new Email:");
+                            String newEmail = scanner.nextLine();
+                            if (newEmail.matches("^[\\w._%+-]+@[\\w.-]+\\.[a-zA-Z]{2,}$")) { // Validates a general email format
+                                patientToUpdate.setEmail(newEmail);
+                                System.out.println("Email updated successfully.");
+                                break;
+                            } else {
+                                System.out.println("Invalid email address. Please enter a valid email.");
+                            }
+                        }
                         break;
                     case 3:
                         System.out.println("Exiting update menu.");

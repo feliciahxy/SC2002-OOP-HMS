@@ -230,7 +230,7 @@ public class Main {
             System.out.println("\nAdministrator Menu:");
             System.out.println("1. View and Manage Hospital Staff");
             System.out.println("2. View and Manage Patients");
-            System.out.println("3. View Appointment details");
+            System.out.println("3. View Appointment Details");
             System.out.println("4. View and Manage Medication Inventory");
             System.out.println("5. Approve Replenishment Requests");
             System.out.println("6. Logout");
@@ -243,7 +243,8 @@ public class Main {
                         administrator.manageStaff(staffManager, userManager, schedules);
                         break;
                     case 2:
-                        Administrator.managePatient(userManager);
+                        administrator.managePatient(userManager);
+                        break;
                     case 3:
                         Appointment.displayAppointments(appointmentList, appointmentOutcomes);
                         break;
