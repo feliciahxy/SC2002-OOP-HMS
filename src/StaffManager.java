@@ -4,6 +4,9 @@ import java.util.*;
  * The StaffManager class manages and categorizes staff members in the hospital system,
  * including doctors, pharmacists, and administrators. It provides methods for 
  * categorizing staff, retrieving categorized staff, and finding specific staff members by ID.
+ * @author Chua Yu Hui 
+ * @version 1.0
+ * @since 2024-10-08
  */
 public class StaffManager {
     private final ArrayList<Doctor> doctors;

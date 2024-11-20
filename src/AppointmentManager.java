@@ -5,6 +5,9 @@ import java.util.ArrayList;
  * The {@code AppointmentManager} class is responsible for managing appointments, 
  * including loading them from a CSV file, writing them to a CSV file, and 
  * providing access to the appointment list.
+ * @author Denzel Tan Yong Liang
+ * @version 1.0
+ * @since 2024-10-08
  */
 public class AppointmentManager {
     private final ArrayList<Appointment> appointmentList;

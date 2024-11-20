@@ -2,6 +2,9 @@ import java.util.*;
 /**
  * Represents a pharmacist who can manage prescriptions, view appointment outcomes,
  * and request replenishments for low-stock medications.
+ * @author Chew Jin Cheng 
+ * @version 1.0
+ * @since 2024-10-08
  */
 public class Pharmacist extends Staff{
     Scanner scanner = new Scanner(System.in);

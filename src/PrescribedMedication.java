@@ -2,6 +2,9 @@
  * Represents a prescribed medication associated with a specific appointment.
  * Stores details about the medication, including the appointment ID, medication name,
  * and the status of the medication (e.g., "Pending", "Dispensed").
+ * @author Chua Yu Hui 
+ * @version 1.0
+ * @since 2024-10-08
  */
 public class PrescribedMedication {
     

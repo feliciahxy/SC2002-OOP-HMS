@@ -4,6 +4,9 @@ import java.util.*;
  * The {@code Doctor} class represents a doctor in the healthcare system, extending the {@code Staff} class.
  * It manages the doctor's schedule and provides methods to interact with patient records, update availability, 
  * handle appointments, and record appointment outcomes.
+ * @author Heng Xin Yu Felicia
+ * @version 1.0
+ * @since 2024-10-08
  */
 public class Doctor extends Staff {
     private Schedule schedule;

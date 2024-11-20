@@ -5,6 +5,9 @@
  * 
  * This class serves as a base class for specific types of staff, such as doctors,
  * pharmacists, and administrators.
+ * @author Chua Yu Hui 
+ * @version 1.0
+ * @since 2024-10-08
  */
 public class Staff extends User {
 

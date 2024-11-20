@@ -5,6 +5,9 @@ import java.util.ArrayList;
  * Manages replenishment requests for medical supplies.
  * Provides functionality to load requests from a CSV file,
  * write updated requests back to the file, and access the requests.
+ * @author Chua Yu Hui 
+ * @version 1.0
+ * @since 2024-10-08
  */
 public class ReplenishmentRequestManager {
     private ArrayList<ReplenishmentRequest> replenishmentRequests;

@@ -3,6 +3,9 @@ import java.util.*;
 /**
  * The Schedule class represents a doctor's schedule, including their ID and available slots.
  * It also provides static utility methods for managing appointments and displaying available dates and slots.
+ * @author Chua Yu Hui 
+ * @version 1.0
+ * @since 2024-10-08
  */
 public class Schedule { 
     private final String doctorID;

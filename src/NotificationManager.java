@@ -3,6 +3,9 @@ import java.util.*;
 /**
  * Manages a collection of notifications.
  * This class provides methods to add and retrieve notifications.
+ * @author Chew Jin Cheng 
+ * @version 1.0
+ * @since 2024-10-08
  */
 public class NotificationManager {
     private final ArrayList<Notification> notifications;

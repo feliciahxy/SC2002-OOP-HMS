@@ -3,6 +3,9 @@ import java.util.*;
 /**
  * The {@code AppointmentOutcome} class represents the outcome of a medical appointment, including details such as
  * diagnosis, service type, prescribed medications, and additional notes.
+ * @author Heng Xin Yu Felicia
+ * @version 1.0
+ * @since 2024-10-08
  */
 public class AppointmentOutcome {
 

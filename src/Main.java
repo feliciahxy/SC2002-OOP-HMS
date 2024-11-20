@@ -2,6 +2,9 @@ import java.util.*;
 /**
  * Main class that handles the flow of the system based on user input.
  * It manages login, menu navigation, and role-specific functionalities for users (Doctor, Pharmacist, Administrator, Patient).
+ * @author Chong Wei Thai 
+ * @version 1.0
+ * @since 2024-10-08
  */
 public class Main {
     /**

@@ -4,6 +4,9 @@ import java.util.*;
 /**
  * The ScheduleManager class manages the schedules for doctors, including
  * loading schedules from a CSV file and writing updated schedules back to the file.
+ * @author Chua Yu Hui 
+ * @version 1.0
+ * @since 2024-10-08
  */
 public class ScheduleManager {
     private final ArrayList<Schedule> schedules;

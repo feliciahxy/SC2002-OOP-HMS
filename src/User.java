@@ -2,6 +2,9 @@
  * The User class represents a user in the system, which could be a staff member or a patient.
  * It includes attributes like ID, name, role, gender, age, and password, along with methods
  * to retrieve and modify these attributes. It also tracks whether the user's password has been changed.
+ * @author Chua Yu Hui 
+ * @version 1.0
+ * @since 2024-10-08
  */
 public class User {
     private String id;

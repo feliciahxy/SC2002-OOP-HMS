@@ -2,6 +2,9 @@
  * The NotificationWhenPatientSchedules class implements the 
  * AppointmentNotificationForDoctorCreator interface and generates 
  * notifications for doctors when a patient schedules an appointment.
+ * @author Chew Jin Cheng 
+ * @version 1.0
+ * @since 2024-10-08
  */
 public class NotificationWhenPatientSchedules implements AppointmentNotificationForDoctorCreator {
     /**

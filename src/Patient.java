@@ -8,6 +8,9 @@ import java.util.regex.Pattern;
  * Represents a patient in the hospital management system.
  * Patients can view their medical records, schedule appointments, 
  * and update personal information.
+ * @author Chew Jin Cheng 
+ * @version 1.0
+ * @since 2024-10-08
  */
 public class Patient extends User {
     private final String patientID;

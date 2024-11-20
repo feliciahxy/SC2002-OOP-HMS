@@ -1,5 +1,8 @@
 /**
  * Represents a medication with its name, quantity, and low stock level alert.
+ * @author Chong Wei Thai 
+ * @version 1.0
+ * @since 2024-10-08
  */
 public class Medication {
     private String medicineName;

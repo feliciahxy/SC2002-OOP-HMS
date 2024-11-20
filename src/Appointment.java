@@ -4,6 +4,9 @@ import java.util.*;
  * The {@code Appointment} class represents an appointment with attributes such as 
  * appointment ID, patient ID, doctor ID, date, time, and status. It also includes 
  * utility methods for managing and manipulating appointments.
+ * @author Denzel Tan Yong Liang
+ * @version 1.0
+ * @since 2024-10-08
  */
 
 public class Appointment {

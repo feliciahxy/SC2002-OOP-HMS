@@ -2,6 +2,9 @@ import java.util.ArrayList;
 
 /**
  * The NotificationWriter interface defines a method for writing a list of notifications to a file.
+ * @author Chew Jin Cheng 
+ * @version 1.0
+ * @since 2024-10-08
  */
 public interface NotificationWriter {
         /**

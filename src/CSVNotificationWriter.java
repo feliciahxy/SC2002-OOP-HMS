@@ -5,6 +5,9 @@ import java.util.ArrayList;
 /**
  * The {@code CSVNotificationWriter} class implements the {@code NotificationWriter} interface
  * to write notification data to a CSV file.
+ * @author Heng Xin Yu Felicia
+ * @version 1.0
+ * @since 2024-10-08
  */
 public class CSVNotificationWriter implements NotificationWriter {
 

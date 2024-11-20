@@ -1,6 +1,9 @@
 /**
  * Interface for creating notification messages.
  * Provides a default implementation for generating a generic notification message.
+ * @author Chew Jin Cheng 
+ * @version 1.0
+ * @since 2024-10-08
  */
 public interface NotificationMessageCreator {
     /**

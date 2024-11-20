@@ -3,6 +3,9 @@ import java.util.ArrayList;
 
 /**
  * Manages the list of medications, including loading and saving medication data from/to a CSV file.
+ * @author Chong Wei Thai 
+ * @version 1.0
+ * @since 2024-10-08
  */
 
 public class MedicationManager {

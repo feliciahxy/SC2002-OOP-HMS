@@ -1,5 +1,8 @@
 /**
  * A utility class for building {@link Notification} objects.
+ * @author Chong Wei Thai 
+ * @version 1.0
+ * @since 2024-10-08
  */
 public class NotificationBuilder {
     /**

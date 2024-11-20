@@ -1,6 +1,9 @@
 /**
  * Class responsible for creating notification messages when a doctor cancels an appointment.
  * Implements the {@link AppointmentNotificationForPatientCreator} interface.
+ * @author Chew Jin Cheng 
+ * @version 1.0
+ * @since 2024-10-08
  */
 public class NotificationWhenDoctorCancels implements AppointmentNotificationForPatientCreator {
     /**

@@ -3,6 +3,9 @@ import java.util.*;
 /**
  * The {@code Inventory} class manages a collection of medications, enabling actions such as viewing inventory,
  * adding or removing medications, updating stock levels, handling low stock alerts, and managing replenishment requests.
+ * @author Chong Wei Thai 
+ * @version 1.0
+ * @since 2024-10-08
  */
 public class Inventory {
     ArrayList<Medication> medications;

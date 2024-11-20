@@ -4,6 +4,9 @@ import java.util.*;
 /**
  * The UserManager class manages user data for staff and patients, including login,
  * password management, and loading and saving user data from and to CSV files.
+ * @author Chua Yu Hui 
+ * @version 1.0
+ * @since 2024-10-08
  */
 public class UserManager {
     private final ArrayList<Staff> staffUsers;

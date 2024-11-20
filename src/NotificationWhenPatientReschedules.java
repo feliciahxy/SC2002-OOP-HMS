@@ -2,6 +2,9 @@
  * The NotificationWhenPatientReschedules class implements the 
  * AppointmentNotificationForDoctorCreator interface and generates 
  * notifications for doctors when a patient reschedules an appointment.
+ * @author Chew Jin Cheng 
+ * @version 1.0
+ * @since 2024-10-08
  */
 public class NotificationWhenPatientReschedules implements AppointmentNotificationForDoctorCreator {
     /**

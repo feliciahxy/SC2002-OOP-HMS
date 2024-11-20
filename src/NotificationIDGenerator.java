@@ -2,6 +2,9 @@ import java.util.*;
 
 /**
  * A utility class for generating unique notification IDs.
+ * @author Chew Jin Cheng 
+ * @version 1.0
+ * @since 2024-10-08
  */
 public class NotificationIDGenerator {
     /**

@@ -1,6 +1,9 @@
 /**
  * The {@code AppointmentNotificationForDoctorCreator} interface extends the {@link AppointmentNotificationMessageCreator} interface.
  * It defines the contract for creating notification messages intended for doctors regarding appointment-related events.
+ * @author Denzel Tan Yong Liang
+ * @version 1.0
+ * @since 2024-10-08
  */
 public interface AppointmentNotificationForDoctorCreator extends AppointmentNotificationMessageCreator {
     /**

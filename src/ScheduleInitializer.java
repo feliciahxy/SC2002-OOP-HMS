@@ -5,6 +5,9 @@ import java.util.*;
  * The ScheduleInitializer class is responsible for initializing and updating the schedule
  * file based on the list of doctor IDs provided in the staff list file. It ensures that the
  * schedule includes all existing and newly added doctors while maintaining the existing data.
+ * @author Chua Yu Hui 
+ * @version 1.0
+ * @since 2024-10-08
  */
 public class ScheduleInitializer {
 

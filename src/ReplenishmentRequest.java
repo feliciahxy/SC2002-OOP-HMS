@@ -2,6 +2,9 @@
  * Represents a replenishment request for medical supplies.
  * Stores details about the request, including request ID, medicine name,
  * quantity requested, and the current status of the request.
+ * @author Chua Yu Hui 
+ * @version 1.0
+ * @since 2024-10-08
  */
 public class ReplenishmentRequest {
     private String requestID;

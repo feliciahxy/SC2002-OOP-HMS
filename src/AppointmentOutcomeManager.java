@@ -6,6 +6,9 @@ import java.util.Map;
 /**
  * The {@code AppointmentOutcomeManager} class is responsible for managing appointment outcomes and their
  * associated prescribed medications. It provides functionality to load and write data to CSV files.
+ * @author Heng Xin Yu Felicia
+ * @version 1.0
+ * @since 2024-10-08
  */
 public class AppointmentOutcomeManager {
     private ArrayList<AppointmentOutcome> appointmentOutcomes;

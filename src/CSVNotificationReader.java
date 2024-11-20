@@ -5,6 +5,9 @@ import java.util.ArrayList;
 /**
  * The {@code CSVNotificationReader} class implements the {@code NotificationReader} interface
  * to read notification data from a CSV file.
+* @author Heng Xin Yu Felicia
+ * @version 1.0
+ * @since 2024-10-08
  */
 public class CSVNotificationReader implements NotificationReader {
 

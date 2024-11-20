@@ -4,6 +4,9 @@ import java.util.*;
 
 /**
  * {@code Administrator} class represents an administrator who can manage staff and patients.
+ * @author Denzel Tan Yong Liang
+ * @version 1.0
+ * @since 2024-10-08
  */
 public class Administrator extends Staff {
 
