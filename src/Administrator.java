@@ -279,11 +279,11 @@ public class Administrator extends Staff {
                 System.out.println("[4] Quit to Previous Menu");
                 System.out.print("Enter Choice: ");
                 int choice = scanner.nextInt();
-                scanner.nextLine();
+                scanner.nextLine(); // Consume the leftover newline
     
                 if (choice == 4) {
                     System.out.println("Returning to the previous menu.");
-                    return;
+                    return; // Exit the method
                 }
     
                 String name, gender;
@@ -306,8 +306,21 @@ public class Administrator extends Staff {
                             }
                         }
     
-                        System.out.println("Enter Doctor Age:");
-                        age = getValidAge(scanner); // Ensure that age is a valid 
+                        // Inline age validation
+                        while (true) {
+                            try {
+                                System.out.println("Enter Doctor Age:");
+                                age = scanner.nextInt();
+                                if (age > 0) {
+                                    break;
+                                } else {
+                                    System.out.println("Age must be a positive integer. Please try again.");
+                                }
+                            } catch (InputMismatchException e) {
+                                System.out.println("Invalid input. Please enter a valid number for age.");
+                                scanner.nextLine(); // Clear invalid input
+                            }
+                        }
     
                         ArrayList<String> slots = new ArrayList<>();
                         for (int i = 0; i < 90; i++) {
@@ -327,7 +340,7 @@ public class Administrator extends Staff {
                         System.out.println("Enter Pharmacist Name:");
                         name = scanner.nextLine();
     
-                        // Ensure that gender is valid
+                        // Inline gender validation
                         while (true) {
                             System.out.println("Enter Pharmacist Gender (Male/Female):");
                             gender = scanner.nextLine();
@@ -338,8 +351,21 @@ public class Administrator extends Staff {
                             }
                         }
     
-                        System.out.println("Enter Pharmacist Age:");
-                        age = getValidAge(scanner);
+                        // Inline age validation
+                        while (true) {
+                            try {
+                                System.out.println("Enter Pharmacist Age:");
+                                age = scanner.nextInt();
+                                if (age > 0) {
+                                    break;
+                                } else {
+                                    System.out.println("Age must be a positive integer. Please try again.");
+                                }
+                            } catch (InputMismatchException e) {
+                                System.out.println("Invalid input. Please enter a valid number for age.");
+                                scanner.nextLine(); // Clear invalid input
+                            }
+                        }
     
                         size = staffManager.getPharmacists().size();
                         formattedSize = String.format("%03d", size + 1);
@@ -353,7 +379,7 @@ public class Administrator extends Staff {
                         System.out.println("Enter Administrator Name:");
                         name = scanner.nextLine();
     
-                        // Ensure that gender is valid
+                        // Inline gender validation
                         while (true) {
                             System.out.println("Enter Administrator Gender (Male/Female):");
                             gender = scanner.nextLine();
@@ -364,8 +390,21 @@ public class Administrator extends Staff {
                             }
                         }
     
-                        System.out.println("Enter Administrator Age:");
-                        age = getValidAge(scanner); // Ensure that age is valid
+                        // Inline age validation
+                        while (true) {
+                            try {
+                                System.out.println("Enter Administrator Age:");
+                                age = scanner.nextInt();
+                                if (age > 0) {
+                                    break;
+                                } else {
+                                    System.out.println("Age must be a positive integer. Please try again.");
+                                }
+                            } catch (InputMismatchException e) {
+                                System.out.println("Invalid input. Please enter a valid number for age.");
+                                scanner.nextLine(); // Clear invalid input
+                            }
+                        }
     
                         size = staffManager.getAdministrators().size();
                         formattedSize = String.format("%03d", size + 1);
@@ -382,28 +421,11 @@ public class Administrator extends Staff {
                 System.out.println("Staff details added successfully.");
             } catch (InputMismatchException e) {
                 System.out.println("Invalid input. Please enter a valid number.");
-                scanner.nextLine();
+                scanner.nextLine(); // Clear invalid input
             }
         }
     }
     
-    // Age validator with appropriate error handling
-    private static int getValidAge(Scanner scanner) {
-        while (true) {
-            try {
-                System.out.print("Enter Age: ");
-                int age = scanner.nextInt();
-                if (age > 0) {
-                    return age;
-                } else {
-                    System.out.println("Age must be a positive number. Please try again.");
-                }
-            } catch (InputMismatchException e) {
-                System.out.println("Invalid input. Please enter a valid number for age.");
-                scanner.nextLine();
-            }
-        }
-    }
     
     public static void updateStaff(UserManager userManager) {
         Scanner scanner = new Scanner(System.in);
