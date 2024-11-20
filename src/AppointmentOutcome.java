@@ -21,7 +21,7 @@ public class AppointmentOutcome {
     public String toString() {
         StringBuilder medications = new StringBuilder();
         for (PrescribedMedication medication : PrescribedMedications) {
-            medications.append(medication.getMedicationName()).append(", ");
+            medications.append(medication.toString()).append(", ");
         }
         
         if (medications.length() > 0) {

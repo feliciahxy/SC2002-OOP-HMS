@@ -646,7 +646,7 @@ public class Administrator extends Staff {
                 try {
                     System.out.print("Enter Date of Birth (YYYY-MM-DD): ");
                     String dobInput = scanner.next();
-                    dob = LocalDate.parse(dobInput, DateTimeFormatter.ofPattern("YYYY-MM-DD"));
+                    dob = LocalDate.parse(dobInput, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
                     break;
                 } catch (Exception e) {
                     System.out.println("Invalid date format. Please enter the date in YYYY-MM-DD format.");
