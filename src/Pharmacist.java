@@ -20,8 +20,11 @@ public class Pharmacist extends Staff{
     public void viewAppointmentOutcomeRecord(ArrayList<AppointmentOutcome> appointmentOutcome){
         while (true) { 
             try {
-                System.out.print("Enter appointment ID: ");
+                System.out.print("Enter 0 to quit.\nEnter appointment ID: ");
                 String appointmentID = scanner.nextLine(); 
+                if (appointmentID.equals("0")){
+                    return;
+                }
                 AppointmentOutcome apptOutcome = this.findAppointmentOutcomeRecord(appointmentID, appointmentOutcome);
                 if (apptOutcome != null){
                     ArrayList<PrescribedMedication> PrescribedMedications = apptOutcome.getPrescribedMedicationList();
