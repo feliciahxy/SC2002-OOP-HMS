@@ -321,7 +321,7 @@ public class Doctor extends Staff {
             String time = Schedule.slotToTime(daySlot);
 
             if (slots.get(i).endsWith("-1")) {
-                System.out.println("[" + count + "] " + day + " November " + time + " " + slots.get(i).substring(0, 5));
+                System.out.println("[" + count + "] " + day + " November " + time + " " + "PatientID: "+ slots.get(i).substring(0, 5));
                 count++;
             }
         }
