@@ -26,11 +26,10 @@ public class Doctor extends Staff {
         String inputPatientID;
 
         System.out.println("View Patient Records");
-        System.out.println("Enter PatientID: ");
-
         String regex = "^P\\d{4}$";
 
         while (true) {
+            System.out.print("Enter PatientID: ");
             inputPatientID = sc.nextLine();
 
             if (!inputPatientID.matches(regex)) {
@@ -70,7 +69,7 @@ public class Doctor extends Staff {
         String regex = "^P\\d{4}$";
 
         while (true) {
-            System.out.println("Enter PatientID: ");
+            System.out.print("Enter PatientID: ");
             inputPatientID = sc.nextLine();
 
             if (!inputPatientID.matches(regex)) {
@@ -104,7 +103,7 @@ public class Doctor extends Staff {
             }
 
             if (!validID) {
-                System.out.print("Invalid Appointment ID. Please try again: ");
+                System.out.println("Invalid Appointment ID.");
                 System.out.print("Which appointment do you want to update? Enter the appointment ID: ");
                 apptID = sc.nextLine(); 
             }
@@ -118,6 +117,7 @@ public class Doctor extends Staff {
             System.out.println("[3] Consultation Notes");
             System.out.println("[4] Prescribed Medicine");
             System.out.println("Input -1 to quit");
+            System.out.print("Enter choice: ");
 
             try {
                 choice = sc.nextInt();
@@ -130,28 +130,28 @@ public class Doctor extends Staff {
 
             switch(choice) {
                 case 1:
-                    System.out.println("Enter additional diagnosis");
+                    System.out.print("Enter additional diagnosis: ");
                     String newDiagnosis = sc.nextLine();
                     selectedAppointmentOutcome.setDiagnosis(selectedAppointmentOutcome.getDiagnosis() + " " + newDiagnosis);
                     System.out.println("Diagnosis updated!");
                     break;
 
                 case 2:
-                    System.out.println("Enter additional service type");
+                    System.out.print("Enter additional service type: ");
                     String newServiceType = sc.nextLine();
                     selectedAppointmentOutcome.setServiceType(selectedAppointmentOutcome.getServiceType() + " " + newServiceType);
                     System.out.println("Service Type updated!");
                     break;
 
                 case 3:
-                    System.out.println("Enter additional consultation notes");
+                    System.out.print("Enter additional consultation notes: ");
                     String newNotes = sc.nextLine();
                     selectedAppointmentOutcome.setNotes(selectedAppointmentOutcome.getNotes() + " " + newNotes);
                     System.out.println("Consultation Notes updated!");
                     break;
 
                 case 4:
-                    System.out.println("Enter additional prescription");
+                    System.out.print("Enter additional prescription: ");
                     String newMedicine = sc.nextLine();
                     PrescribedMedication newPrescription = new PrescribedMedication(apptID, newMedicine, "pending");
                     selectedAppointmentOutcome.getPrescribedMedicationList().add(newPrescription);
@@ -186,13 +186,33 @@ public class Doctor extends Staff {
         Scanner sc = new Scanner(System.in);
         ArrayList<String> slots = this.schedule.getSlots();
 
-        System.out.println("\nUpdate Availability");
-        System.out.println("Enter date: ");
-        int selectedDate = sc.nextInt();
-        System.out.println("Slot 1: 0900-1000, Slot 2: 1000-1100, Slot 3: 1100-1200");
-        System.out.println("Enter slot: ");
-        int selectedSlot = sc.nextInt();
-        sc.nextLine();
+        int selectedDate = -1;
+        while (true) {
+            try {
+                System.out.println("\nUpdate Availability");
+                System.out.print("Enter date: ");
+                selectedDate = sc.nextInt();
+                sc.nextLine();
+                break;
+            } catch (InputMismatchException e) {
+                sc.nextLine();
+                System.out.println("Invalid input. Please enter a valid date.");
+            }
+        }
+
+        int selectedSlot = -1;
+        while (true) {
+            try {
+                System.out.println("Slot 1: 0900-1000, Slot 2: 1000-1100, Slot 3: 1100-1200");
+                System.out.print("Enter slot: ");
+                selectedSlot = sc.nextInt();
+                sc.nextLine();
+                break;
+            } catch (InputMismatchException e) {
+                sc.nextLine();
+                System.out.println("Invalid input. Please enter a valid slot.");
+            }
+        }
 
         int slotIndex = (selectedDate - 1) * 3 + selectedSlot - 1;
         System.out.println("Current Arrangement: " + slots.get(slotIndex));
@@ -264,7 +284,7 @@ public class Doctor extends Staff {
         while (true) {
             System.out.println("[1] Accept");
             System.out.println("[2] Decline");
-            System.out.println("Enter choice: ");
+            System.out.print("Enter choice: ");
             try {
                 input = sc.nextInt();
                 if (input == 1 || input == 2) break;
@@ -333,20 +353,20 @@ public class Doctor extends Staff {
 
         Scanner sc = new Scanner(System.in);
 
-        System.out.print("The format should be AP followed by 4 digits (e.g., AP0001).\nEnter AppointmentID: ");
         String appointmentID;
         while (true) {
+            System.out.print("The format should be AP followed by 4 digits (e.g., AP0001).\nEnter AppointmentID: ");
             appointmentID = sc.nextLine();
             if (Appointment.isValidAppointmentID(appointmentID)) {
                 if (!Appointment.inAppointments(appointments, appointmentID)) {
-                    System.out.print("Appointment not found. Try Again: ");
+                    System.out.print("Appointment not found.");
                     continue;
                 }
                 if (Appointment.doctorCanWriteOutcome(appointments, appointmentID, this.getId())) {
                     break;
                 }
                 else {
-                    System.out.print("You do not have access to this AppointmentID. Try Again: ");
+                    System.out.print("You do not have access to this AppointmentID.");
                 }
             }
             else {
@@ -369,18 +389,18 @@ public class Doctor extends Staff {
         int slotIndex = (date -  1) * 3 + slot - 1;
         this.schedule.getSlots().set(slotIndex, "P1001-2");
 
-        System.out.println("What is the diagnosis: ");
+        System.out.print("What is the diagnosis: ");
         String diagnosis = sc.nextLine();
-        System.out.println("What is the service type: ");
+        System.out.print("What is the service type: ");
         String serviceType = sc.nextLine();
-        System.out.println("Any additional notes: ");
+        System.out.print("Any additional notes: ");
         String notes = sc.nextLine();
 
         String medicine = "";
         ArrayList<PrescribedMedication> allPrescribedMedications = new ArrayList<>();
         while (!medicine.equals("-1")) {
             System.out.println("Input -1 to quit.");
-            System.out.println("Enter medication given: ");
+            System.out.print("Enter medication given: ");
             medicine = sc.nextLine();
             if (medicine.equals("-1")) break;
             PrescribedMedication prescribedMedication = new PrescribedMedication(appointmentID, medicine, "pending");
