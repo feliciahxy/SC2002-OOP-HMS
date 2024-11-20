@@ -69,9 +69,15 @@ public class Main {
                     }
                 }
 
+                
+                int firstNotification = 0;
+
                 for (Notification notification : notifications) {
                     if (notification.getReceiverID().equals(userID) && notification.getStatus().equals("pending")) {
-                        System.out.println("\nLatest Notification");
+                        if (firstNotification == 0) {
+                            System.out.println("\nLatest Notification(s)");
+                            firstNotification = 1;
+                        }
                         System.out.println(notification.getMessage());
                         notification.setStatus("sent");
                     }
@@ -85,7 +91,7 @@ public class Main {
                         displayPharmacistMenu(userID, staffManager, appointmentOutcomes,inventory, replenishmentRequest);
                         break;
                     case "Administrator":
-                        displayAdminMenu(userID, staffManager, appointments, appointmentOutcomes, inventory, replenishmentRequest, userManager);
+                        displayAdminMenu(userID, staffManager, appointments, appointmentOutcomes, inventory, replenishmentRequest, userManager, schedules);
                         break;
                     case "Patient":
                         displayPatientMenu(userManager, doctors, userID, schedules, appointments, appointmentOutcomes, notifications);
@@ -202,7 +208,7 @@ public class Main {
         } while (choice != 5);
     }
 
-    public static void displayAdminMenu(String userID, StaffManager staffManager, ArrayList<Appointment> appointmentList, ArrayList<AppointmentOutcome> appointmentOutcomes, Inventory inventory, ArrayList<ReplenishmentRequest> replenishmentRequest, UserManager userManager) {
+    public static void displayAdminMenu(String userID, StaffManager staffManager, ArrayList<Appointment> appointmentList, ArrayList<AppointmentOutcome> appointmentOutcomes, Inventory inventory, ArrayList<ReplenishmentRequest> replenishmentRequest, UserManager userManager, ArrayList<Schedule> schedules) {
 
         Scanner scanner = new Scanner(System.in);
         Administrator administrator = staffManager.findAdministratorByID(userID);
@@ -223,10 +229,11 @@ public class Main {
 
             switch (choice) {
                 case 1:
-                    administrator.manageStaff(staffManager, userManager);
+                    administrator.manageStaff(staffManager, userManager, schedules);
                     break;
                 case 2:
-                    Administrator.managePatient(userManager);
+                    Administrator.managePatient(userManager); 
+                    break;
                 case 3:
                     Appointment.displayAppointments(appointmentList, appointmentOutcomes);
                     break;
@@ -242,7 +249,7 @@ public class Main {
                 default:
                     System.out.println("Invalid choice, please try again.");
             }
-        } while (choice != 5);
+        } while (choice != 6);
     }
 
     public static void displayPatientMenu(UserManager userManager, ArrayList<Doctor> doctors, String userID, ArrayList<Schedule> schedules, ArrayList<Appointment> appointments, ArrayList<AppointmentOutcome> appointmentOutcomes, ArrayList<Notification> notifications) {

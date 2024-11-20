@@ -8,7 +8,7 @@ public class Administrator extends Staff {
         super(id, name, role, gender, age, password);
     }
   
-    public void manageStaff(StaffManager staffManager, UserManager userManager){
+    public void manageStaff(StaffManager staffManager, UserManager userManager, ArrayList<Schedule> schedules){
         Scanner scanner = new Scanner(System.in);
         System.out.println("View and manage staff");
         System.out.println("[1] View All Staff");
@@ -21,15 +21,16 @@ public class Administrator extends Staff {
         switch(choice){
             case 1:
                 viewStaff(staffManager, userManager);
-            break;
-        case 2:
-                addStaff(staffManager, userManager);
-            break;
-        case 3:
+                break;
+            case 2:
+                addStaff(staffManager, userManager, schedules);
+                break;
+            case 3:
                 updateStaff(userManager);
-            break;
-        case 4:
+                break;
+            case 4:
                 deleteStaff(staffManager, userManager);
+                break;
             case 5:
                 break;
         }
@@ -172,7 +173,7 @@ public class Administrator extends Staff {
         }
     }
 
-    public static void addStaff(StaffManager staffManager, UserManager userManager) {
+    public static void addStaff(StaffManager staffManager, UserManager userManager, ArrayList<Schedule> schedules) {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Enter the type of staff to add: ");
         System.out.println("[1] Doctor");
@@ -212,6 +213,7 @@ public class Administrator extends Staff {
                 formattedSize = String.format("%03d", size + 1);
                 String doctorId = "D" + formattedSize;
                 Schedule schedule = new Schedule(doctorId, slots);
+                schedules.add(schedule);
                 Doctor doctor = new Doctor(doctorId, name, "Doctor", gender, age, "password", schedule);
                 staffManager.getDoctors().add(doctor);
                 userManager.getStaffUsers().add(doctor);
