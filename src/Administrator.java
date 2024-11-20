@@ -639,25 +639,24 @@ public class Administrator extends Staff {
     public static void addPatient(UserManager userManager) {
         Scanner scanner = new Scanner(System.in);
         try {
-            System.out.println("Enter the Name of Patient: ");
+            System.out.print("Enter the Name of Patient: ");
             String name = scanner.nextLine();
-
-            System.out.println("Enter Date of Birth (yyyy-MM-dd): ");
             LocalDate dob;
             while (true) {
                 try {
+                    System.out.print("Enter Date of Birth (YYYY-MM-DD): ");
                     String dobInput = scanner.next();
-                    dob = LocalDate.parse(dobInput, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+                    dob = LocalDate.parse(dobInput, DateTimeFormatter.ofPattern("YYYY-MM-DD"));
                     break;
                 } catch (Exception e) {
-                    System.out.println("Invalid date format. Please enter the date in yyyy-MM-dd format.");
+                    System.out.println("Invalid date format. Please enter the date in YYYY-MM-DD format.");
                 }
             }
             scanner.nextLine();
 
             String gender;
             while (true) {
-                System.out.println("Enter Gender (M/F):");
+                System.out.print("Enter Gender (M/F): ");
                 gender = scanner.nextLine();
                 if (gender.equalsIgnoreCase("M") || gender.equalsIgnoreCase("F")) {
                     break;
@@ -670,8 +669,8 @@ public class Administrator extends Staff {
             String formattedSize = String.format("%03d", size + 1);
             String id = "P1" + formattedSize;
             String phoneNumber;
-            System.out.println("Enter Phone Number: ");
             while (true) {
+                System.out.print("Enter Phone Number: ");
                 phoneNumber = scanner.nextLine();
                 if (phoneNumber.matches("\\d{8}")) { 
                     break;
@@ -680,8 +679,8 @@ public class Administrator extends Staff {
                 }
             }
             String email;
-            System.out.println("Enter Email: ");
             while (true) {
+                System.out.print("Enter Email: ");
                 email = scanner.nextLine();
                 if (email.matches("^[\\w._%+-]+@[\\w.-]+\\.[a-zA-Z]{2,}$")) {
                     break;
@@ -689,7 +688,7 @@ public class Administrator extends Staff {
                     System.out.println("Invalid email address. Please enter a valid email:");
                 }
             }
-            System.out.println("Enter Blood Type: ");
+            System.out.print("Enter Blood Type: ");
             String bloodType = scanner.nextLine();
 
             Patient patient = new Patient(id, name, dob, gender, bloodType, phoneNumber, email, "password");
