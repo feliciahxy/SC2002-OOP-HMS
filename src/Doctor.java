@@ -240,6 +240,10 @@ public class Doctor extends Staff {
 
         int choice = -1;
         while (true) {
+            if (count == 1) {
+                System.out.print("NIL\n");
+                return;
+            }
             System.out.print("Enter the pending appointment you would like to accept or decline (1-" + String.valueOf(count - 1) + "): ");
             choice = sc.nextInt();
             if (choice >= 1 && choice <= count - 1) break;
@@ -274,7 +278,6 @@ public class Doctor extends Staff {
             slots.set(slotIndex, slots.get(slotIndex).substring(0,5) + "-1");
             selectedAppointment.setStatus("confirmed");
             System.out.println("Appointment confirmed successfully!");
-
             AppointmentNotificationForPatientCreator notificationWhenDoctorConfirms = new NotificationWhenDoctorConfirms();
             String message = notificationWhenDoctorConfirms.createMessage(selectedAppointment, doctor);
             String notificationID = NotificationIDGenerator.generateNotificationID(notifications);
@@ -306,6 +309,8 @@ public class Doctor extends Staff {
                 count++;
             }
         }
+
+        if (count == 1) System.out.println("NIL\n");
     }
 
     public void recordAppointmentOutcome(ArrayList<Appointment> appointments, ArrayList<AppointmentOutcome> appointmentOutcomes) {

@@ -5,15 +5,11 @@ import java.util.*;
 public class UserManager {
     private final ArrayList<Staff> staffUsers;
     private final ArrayList<Patient> patientUsers;
-    private final ArrayList<Schedule> schedules;
 
-    public UserManager() {
+
+    public UserManager(ArrayList<Schedule> schedules) {
         staffUsers = new ArrayList<>();
         patientUsers = new ArrayList<>();
-
-        ScheduleManager scheduleManager = new ScheduleManager();
-        scheduleManager.loadSchedulesFromCSV("../data/Schedule.csv");
-        schedules = scheduleManager.getSchedules();
         
         loadUsersFromCSV("../data/Staff_List.csv", true, schedules);
         loadUsersFromCSV("../data/Patient_List.csv", false, null);
@@ -32,13 +28,6 @@ public class UserManager {
             String line;
             br.readLine();
 
-            Map<String, Schedule> scheduleMap = new HashMap<>();
-            if (schedules != null) {
-                for (Schedule schedule : schedules) {
-                    scheduleMap.put(schedule.getDoctorID(), schedule);
-                }
-            }
-
             while ((line = br.readLine()) != null) {
                 String[] fields = line.split(",");
                 if (isStaff) {
@@ -50,7 +39,11 @@ public class UserManager {
                     String password = fields[5];
                     
                     if (role.equals("Doctor")) {
-                        Schedule doctorSchedule = scheduleMap.get(id);
+                        Schedule doctorSchedule = null;
+                        for (Schedule schedule : schedules) {
+                            if (schedule.getDoctorID().equals(id)) doctorSchedule = schedule;
+                            break;
+                        }
                         staffUsers.add(new Doctor(id, name, role, gender, age, password, doctorSchedule));
                     }
                     else if (role.equals("Pharmacist")) {

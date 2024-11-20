@@ -9,8 +9,9 @@ public class Main {
         ScheduleInitializer.main(args);
 
         ScheduleManager scheduleManager = new ScheduleManager();
+        ArrayList<Schedule> schedules = scheduleManager.getSchedules();
 
-        UserManager userManager = new UserManager();
+        UserManager userManager = new UserManager(schedules);
         StaffManager staffManager = new StaffManager();
         staffManager.categorizeStaff(userManager.getStaffUsers());
         
@@ -32,7 +33,6 @@ public class Main {
         ArrayList<Doctor> doctors = staffManager.getDoctors();
         ArrayList<Administrator> administrators = staffManager.getAdministrators();
         ArrayList<Pharmacist> pharmacists = staffManager.getPharmacists();
-        ArrayList<Schedule> schedules = scheduleManager.getSchedules();
         ArrayList<AppointmentOutcome> appointmentOutcomes = appointmentOutcomeManager.getAppointmentOutcomes();
         ArrayList<Appointment> appointments = appointmentManager.getAppointmentList();
         ArrayList<ReplenishmentRequest> replenishmentRequest = replenishmentRequestManager.getReplenishmentRequests();
