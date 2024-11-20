@@ -57,7 +57,7 @@ public class Patient extends User {
             if (isPhoneNumberValid) {
                 break; 
             } else {
-                System.out.print("Invalid phone number format. Please enter a valid phone number:");
+                System.out.print("Invalid phone number format. Please enter a valid phone number: ");
                 newPhoneNumber = sc.nextLine(); 
             }
         }
@@ -68,7 +68,7 @@ public class Patient extends User {
             if (isEmailValid) {
                 break; 
             } else {
-                System.out.print("Invalid email format. Please enter a valid email:");
+                System.out.print("Invalid email format. Please enter a valid email: ");
                 newEmail = sc.nextLine();
             }
         }
