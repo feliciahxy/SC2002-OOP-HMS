@@ -1,4 +1,5 @@
 import java.util.*;
+import java.util.InputMismatchException;
 
 public class Main {
 
@@ -37,7 +38,6 @@ public class Main {
         ArrayList<Appointment> appointments = appointmentManager.getAppointmentList();
         ArrayList<ReplenishmentRequest> replenishmentRequest = replenishmentRequestManager.getReplenishmentRequests();
         ArrayList<Notification> notifications = notificationManager.getNotifications();
-
 
         System.out.print("Enter your ID: ");
         String userID = scanner.nextLine();
@@ -118,7 +118,7 @@ public class Main {
     public static void displayDoctorMenu(String userID, StaffManager staffManager, ArrayList<Patient> patientUsers, ArrayList<AppointmentOutcome> appointmentOutcomes, ArrayList<Appointment> appointments, ArrayList<Notification> notifications) {
         Scanner scanner = new Scanner(System.in);
         Doctor doctor = staffManager.findDoctorByID(userID);
-        int choice;
+        int choice = -1;
 
         do {
             System.out.println("\nDoctor Menu:");
@@ -131,43 +131,48 @@ public class Main {
             System.out.println("7. Record Appointment Outcome");
             System.out.println("8. Logout");
             System.out.print("Enter your choice: ");
-            choice = scanner.nextInt();
 
-            switch (choice) {
-                case 1:
-                    doctor.viewPatientRecords(patientUsers, appointmentOutcomes, appointments);
-                    break;
-                case 2:
-                    doctor.updatePatientRecord(patientUsers, appointmentOutcomes, appointments);
-                    break;
-                case 3:
-                    doctor.viewPersonalSchedule();
-                    break;
-                case 4:
-                    doctor.setAvailability();
-                    break;
-                case 5:
-                    doctor.acceptOrDeclineAppointment(appointments, doctor, notifications);
-                    break;
-                case 6:
-                    doctor.viewUpcomingAppointments();
-                    break;
-                case 7:
-                    doctor.recordAppointmentOutcome(appointments, appointmentOutcomes);
-                    break;
-                case 8:
-                    System.out.println("Logging out...");
-                    break;
-                default:
-                    System.out.println("Invalid choice, please try again.");
+            try {
+                choice = scanner.nextInt();
+                switch (choice) {
+                    case 1:
+                        doctor.viewPatientRecords(patientUsers, appointmentOutcomes, appointments);
+                        break;
+                    case 2:
+                        doctor.updatePatientRecord(patientUsers, appointmentOutcomes, appointments);
+                        break;
+                    case 3:
+                        doctor.viewPersonalSchedule();
+                        break;
+                    case 4:
+                        doctor.setAvailability();
+                        break;
+                    case 5:
+                        doctor.acceptOrDeclineAppointment(appointments, doctor, notifications);
+                        break;
+                    case 6:
+                        doctor.viewUpcomingAppointments();
+                        break;
+                    case 7:
+                        doctor.recordAppointmentOutcome(appointments, appointmentOutcomes);
+                        break;
+                    case 8:
+                        System.out.println("Logging out...");
+                        break;
+                    default:
+                        System.out.println("Invalid choice, please try again.");
+                }
+            } catch (InputMismatchException e) {
+                System.out.println("Invalid input. Please enter a valid number.");
+                scanner.nextLine(); // Clear invalid input
             }
         } while (choice != 8);
     }
 
     public static void displayPharmacistMenu(String userID, StaffManager staffManager, ArrayList<AppointmentOutcome> appointmentOutcomes, Inventory inventory, ArrayList<ReplenishmentRequest> replenishmentRequest) {
         Scanner scanner = new Scanner(System.in);
-        int choice;
         Pharmacist pharmacist = staffManager.findPharmacistByID(userID);
+        int choice = -1;
 
         do {
             inventory.notifyLowStock();
@@ -178,35 +183,39 @@ public class Main {
             System.out.println("4. Submit Replenishment Request");
             System.out.println("5. Logout");
             System.out.print("Enter your choice: ");
-            choice = scanner.nextInt();
-
-            switch (choice) {
-                case 1:
-                    pharmacist.viewAppointmentOutcomeRecord(appointmentOutcomes);
-                    break;
-                case 2:
-                    pharmacist.updatePrescription(appointmentOutcomes, inventory);
-                    break;
-                case 3:
-                    inventory.viewInventory();
-                    break;
-                case 4:
-                    pharmacist.requestReplenishment(replenishmentRequest, inventory);
-                    break;
-                case 5:
-                    System.out.println("Logging out...");
-                    break;
-                default:
-                    System.out.println("Invalid choice, please try again.");
+            
+            try {
+                choice = scanner.nextInt();
+                switch (choice) {
+                    case 1:
+                        pharmacist.viewAppointmentOutcomeRecord(appointmentOutcomes);
+                        break;
+                    case 2:
+                        pharmacist.updatePrescription(appointmentOutcomes, inventory);
+                        break;
+                    case 3:
+                        inventory.viewInventory();
+                        break;
+                    case 4:
+                        pharmacist.requestReplenishment(replenishmentRequest, inventory);
+                        break;
+                    case 5:
+                        System.out.println("Logging out...");
+                        break;
+                    default:
+                        System.out.println("Invalid choice, please enter a number between 1 and 5.");
+                }
+            } catch (InputMismatchException e) {
+                System.out.println("Invalid input. Please enter a valid number.");
+                scanner.nextLine();
             }
         } while (choice != 5);
     }
 
     public static void displayAdminMenu(String userID, StaffManager staffManager, ArrayList<Appointment> appointmentList, ArrayList<AppointmentOutcome> appointmentOutcomes, Inventory inventory, ArrayList<ReplenishmentRequest> replenishmentRequest, UserManager userManager) {
-
         Scanner scanner = new Scanner(System.in);
         Administrator administrator = staffManager.findAdministratorByID(userID);
-        int choice;
+        int choice = -1;
 
         do {
             inventory.notifyLowStock();
@@ -219,36 +228,41 @@ public class Main {
             System.out.println("5. Approve Replenishment Requests");
             System.out.println("6. Logout");
             System.out.print("Enter your choice: ");
-            choice = scanner.nextInt();
-
-            switch (choice) {
-                case 1:
-                    administrator.manageStaff(staffManager, userManager);
-                    break;
-                case 2:
-                    Administrator.managePatient(userManager);
-                case 3:
-                    Appointment.displayAppointments(appointmentList, appointmentOutcomes);
-                    break;
-                case 4:
-                    inventory.manageInventory();
-                    break;
-                case 5:
-                    inventory.approveReplenishmentRequest(replenishmentRequest);
-                    break;
-                case 6:
-                    System.out.println("Logging out...");
-                    break;
-                default:
-                    System.out.println("Invalid choice, please try again.");
+            
+            try {
+                choice = scanner.nextInt();
+                switch (choice) {
+                    case 1:
+                        administrator.manageStaff(staffManager, userManager);
+                        break;
+                    case 2:
+                        Administrator.managePatient(userManager);
+                    case 3:
+                        Appointment.displayAppointments(appointmentList, appointmentOutcomes);
+                        break;
+                    case 4:
+                        inventory.manageInventory();
+                        break;
+                    case 5:
+                        inventory.approveReplenishmentRequest(replenishmentRequest);
+                        break;
+                    case 6:
+                        System.out.println("Logging out...");
+                        break;
+                    default:
+                        System.out.println("Invalid choice, please try again.");
+                } 
+            } catch (InputMismatchException e) {
+                System.out.println("Invalid input. Please enter a valid number.");
+                scanner.nextLine();
             }
-        } while (choice != 5);
+        } while (choice != 6);
     }
 
     public static void displayPatientMenu(UserManager userManager, ArrayList<Doctor> doctors, String userID, ArrayList<Schedule> schedules, ArrayList<Appointment> appointments, ArrayList<AppointmentOutcome> appointmentOutcomes, ArrayList<Notification> notifications) {
         Scanner scanner = new Scanner(System.in);
         Patient patient = userManager.findPatientByID(userID);
-        int choice;
+        int choice = -1;
 
         do {
             System.out.println("\nPatient Menu:");
@@ -262,43 +276,49 @@ public class Main {
             System.out.println("8. View Past Appointment Outcome Records");
             System.out.println("9. Logout");
             System.out.print("Enter your choice: ");
-            choice = scanner.nextInt();
-            scanner.nextLine();
 
-            switch (choice) {
-                case 1:
-                    patient.viewMedicalRecord(appointmentOutcomes, appointments);
-                    break;
-                case 2:
-                    System.out.print("Enter new phone number: ");
-                    String newPhoneNumber = scanner.nextLine();
-                    System.out.print("Enter new email: ");
-                    String newEmail = scanner.nextLine();
-                    patient.updatePersonalInfo(newPhoneNumber, newEmail);
-                    break;
-                case 3:
-                    patient.viewAvailableSlots(doctors, schedules);
-                    break;
-                case 4:
-                    patient.scheduleAppointment(doctors, schedules, appointments, patient, notifications);
-                    break;
-                case 5:
-                    patient.rescheduleAppointment(patient, appointments, doctors, schedules, notifications);
-                    break;
-                case 6:
-                    patient.cancelAppointment(patient, appointments, schedules, doctors, notifications);
-                    break;
-                case 7:
-                    patient.displaySchedules(patient.getPatientID(), schedules, doctors);
-                    break;
-                case 8:
-                    AppointmentOutcome.displayAppointmentHistory(patient.getPatientID(), appointmentOutcomes, appointments);
-                    break;
-                case 9:
-                    System.out.println("Logging out...");
-                    break;
-                default:
-                    System.out.println("Invalid choice, please try again.");
+            try {
+                choice = scanner.nextInt();
+                scanner.nextLine();
+            
+                switch (choice) {
+                    case 1:
+                        patient.viewMedicalRecord(appointmentOutcomes, appointments);
+                        break;
+                    case 2:
+                        System.out.print("Enter new phone number: ");
+                        String newPhoneNumber = scanner.nextLine();
+                        System.out.print("Enter new email: ");
+                        String newEmail = scanner.nextLine();
+                        patient.updatePersonalInfo(newPhoneNumber, newEmail);
+                        break;
+                    case 3:
+                        patient.viewAvailableSlots(doctors, schedules);
+                        break;
+                    case 4:
+                        patient.scheduleAppointment(doctors, schedules, appointments, patient, notifications);
+                        break;
+                    case 5:
+                        patient.rescheduleAppointment(patient, appointments, doctors, schedules, notifications);
+                        break;
+                    case 6:
+                        patient.cancelAppointment(patient, appointments, schedules, doctors, notifications);
+                        break;
+                    case 7:
+                        patient.displaySchedules(patient.getPatientID(), schedules, doctors);
+                        break;
+                    case 8:
+                        AppointmentOutcome.displayAppointmentHistory(patient.getPatientID(), appointmentOutcomes, appointments);
+                        break;
+                    case 9:
+                        System.out.println("Logging out...");
+                        break;
+                    default:
+                        System.out.println("Invalid choice, please try again.");
+                }
+            } catch (InputMismatchException e) {
+                System.out.println("Invalid input. Please enter a valid number.");
+                scanner.nextLine();
             }
         } while (choice != 9);
     }
