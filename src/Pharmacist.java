@@ -33,6 +33,7 @@ public class Pharmacist extends Staff{
                         PrescribedMedication med = PrescribedMedications.get(i);
                         System.out.printf("Medication Name: %s, status: %s\n", med.getMedicationName(), med.getMedicationStatus());
                     }
+                    return;
                 }
             } 
             catch (InputMismatchException e) {
