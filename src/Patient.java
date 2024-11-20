@@ -127,28 +127,25 @@ public class Patient extends User {
         Scanner sc = new Scanner(System.in);
 
         String appointmentID;
-        while (true) {
-            System.out.print("The format should be AP followed by 4 digits (e.g., AP0001).\nEnter AppointmentID to reschedule: ");
-            appointmentID = sc.nextLine();
-            if (Appointment.isValidAppointmentID(appointmentID)) {
-                if (!Appointment.inAppointments(appointmentList, appointmentID)) {
-                    System.out.println("Appointment not found. Try Again: ");
-                    continue;
-                }
-                if (Appointment.belongToPatient(appointmentList, appointmentID, patient.getPatientID())) {
-                    if (Appointment.canReschedule(appointmentList, appointmentID)) break;
-                    else {
-                        System.out.println("This appointment cannot be rescheduled.");
-                    }
-                }
-                else {
-                    System.out.print("You do not have access to this AppointmentID. Try Again: ");
+        System.out.print("The format should be AP followed by 4 digits (e.g., AP0001).\nEnter AppointmentID to reschedule: ");
+        appointmentID = sc.nextLine();
+        if (Appointment.isValidAppointmentID(appointmentID)) {
+            if (!Appointment.inAppointments(appointmentList, appointmentID)) {
+                System.out.println("Appointment not found. Try Again: ");
+            }
+            if (Appointment.belongToPatient(appointmentList, appointmentID, patient.getPatientID())) {
+                if (!Appointment.canReschedule(appointmentList, appointmentID)) {
+                    System.out.println("This appointment cannot be rescheduled.");
                 }
             }
             else {
-                System.out.println("Invalid Input Format.");
+                System.out.print("You do not have access to this AppointmentID. Try Again: ");
             }
         }
+        else {
+            System.out.println("Invalid Input Format.");
+        }
+    
         Appointment inputAppointment = null;
         for (Appointment appointment : appointmentList) {
             if (appointment.getAppointmentID().equals(appointmentID)) {
@@ -235,24 +232,21 @@ public class Patient extends User {
     public void cancelAppointment(Patient patient, ArrayList<Appointment> appointmentList, ArrayList<Schedule> schedules, ArrayList<Doctor> doctors, ArrayList<Notification> notifications) {
         Scanner sc = new Scanner(System.in);
 
-        System.out.print("The format should be AP followed by 4 digits (e.g., AP0001).\nEnter AppointmentID to cancel: ");
         String appointmentID;
-        while (true) {
-            appointmentID = sc.nextLine();
-            if (Appointment.isValidAppointmentID(appointmentID)) {
-                if (!Appointment.inAppointments(appointmentList, appointmentID)) {
-                    System.out.print("Appointment not found. Try Again: ");
-                    continue;
-                }
-                if (Appointment.belongToPatient(appointmentList, appointmentID, patient.getPatientID())) break;
-                else {
-                    System.out.print("You do not have access to this AppointmentID. Try Again: ");
-                }
+        System.out.print("The format should be AP followed by 4 digits (e.g., AP0001).\nEnter AppointmentID to cancel: ");
+        appointmentID = sc.nextLine();
+        if (Appointment.isValidAppointmentID(appointmentID)) {
+            if (!Appointment.inAppointments(appointmentList, appointmentID)) {
+                System.out.print("Appointment not found. Try Again: ");
             }
-            else {
-                System.out.println("Invalid Input Format.");
+            if (!Appointment.belongToPatient(appointmentList, appointmentID, patient.getPatientID())) {
+                System.out.print("You do not have access to this AppointmentID. Try Again: ");
             }
         }
+        else {
+            System.out.println("Invalid Input Format.");
+        }
+    
 
         Appointment inputAppointment = null;
         for (Appointment appointment : appointmentList) {
