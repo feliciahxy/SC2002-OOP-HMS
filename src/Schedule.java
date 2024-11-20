@@ -1,24 +1,48 @@
 import java.util.*;
 
+/**
+ * The Schedule class represents a doctor's schedule, including their ID and available slots.
+ * It also provides static utility methods for managing appointments and displaying available dates and slots.
+ */
 public class Schedule { 
     private final String doctorID;
     private final ArrayList<String> slots;
 
-    // Constructor
+    /**
+     * Constructor to initialize a Schedule with a doctor ID and a list of slots.
+     *
+     * @param doctorID the unique ID of the doctor.
+     * @param slots    a list of appointment slots for the doctor.
+     */
     public Schedule(String doctorID, ArrayList<String> slots) {
         this.doctorID = doctorID;
         this.slots = slots;
     }
 
-    // Object getters & accessors
+    /**
+     * Gets the doctor ID associated with the schedule.
+     *
+     * @return the doctor ID.
+     */
     public String getDoctorID() {
         return doctorID;
     }
 
+    /**
+     * Gets the list of appointment slots for the doctor.
+     *
+     * @return a list of appointment slots.
+     */
     public ArrayList<String> getSlots() {
         return slots;
     }
 
+    /**
+     * Updates a specific slot in the schedule.
+     *
+     * @param index the index of the slot to update.
+     * @param input the new value for the slot.
+     */
     public void setSlot(int index, String input) {
         if (index >= 0 && index < slots.size()) {
             slots.set(index, input);
@@ -27,6 +51,13 @@ public class Schedule {
         }
     }
 
+    /**
+     * Cancels an appointment slot for a specific doctor.
+     *
+     * @param schedules the list of all schedules.
+     * @param slot      the slot index to cancel.
+     * @param doctorID  the ID of the doctor whose slot is to be canceled.
+     */
     public static void cancelSlot(ArrayList<Schedule> schedules, int slot, String doctorID) {
         for (Schedule schedule : schedules) {
             if (schedule.getDoctorID().equals(doctorID)) {
@@ -36,6 +67,12 @@ public class Schedule {
                 
     }
 
+    /**
+     * Displays doctors with pending appointments.
+     *
+     * @param doctors                      the list of all doctors.
+     * @param pendingAppointmentsByDoctor  a map of doctor IDs to their pending appointment slots.
+     */
     public static void displayDoctorsPending(ArrayList<Doctor> doctors, Map<String, ArrayList<Integer>> pendingAppointmentsByDoctor) {
         int count = 1;
         for (Map.Entry<String, ArrayList<Integer>> entry : pendingAppointmentsByDoctor.entrySet()) {
@@ -45,6 +82,12 @@ public class Schedule {
         }
     }
 
+    /**
+     * Displays doctors with confirmed appointments.
+     *
+     * @param doctors                       the list of all doctors.
+     * @param confirmedAppointmentsByDoctor a map of doctor IDs to their confirmed appointment slots.
+     */
     public static void displayDoctorsConfirmed(ArrayList<Doctor> doctors, Map<String, ArrayList<Integer>> confirmedAppointmentsByDoctor) {
         int count = 1;
         for (Map.Entry<String, ArrayList<Integer>> entry : confirmedAppointmentsByDoctor.entrySet()) {
@@ -54,6 +97,12 @@ public class Schedule {
         }
     }
 
+    /**
+     * Displays pending appointments for each doctor.
+     *
+     * @param doctors                      the list of all doctors.
+     * @param pendingAppointmentsByDoctor  a map of doctor IDs to their pending appointment slots.
+     */
     public static void displayPendingAppointment(ArrayList<Doctor> doctors, Map<String, ArrayList<Integer>> pendingAppointmentsByDoctor) {
         if (pendingAppointmentsByDoctor.size() == 0) {
             System.out.println("\nPending Appointments: NIL"); return;
@@ -80,6 +129,12 @@ public class Schedule {
         }
     }
 
+    /**
+     * Displays confirmed appointments for each doctor.
+     *
+     * @param doctors                       the list of all doctors.
+     * @param confirmedAppointmentsByDoctor a map of doctor IDs to their confirmed appointment slots.
+     */
     public static void displayConfirmedAppointment(ArrayList<Doctor> doctors, Map<String, ArrayList<Integer>> confirmedAppointmentsByDoctor) {
         if (confirmedAppointmentsByDoctor.size() == 0) {
             System.out.println("\nConfirmed Appointments: NIL"); return;
@@ -105,6 +160,7 @@ public class Schedule {
             System.out.println();
         }
     }
+
 
     public static ArrayList<Integer> displayAvailableSlotsForDate(String doctorID, int date, ArrayList<Schedule> schedules) {
         ArrayList<Integer> availableSlots = new ArrayList<>();
@@ -167,7 +223,12 @@ public class Schedule {
     }
 
 
-
+    /**
+     * Converts a slot number to a time range.
+     *
+     * @param slot the slot number (1-3).
+     * @return the corresponding time range as a string.
+     */
     public static String slotToTime(int slot) {
         if (slot == 1) return "0900-1000";
         else if (slot == 2) return "1000-1100";
@@ -175,6 +236,13 @@ public class Schedule {
         else return "Error slot value.";
     }
 
+    /**
+     * Retrieves a map of pending appointments for a specific patient.
+     *
+     * @param patientID the ID of the patient.
+     * @param schedules the list of all schedules.
+     * @return a Map where the key is the doctor ID and the value is a list of slot indices representing pending appointments.
+     */
     public static Map<String, ArrayList<Integer>> getPendingAppointments(String patientID, ArrayList<Schedule> schedules) {
         Map<String, ArrayList<Integer>> pendingAppointmentsByDoctor = new HashMap<>();
     
@@ -198,6 +266,13 @@ public class Schedule {
         return pendingAppointmentsByDoctor;
     }
     
+    /**
+     * Retrieves a map of confirmed appointments for a specific patient.
+     *
+     * @param patientID the ID of the patient.
+     * @param schedules the list of all schedules.
+     * @return a Map where the key is the doctor ID and the value is a list of slot indices representing confirmed appointments.
+     */
     public static Map<String, ArrayList<Integer>> getConfirmedAppointments(String patientID, ArrayList<Schedule> schedules) {
         Map<String, ArrayList<Integer>> confirmedAppointmentsByDoctor = new HashMap<>();
     
@@ -221,6 +296,16 @@ public class Schedule {
         return confirmedAppointmentsByDoctor;
     }
 
+    /**
+     * Adds a new schedule for a patient with a specific doctor.
+     *
+     * @param patientID the ID of the patient.
+     * @param doctorID the ID of the doctor.
+     * @param dateChoice the date of the appointment (1-30).
+     * @param slotChoice the slot choice (1-3).
+     * @param schedules the list of all schedules.
+     * @return the slot number (1-3) if successfully added; -1 if the slot is unavailable.
+     */
     public static int addSchedule(String patientID, String doctorID, int dateChoice, int slotChoice, ArrayList<Schedule> schedules) {
         for (Schedule schedule : schedules) {
             if (schedule.getDoctorID().equals(doctorID)) {
@@ -243,39 +328,3 @@ public class Schedule {
 
 }
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-    // Main Functions
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-/* public class Schedule {
-    private List<Date> availableDates;
-    private List<Time> availableTimes;
-
-    public Schedule(List<Date> availableDates, List<Time> availableTimes) {
-        this.availableDates = availableDates;
-        this.availableTimes = availableTimes;
-    }
-
-    public void updateAvailability(Date date, Time time) {
-        return;
-    }
-
-    public List<Date> getAvailableDates() {
-        return availableDates;
-    }
-
-    public void setAvailableDates(List<Date> availableDates) {
-        this.availableDates = availableDates;
-    }
-
-    public List<Time> getAvailableTimes() {
-        return availableTimes;
-    }
-
-    public void setAvailableTimes(List<Time> availableTimes) {
-        this.availableTimes = availableTimes;
-    }
-} */

@@ -4,6 +4,11 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * Represents a patient in the hospital management system.
+ * Patients can view their medical records, schedule appointments, 
+ * and update personal information.
+ */
 public class Patient extends User {
     private final String patientID;
     private final String name;
@@ -14,6 +19,18 @@ public class Patient extends User {
     private final String bloodType;
     private final List<String> pastDiagnosesAndTreatments;
 
+    /**
+     * Constructs a Patient object.
+     *
+     * @param patientID   the unique ID of the patient.
+     * @param name        the name of the patient.
+     * @param dob         the date of birth of the patient.
+     * @param gender      the gender of the patient.
+     * @param bloodType   the blood type of the patient.
+     * @param phoneNumber the phone number of the patient.
+     * @param email       the email of the patient.
+     * @param password    the password for the patient's account.
+     */
     public Patient(String patientID, String name, LocalDate dob, String gender, String bloodType, String phoneNumber, String email, String password) {
         super(patientID, name, "Patient", gender, 0, password);
         this.patientID = patientID;
@@ -26,6 +43,12 @@ public class Patient extends User {
         this.pastDiagnosesAndTreatments = new ArrayList<>();
     }
 
+    /**
+     * Displays the patient's medical record, including past diagnoses and treatments.
+     *
+     * @param appointmentOutcomes the list of appointment outcomes.
+     * @param appointments        the list of appointments.
+     */
     public void viewMedicalRecord(ArrayList<AppointmentOutcome> appointmentOutcomes, ArrayList<Appointment> appointments) {
         System.out.println("\nPatient ID: " + patientID);
         System.out.println("Name: " + name);
@@ -38,10 +61,26 @@ public class Patient extends User {
         AppointmentOutcome.displayAppointmentHistory(patientID, appointmentOutcomes, appointments);
     }
 
+    /**
+     * Validates the format of a phone number.
+     *
+     * @param phoneNumber the phone number to validate.
+     * @return {@code true} if the phone number is valid; {@code false} otherwise.
+     *         A valid phone number must start with 6, 8, or 9 and must be 8 digits long.
+     */
     private boolean isValidPhoneNumber(String phoneNumber) {
         return phoneNumber.matches("^[689]\\d{7}$"); //validator for phone no. format in accordance to starting digit or 6,8, or 9, and length of no. to be 8
     }
 
+    /**
+     * Validates the format of an email address.
+     *
+     * @param email the email address to validate.
+     * @return {@code true} if the email address is valid; {@code false} otherwise.
+     *         A valid email address must follow the general pattern: 
+     *         <local-part>@<domain>.<TLD>, where the local part may include letters, 
+     *         digits, underscores, dots, and special characters.
+     */
     private boolean isValidEmail(String email) {
         String emailRegex = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$"; //validator for email format
         Pattern pattern = Pattern.compile(emailRegex);
@@ -49,6 +88,12 @@ public class Patient extends User {
         return matcher.matches();
     }
 
+    /**
+     * Updates the patient's personal information, including phone number and email.
+     *
+     * @param newPhoneNumber the new phone number.
+     * @param newEmail       the new email.
+     */
     public void updatePersonalInfo(String newPhoneNumber, String newEmail) {
         Scanner sc = new Scanner(System.in);
     
@@ -79,6 +124,9 @@ public class Patient extends User {
         System.out.println("Personal information updated successfully.");
     }
 
+    /**
+     * Updates the patient's information in the CSV file.
+     */
     private void updatePatientInfoInCSV() {
         String filePath = "../data/Patient_List.csv";
         
@@ -109,6 +157,13 @@ public class Patient extends User {
         }
     }
 
+    /**
+     * Displays the patient's pending and confirmed schedules.
+     *
+     * @param patientID   the patient's ID.
+     * @param schedules   the list of schedules.
+     * @param doctors     the list of doctors.
+     */
     public void displaySchedules(String patientID, ArrayList<Schedule> schedules, ArrayList<Doctor> doctors) {
         Map<String, ArrayList<Integer>> pendingAppointmentsByDoctor = Schedule.getPendingAppointments(patientID, schedules);
         Map<String, ArrayList<Integer>> confirmedAppointmentsByDoctor = Schedule.getConfirmedAppointments(patientID, schedules);
@@ -122,7 +177,15 @@ public class Patient extends User {
         Schedule.displayConfirmedAppointment(doctors, confirmedAppointmentsByDoctor);
     }
 
-    
+    /**
+     * Reschedules an existing appointment.
+     *
+     * @param patient         the patient rescheduling the appointment.
+     * @param appointmentList the list of appointments.
+     * @param doctors         the list of doctors.
+     * @param schedules       the list of schedules.
+     * @param notifications   the list of notifications.
+     */
     public void rescheduleAppointment(Patient patient, ArrayList<Appointment> appointmentList, ArrayList<Doctor> doctors, ArrayList<Schedule> schedules, ArrayList<Notification> notifications) {
         Scanner sc = new Scanner(System.in);
 
@@ -229,6 +292,16 @@ public class Patient extends User {
     }
 
 
+    /**
+     * Cancels an existing appointment.
+     *
+     * @param patient         the patient canceling the appointment.
+     * @param appointmentList the list of appointments.
+     * @param schedules       the list of schedules.
+     * @param doctors         the list of doctors.
+     * @param notifications   the list of notifications.
+     */
+
     public void cancelAppointment(Patient patient, ArrayList<Appointment> appointmentList, ArrayList<Schedule> schedules, ArrayList<Doctor> doctors, ArrayList<Notification> notifications) {
         Scanner sc = new Scanner(System.in);
 
@@ -284,6 +357,15 @@ public class Patient extends User {
         notifications.add(NotificationBuilder.buildNotification(notificationID, selectedDoctor.getId(), message));
     }
 
+    /**
+     * Schedules a new appointment for the patient.
+     *
+     * @param doctors         the list of doctors.
+     * @param schedules       the list of schedules.
+     * @param appointmentList the list of appointments.
+     * @param patient         the patient scheduling the appointment.
+     * @param notifications   the list of notifications.
+     */
     public void scheduleAppointment(ArrayList<Doctor> doctors, ArrayList<Schedule> schedules, ArrayList<Appointment> appointmentList, Patient patient, ArrayList<Notification> notifications){
         Scanner scanner = new Scanner(System.in);
 
@@ -366,6 +448,12 @@ public class Patient extends User {
         notifications.add(NotificationBuilder.buildNotification(notificationID, doctorID, message));
     }
 
+    /**
+     * Views available slots for appointments.
+     *
+     * @param doctors   the list of doctors.
+     * @param schedules the list of schedules.
+     */
     public void viewAvailableSlots(ArrayList<Doctor> doctors, ArrayList<Schedule> schedules) {
         Scanner scanner = new Scanner(System.in);
 
@@ -423,13 +511,12 @@ public class Patient extends User {
         ArrayList<Integer> availableSlots = Schedule.displayAvailableSlotsForDate(doctorID, dateChoice, schedules);
     }
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-    // Helper Functions
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
+    /**
+     * Retrieves a list of doctor names from a list of Doctor objects.
+     *
+     * @param doctors the list of Doctor objects.
+     * @return an ArrayList containing the names of all doctors in the input list.
+     */
     public static ArrayList<String> getDoctorNames (ArrayList<Doctor> doctors) {
         ArrayList<String> doctorNames = new ArrayList<>();
         for (Doctor doctor : doctors) {
@@ -438,6 +525,11 @@ public class Patient extends User {
         return doctorNames;
     }
 
+    /**
+     * Displays a numbered list of doctor names.
+     *
+     * @param doctorNames an ArrayList containing doctor names.
+     */
     public static void displayDoctorNames(ArrayList<String> doctorNames) {
         System.out.println("List of Doctors:");
         for (int i = 0; i < doctorNames.size(); i++) {
@@ -445,6 +537,13 @@ public class Patient extends User {
         }
     }
 
+    /**
+     * Retrieves a doctor's ID based on their name.
+     *
+     * @param doctors    the list of Doctor objects.
+     * @param doctorName the name of the doctor.
+     * @return the ID of the doctor if found, or {@code null} if no matching doctor is found.
+     */
     public static String getDoctorIDFromName (ArrayList<Doctor> doctors, String doctorName) {
         for (Doctor doctor : doctors) {
             if (doctorName.equalsIgnoreCase(doctor.getName())) {
@@ -454,6 +553,13 @@ public class Patient extends User {
         return null;
     }
 
+    /**
+     * Retrieves a doctor's name based on their ID.
+     *
+     * @param doctors  the list of Doctor objects.
+     * @param doctorID the ID of the doctor.
+     * @return the name of the doctor if found, or {@code null} if no matching doctor is found.
+     */
     public static String getDoctorNameFromID (ArrayList<Doctor> doctors, String doctorID) {
         for (Doctor doctor : doctors) {
             if (doctorID.equalsIgnoreCase(doctor.getId())) {
@@ -463,30 +569,65 @@ public class Patient extends User {
         return null;
     }
 
-
+    /**
+     * Adds a new diagnosis or treatment to the patient's medical history.
+     *
+     * @param diagnosisAndTreatment the diagnosis or treatment to add.
+     */
     public void addDiagnosisAndTreatment(String diagnosisAndTreatment) {
         this.pastDiagnosesAndTreatments.add(diagnosisAndTreatment);
     }
 
+    /**
+     * Retrieves the patient's date of birth.
+     *
+     * @return the patient's date of birth as a {@code LocalDate}.
+     */
     public LocalDate getDob() {
         return dob;
     }
 
+    /**
+     * Retrieves the patient's blood type.
+    *
+    * @return the patient's blood type as a {@code String}.
+    */
     public String getBloodType() {
         return bloodType;
     }
 
+    /**
+     * Retrieves the patient's email address.
+     *
+     * @return the patient's email address.
+     */
     public String getEmail() {
         return email;
     }
 
+    /**
+     * Retrieves the patient's phone number.
+     *
+     * @return the patient's phone number.
+     */
     public String getPhoneNumber() {
         return phoneNumber;
     }
 
+    /**
+     * Retrieves the patient's ID.
+     *
+     * @return the patient's ID.
+     */
     public String getPatientID() {
         return patientID;
     }
+
+    /**
+     * Updates the patient's phone number if the format is valid.
+     *
+     * @param phoneNumber the new phone number to update.
+     */
     public void setPhoneNumber(String phoneNumber) {
         if (isValidPhoneNumber(phoneNumber)) {
             this.phoneNumber = phoneNumber;
@@ -496,6 +637,11 @@ public class Patient extends User {
         }
     }
 
+    /**
+     * Updates the patient's email address if the format is valid.
+     *
+     * @param email the new email address to update.
+     */
     public void setEmail(String email) {
         if (isValidEmail(email)) {
             this.email = email;

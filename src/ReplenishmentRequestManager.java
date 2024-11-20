@@ -1,14 +1,28 @@
 import java.io.*;
 import java.util.ArrayList;
 
+/**
+ * Manages replenishment requests for medical supplies.
+ * Provides functionality to load requests from a CSV file,
+ * write updated requests back to the file, and access the requests.
+ */
 public class ReplenishmentRequestManager {
     private ArrayList<ReplenishmentRequest> replenishmentRequests;
 
+    /**
+     * Constructs a new ReplenishmentRequestManager.
+     * Loads replenishment requests from the CSV file at initialization.
+     */
     public ReplenishmentRequestManager() {
         this.replenishmentRequests = new ArrayList<>();
         loadReplenishmentRequestsFromCSV("../Data/ReplenishRequest.csv");
     }
 
+    /**
+     * Loads replenishment requests from a CSV file.
+     *
+     * @param filePath the path to the CSV file containing replenishment request data.
+     */
     private void loadReplenishmentRequestsFromCSV(String filePath) {
         try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
             String line;
@@ -34,6 +48,10 @@ public class ReplenishmentRequestManager {
         }
     }
 
+    /**
+     * Writes the current list of replenishment requests to a CSV file.
+     * The file is overwritten with the updated list of requests.
+     */
     public void writeReplenishmentRequestsToCSV() {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter("../Data/ReplenishRequest.csv"))) {
             // Write the header line
@@ -51,7 +69,11 @@ public class ReplenishmentRequestManager {
         }
     }
     
-
+    /**
+     * Retrieves the list of replenishment requests.
+     *
+     * @return an ArrayList of ReplenishmentRequest objects.
+     */
     public ArrayList<ReplenishmentRequest> getReplenishmentRequests() {
         return this.replenishmentRequests;
     }

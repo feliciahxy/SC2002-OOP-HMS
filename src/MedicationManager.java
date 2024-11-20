@@ -1,14 +1,26 @@
 import java.io.*;
 import java.util.ArrayList;
 
+/**
+ * Manages the list of medications, including loading and saving medication data from/to a CSV file.
+ */
+
 public class MedicationManager {
     private ArrayList<Medication> medications;
 
+    /**
+     * Constructs a new {@link MedicationManager} and loads medications from a CSV file.
+     */
     public MedicationManager() {
         this.medications = new ArrayList<>();
         loadMedicationsFromCSV("../data/Medicine_List.csv");
     }
 
+    /**
+     * Loads medications from a CSV file into the list.
+     *
+     * @param filePath the path to the CSV file containing medication data.
+     */
     private void loadMedicationsFromCSV(String filePath) {
         try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
             String line;
@@ -33,6 +45,9 @@ public class MedicationManager {
         }
     }
 
+    /**
+     * Saves the current list of medications to a CSV file.
+     */
     public void writeMedicationsToCSV() {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter("../data/Medicine_List.csv"))) {
             // Write the header
@@ -50,6 +65,11 @@ public class MedicationManager {
     }
     
 
+    /**
+     * Retrieves the list of medications.
+     *
+     * @return the list of {@link Medication} objects.
+     */
     public ArrayList<Medication> getMedications() {
         return this.medications;
     }

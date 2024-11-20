@@ -1,5 +1,11 @@
 import java.util.*;
 
+/**
+ * The {@code Appointment} class represents an appointment with attributes such as 
+ * appointment ID, patient ID, doctor ID, date, time, and status. It also includes 
+ * utility methods for managing and manipulating appointments.
+ */
+
 public class Appointment {
     private String appointmentID;
     private String patientID;
@@ -8,6 +14,16 @@ public class Appointment {
     private String time;
     private String status;
 
+    /**
+     * Constructs an {@code Appointment} with the specified attributes.
+     *
+     * @param appointmentID the ID of the appointment.
+     * @param patientID the ID of the patient.
+     * @param doctorID the ID of the doctor.
+     * @param date the date of the appointment.
+     * @param time the time of the appointment.
+     * @param status the status of the appointment.
+     */
     public Appointment (String appointmentID, String patientID, String doctorID, String date, String time, String status) {
         this.appointmentID= appointmentID;
         this.patientID = patientID;
@@ -17,6 +33,11 @@ public class Appointment {
         this.status = status;
     }
 
+    /**
+     * Returns a string representation of the appointment.
+     *
+     * @return a formatted string with appointment details.
+     */
     public String toString() {
         return "Appointment Details:\n" +
                "Appointment ID: " + appointmentID + "\n" +
@@ -27,12 +48,16 @@ public class Appointment {
                "Status: " + status;
     }
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-    // Main Functions
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
+    /**
+     * Creates a new appointment and adds it to the specified appointment list.
+     *
+     * @param appointmentList the list of appointments.
+     * @param patientID the ID of the patient.
+     * @param doctorID the ID of the doctor.
+     * @param dateChoice the chosen date.
+     * @param slot the chosen time slot.
+     * @return the created {@code Appointment}.
+     */
     public static Appointment createAppointment(ArrayList<Appointment> appointmentList, String patientID, String doctorID, int dateChoice, int slot) {
         int size = appointmentList.size();
         String formattedSize = String.format("%04d", size + 1);
@@ -43,6 +68,14 @@ public class Appointment {
         return appointment;
     }
 
+    /**
+     * Changes the date and time of an existing appointment.
+     *
+     * @param appointmentList the list of appointments.
+     * @param appointmentID the ID of the appointment to be changed.
+     * @param newDate the new date.
+     * @param newSlot the new time slot.
+     */
     public static void changeAppointment(ArrayList<Appointment> appointmentList, String appointmentID, int newDate, int newSlot) {
         String formattedDate = String.format("%02d", newDate);
         for (Appointment appointment : appointmentList) {
@@ -55,6 +88,12 @@ public class Appointment {
         }
     }
 
+    /**
+     * Cancels an appointment by updating its status to "cancelled".
+     *
+     * @param appointmentList the list of appointments.
+     * @param appointmentID the ID of the appointment to cancel.
+     */
     public static void cancelAppointment(ArrayList<Appointment> appointmentList, String appointmentID) {
         for (Appointment appointment : appointmentList) {
             if (appointment.getAppointmentID().equals(appointmentID)) {
@@ -63,6 +102,13 @@ public class Appointment {
         }
     }
 
+    /**
+     * Retrieves a list of appointment IDs associated with a given patient ID.
+     *
+     * @param patientID the ID of the patient.
+     * @param appointmentList the list of appointments.
+     * @return a list of appointment IDs belonging to the patient.
+     */
     public static ArrayList<String> patientAppointmentIDs(String patientID, ArrayList<Appointment> appointmentList) {
         ArrayList<String> patientAppointmentIDs = new ArrayList<>();
         for (Appointment appointment : appointmentList) {
@@ -71,10 +117,12 @@ public class Appointment {
         return patientAppointmentIDs;
     }
     
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-    // Admin
-
+    /**
+     * Displays all appointments along with their outcomes.
+     *
+     * @param appointmentList the list of appointments.
+     * @param appointmentOutcomes the list of appointment outcomes.
+     */
     public static void displayAppointments(ArrayList<Appointment> appointmentList, ArrayList<AppointmentOutcome> appointmentOutcomes) {
         for (Appointment appointment : appointmentList) {
             System.out.println("\nAppointmentID: " + appointment.getAppointmentID());
@@ -96,12 +144,14 @@ public class Appointment {
         }
     }
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-    // Doctor
-
+    /**
+     * Determines if a doctor can write an outcome for a specified appointment.
+     *
+     * @param appointments the list of appointments.
+     * @param appointmentID the ID of the appointment.
+     * @param doctorID the ID of the doctor.
+     * @return {@code true} if the doctor can write the outcome; {@code false} otherwise.
+     */
     public static boolean doctorCanWriteOutcome(ArrayList<Appointment> appointments, String appointmentID, String doctorID) {
         for (Appointment appointment : appointments) {
             if (appointment.getAppointmentID().equals(appointmentID)) {
@@ -113,21 +163,23 @@ public class Appointment {
         return false;
     }
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-    // Helper Functions
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-    // Format of AppointmentID
+    /**
+     * Validates the format of an appointment ID.
+     *
+     * @param appointmentID the appointment ID to validate.
+     * @return {@code true} if the appointment ID is valid; {@code false} otherwise.
+     */
     public static boolean isValidAppointmentID(String appointmentID) {
         return appointmentID.matches("^AP\\d{4}$");
     }
 
-    // AppointmentID found in Appointments
+    /**
+     * Checks if an appointment ID exists in the list of appointments.
+     *
+     * @param appointments the list of appointments.
+     * @param appointmentID the appointment ID to check.
+     * @return {@code true} if the appointment ID exists; {@code false} otherwise.
+     */
     public static boolean inAppointments(ArrayList<Appointment> appointments, String appointmentID) {
         for (Appointment appointment : appointments) {
             if (appointment.getAppointmentID().equals(appointmentID)) return true;
@@ -135,7 +187,14 @@ public class Appointment {
         return false;
     }
 
-    // AppointmentID matches patientID
+    /**
+     * Checks if an appointment belongs to a specified patient.
+     *
+     * @param appointmentList the list of appointments.
+     * @param appointmentID the appointment ID to check.
+     * @param patientID the ID of the patient.
+     * @return {@code true} if the appointment belongs to the patient; {@code false} otherwise.
+     */
     public static boolean belongToPatient(ArrayList<Appointment> appointmentList, String appointmentID, String patientID) {
         for (Appointment appointment : appointmentList) {
             if (appointment.getAppointmentID().equals(appointmentID)) {
@@ -145,6 +204,13 @@ public class Appointment {
         return false;
     }
 
+    /**
+     * Determines if an appointment can be rescheduled.
+     *
+     * @param appointmentList the list of appointments.
+     * @param appointmentID the ID of the appointment to check.
+     * @return {@code true} if the appointment can be rescheduled; {@code false} otherwise.
+     */
     public static boolean canReschedule(ArrayList<Appointment> appointmentList, String appointmentID) {
         for (Appointment appointment : appointmentList) {
             if (appointment.getStatus().equals("pending")) return true;
@@ -154,6 +220,12 @@ public class Appointment {
         return false;
     }
 
+    /**
+     * Converts a time string to a slot number.
+     *
+     * @param time the time string to convert.
+     * @return the corresponding slot number.
+     */
     public static int timeToSlot(String time) {
         if (time.equals("0900-1000")) return 1;
         else if (time.equals("1000-1100")) return 2;
@@ -162,63 +234,132 @@ public class Appointment {
         else return -1;
     }
 
-
+    /**
+     * Retrieves the appointment ID.
+     *
+     * @return the appointment ID.
+     */
     public String getAppointmentID() { 
         return appointmentID; 
     }
-public void setAppointmentID(String appointmentID) { 
+
+    /**
+     * Updates the appointment ID.
+     *
+     * @param appointmentID the new appointment ID.
+     */
+
+    public void setAppointmentID(String appointmentID) { 
         this.appointmentID = appointmentID;
     }
 
+    /**
+     * Retrieves the patient ID.
+     *
+     * @return the patient ID.
+     */
     public String getPatientID() { 
         return patientID; 
     }
 
+    /**
+     * Updates the patient ID.
+     *
+     * @param patientID the new patient ID.
+     */
     public void setPatientID(String patientID) { 
         this.patientID = patientID; 
     }
 
+    /**
+     * Retrieves the doctor ID.
+     *
+     * @return the doctor ID.
+     */
     public String getDoctorID() { 
         return doctorID; 
     }
 
+    /**
+     * Updates the doctor ID.
+     *
+     * @param doctorID the new doctor ID.
+     */
     public void setDoctorID(String doctorID) { 
         this.doctorID = doctorID; 
     }
 
+    /**
+     * Retrieves the date of the appointment.
+     *
+     * @return the appointment date.
+     */
     public String getDate() { 
         return date; 
     }
 
+    /**
+     * Updates the date of the appointment.
+     *
+     * @param date the new appointment date.
+     */
     public void setDate(String date) { 
         this.date = date; 
     }
 
+    /**
+     * Retrieves the time of the appointment.
+     *
+     * @return the appointment time.
+     */
     public String getTime() { 
         return time; 
     }
 
+    /**
+     * Updates the time of the appointment.
+     *
+     * @param time the new appointment time.
+     */
     public void setTime(String time) { 
         this.time = time; 
     }
 
-
+    /**
+     * Retrieves the status of the appointment.
+     *
+     * @return the appointment status.
+     */
     public String getStatus() { 
         return status; 
     }
 
+    /**
+     * Updates the status of the appointment.
+     *
+     * @param status the new appointment status.
+     */
     public void setStatus(String status) { 
         this.status = status; 
     }
 
+    /**
+     * Cancels the appointment by setting its status to "cancelled".
+     */
     public void cancel(){
         this.status = "canceled";
     }
 
+    /**
+     * Confirms the appointment by setting its status to "confirmed".
+     */
     public void confirm(){
         this.status = "confirmed";
     }
 
+    /**
+     * Completes the appointment by setting its status to "completed".
+     */
     public void complete(){
         this.status = "completed";
     }

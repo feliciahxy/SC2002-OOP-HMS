@@ -1,14 +1,26 @@
 import java.io.*;
 import java.util.*;
 
+/**
+ * The ScheduleManager class manages the schedules for doctors, including
+ * loading schedules from a CSV file and writing updated schedules back to the file.
+ */
 public class ScheduleManager {
     private final ArrayList<Schedule> schedules;
     
+    /**
+     * Constructs a ScheduleManager instance and loads schedules from a predefined CSV file.
+     */
     public ScheduleManager() {
         schedules = new ArrayList<>();
         loadSchedulesFromCSV("../data/Schedule.csv");
     }
     
+    /**
+     * Loads schedules from a CSV file and populates the schedules list.
+     * 
+     * @param filePath the path to the CSV file containing the schedules.
+     */
     public void loadSchedulesFromCSV(String filePath) {
         try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
             String line;
@@ -34,6 +46,12 @@ public class ScheduleManager {
         }
     }
 
+    /**
+     * Writes the current schedules to a CSV file.
+     * 
+     * The CSV file includes headers representing dates and time slots and 
+     * writes each doctor's schedule in the file.
+     */
     public void writeSchedulesToCSV() {
         try (BufferedWriter bw = new BufferedWriter(new FileWriter("../data/Schedule.csv", false))) {
             StringBuilder header = new StringBuilder("doctorIDs");
@@ -58,6 +76,11 @@ public class ScheduleManager {
         }
     }
 
+    /**
+     * Retrieves the list of all schedules.
+     * 
+     * @return the list of schedules.
+     */
     public ArrayList<Schedule> getSchedules() {
         return schedules;
     }

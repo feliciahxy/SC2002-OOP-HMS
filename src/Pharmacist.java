@@ -1,12 +1,33 @@
 import java.util.*;
-
+/**
+ * Represents a pharmacist who can manage prescriptions, view appointment outcomes,
+ * and request replenishments for low-stock medications.
+ */
 public class Pharmacist extends Staff{
     Scanner scanner = new Scanner(System.in);
-    
+
+    /**
+     * Constructs a Pharmacist object.
+     *
+     * @param staffID   the unique ID of the pharmacist.
+     * @param name      the name of the pharmacist.
+     * @param role      the role of the pharmacist.
+     * @param gender    the gender of the pharmacist.
+     * @param age       the age of the pharmacist.
+     * @param password  the password for the pharmacist's account.
+     */
     public Pharmacist(String staffID, String name, String role, String gender, int age, String password){
         super(staffID, name, role, gender, age, password);
     }
     
+    /**
+     * Finds an appointment outcome record by its ID.
+     *
+     * @param appointmentID      the ID of the appointment.
+     * @param appointmentOutcomes the list of appointment outcomes.
+     * @return the matching {@link AppointmentOutcome} object, or {@code null} if not found.
+     */
+
     private AppointmentOutcome findAppointmentOutcomeRecord(String appointmentID, ArrayList<AppointmentOutcome> appointmentOutcomes){
         for (int i = 0; i<appointmentOutcomes.size(); i++){
             if (appointmentOutcomes.get(i).getAppointmentID().equals(appointmentID)){
@@ -17,6 +38,11 @@ public class Pharmacist extends Staff{
         return null;
     }
     
+    /**
+     * Allows the pharmacist to view an appointment outcome record by its ID.
+     *
+     * @param appointmentOutcome the list of appointment outcomes.
+     */
     public void viewAppointmentOutcomeRecord(ArrayList<AppointmentOutcome> appointmentOutcome){
         while (true) { 
             try {
@@ -44,6 +70,13 @@ public class Pharmacist extends Staff{
                 
     }
 
+    /**
+     * Retrieves an appointment outcome record by ID and returns it.
+     *
+     * @param appointmentOutcome the list of appointment outcomes.
+     * @param appointmentID      the ID of the appointment to retrieve.
+     * @return the corresponding {@link AppointmentOutcome} object, or {@code null} if not found.
+     */
     public AppointmentOutcome viewAppointmentOutcomeRecord(ArrayList<AppointmentOutcome> appointmentOutcome, String appointmentID){
         AppointmentOutcome apptOutcome = this.findAppointmentOutcomeRecord(appointmentID, appointmentOutcome);
         if (apptOutcome != null){
@@ -52,6 +85,12 @@ public class Pharmacist extends Staff{
         return apptOutcome;        
     }
 
+    /**
+     * Allows the pharmacist to update the prescription status for medications in an appointment.
+     *
+     * @param appointmentOutcomes the list of appointment outcomes.
+     * @param inventory           the current inventory of medications.
+     */
     public void updatePrescription(ArrayList<AppointmentOutcome> appointmentOutcomes, Inventory inventory){
         while (true) { 
             try {
@@ -107,6 +146,12 @@ public class Pharmacist extends Staff{
         }
     }
     
+    /**
+     * Allows the pharmacist to request replenishment for low-stock medications.
+     *
+     * @param requestList the list of existing replenishment requests.
+     * @param inventory   the current inventory of medications.
+     */
     public void requestReplenishment(ArrayList<ReplenishmentRequest> requestList, Inventory inventory){//return all low stock medicine
         inventory.getReplenishmentRequest(requestList);       
     }

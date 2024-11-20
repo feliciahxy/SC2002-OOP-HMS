@@ -2,8 +2,18 @@
 import java.io.*;
 import java.util.ArrayList;
 
+/**
+ * The {@code CSVNotificationReader} class implements the {@code NotificationReader} interface
+ * to read notification data from a CSV file.
+ */
 public class CSVNotificationReader implements NotificationReader {
 
+    /**
+     * Reads a list of notifications from a specified CSV file.
+     *
+     * @param filePath the file path of the CSV file to read notifications from.
+     * @return an {@code ArrayList} of {@link Notification} objects read from the file.
+     */
     public ArrayList<Notification> readNotifications(String filePath) {
         ArrayList<Notification> notifications = new ArrayList<>();
         try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {

@@ -1,10 +1,24 @@
 import java.util.*;
 
+/**
+ * The {@code Inventory} class manages a collection of medications, enabling actions such as viewing inventory,
+ * adding or removing medications, updating stock levels, handling low stock alerts, and managing replenishment requests.
+ */
 public class Inventory {
     ArrayList<Medication> medications;
+
+    /**
+     * Constructs an {@code Inventory} instance with the specified list of medications.
+     *
+     * @param medications the list of medications to manage.
+     */
     public Inventory(ArrayList<Medication> medications){
         this.medications = medications;
     }
+
+    /**
+     * Displays the current inventory, listing all medications, their quantities, and low stock levels.
+     */
     public void viewInventory(){
         ArrayList<Medication> medlist = this.getMedicines();
         if (medlist.isEmpty()){
@@ -19,6 +33,11 @@ public class Inventory {
         
     }
 
+    /**
+     * Displays the current inventory with numbered entries.
+     *
+     * @param withnumbers indicator for displaying numbered entries.
+     */
     public void viewInventory(int withnumbers){
         ArrayList<Medication> medlist = this.getMedicines();
         if (medlist.isEmpty()){
@@ -33,12 +52,26 @@ public class Inventory {
         
     }
 
+    /**
+     * Adds a new medication to the inventory.
+     *
+     * @param medicineName the name of the medication.
+     * @param quantity the initial quantity of the medication.
+     * @param lowStockLevel the low stock level threshold for the medication.
+     */
     public void newMedication(String medicineName, int quantity, int lowStockLevel){
         Medication med = new Medication(medicineName, quantity, lowStockLevel);
         medications.add(med);
         System.out.println("Medication added");
     }
 
+    /**
+     * Updates the stock level of a specific medication.
+     *
+     * @param medicineName the name of the medication.
+     * @param quantitychange the amount to increase or decrease the stock by.
+     * @return {@code true} if the stock was successfully updated; {@code false} otherwise.
+     */
     public boolean updateStock(String medicineName, int quantitychange){ // need this function? or just call get medications list then setqty mthd for medication 
         for(int i = 0; i<medications.size(); i++){
             Medication med = medications.get(i);
@@ -56,6 +89,9 @@ public class Inventory {
         return false;
     }
 
+    /**
+     * Displays all medications that have stock levels below their respective low stock thresholds.
+     */
     public void viewLowMedicationStock(){
         boolean low = false;
         for (int i = 0; i<medications.size(); i++){
@@ -70,7 +106,11 @@ public class Inventory {
         }
     }
 
-    //for pharmacist
+    /**
+     * Allows a pharmacist to create replenishment requests for low-stock medications.
+     *
+     * @param requestList the list of replenishment requests to update.
+     */
     public void getReplenishmentRequest(ArrayList<ReplenishmentRequest> requestList){
         Scanner sc = new Scanner(System.in);
         ArrayList<Medication> replenishmentList = new ArrayList<>();
@@ -121,7 +161,11 @@ public class Inventory {
         }
     }
 
-    // for admin!!!!!
+    /**
+     * Approves or rejects pending replenishment requests. For admin use.
+     *
+     * @param requestList the list of replenishment requests.
+     */
     public void approveReplenishmentRequest(ArrayList<ReplenishmentRequest> requestList){
         Scanner sc = new Scanner(System.in);
         for (int i = 0; i<requestList.size(); i++){
@@ -177,6 +221,11 @@ public class Inventory {
         }
     }
 
+    /**
+     * Notifies the user of pending replenishment requests.
+     *
+     * @param requestList the list of replenishment requests.
+     */
     public void notifyReplenishmentRequest(ArrayList<ReplenishmentRequest> requestList){
         for (int i = 0; i<requestList.size(); i++){
             if (requestList.get(i).getStatus().equals("pending")){
@@ -186,6 +235,9 @@ public class Inventory {
         }
     }
 
+    /**
+     * Notifies the user of low-stock medications.
+     */
     public void notifyLowStock(){
         for (int i = 0; i<medications.size(); i++){
             if (medications.get(i).getQuantity() < medications.get(i).getLowStockLevel()){
@@ -195,6 +247,11 @@ public class Inventory {
         }
     }
 
+    /**
+     * Removes a medication from the inventory.
+     *
+     * @param medicineName the name of the medication to remove.
+     */
     public void removeMedication(String medicineName){
         for(int i = 0; i<medications.size(); i++){
             Medication med = medications.get(i);
@@ -206,6 +263,12 @@ public class Inventory {
         }
     }
 
+    /**
+     * Updates the low stock level of a medication.
+     *
+     * @param medicineName the name of the medication.
+     * @param lowLevel the new low stock level.
+     */
     public void updateLowStockLevel(String medicineName, int lowLevel){
         if (lowLevel<0){
             System.out.println("Cannot be negative!");
@@ -221,6 +284,9 @@ public class Inventory {
         }
     }
 
+    /**
+     * Manages the inventory through various operations like viewing, adding, and updating medications.
+     */
     public void manageInventory(){
         Scanner sc = new Scanner(System.in);
         int choice = 0;
@@ -311,12 +377,13 @@ public class Inventory {
         
     }
 
-    
+    /**
+     * Returns the list of medications in the inventory.
+     *
+     * @return the list of medications.
+     */
     public ArrayList<Medication> getMedicines(){
         return this.medications;
     }
-    // public void setMedicines(ArrayList<Medication> medications){
-
-    // }
 
 }

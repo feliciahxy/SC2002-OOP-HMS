@@ -2,8 +2,18 @@
 import java.io.*;
 import java.util.ArrayList;
 
+/**
+ * The {@code CSVNotificationWriter} class implements the {@code NotificationWriter} interface
+ * to write notification data to a CSV file.
+ */
 public class CSVNotificationWriter implements NotificationWriter {
 
+    /**
+     * Writes a list of notifications to a specified CSV file.
+     *
+     * @param filePath      the file path where notifications should be written.
+     * @param notifications the list of {@link Notification} objects to be written.
+     */
     public void writeNotifications(String filePath, ArrayList<Notification> notifications) {
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(filePath))) {
             bw.write("notificationID,receiverID,message,status");

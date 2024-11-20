@@ -1,8 +1,24 @@
 import java.util.*;
 
+/**
+ * The {@code Doctor} class represents a doctor in the healthcare system, extending the {@code Staff} class.
+ * It manages the doctor's schedule and provides methods to interact with patient records, update availability, 
+ * handle appointments, and record appointment outcomes.
+ */
 public class Doctor extends Staff {
     private Schedule schedule;
 
+    /**
+     * Constructs a {@code Doctor} instance with the given details.
+     *
+     * @param id the unique identifier of the doctor.
+     * @param name the name of the doctor.
+     * @param role the role of the doctor (e.g., "Doctor").
+     * @param gender the gender of the doctor.
+     * @param age the age of the doctor.
+     * @param password the login password for the doctor.
+     * @param schedule the doctor's schedule.
+     */
     public Doctor(
         String id,
         String name,
@@ -17,8 +33,13 @@ public class Doctor extends Staff {
         this.schedule = schedule;
     }
 
-    // actual doctor functions
-
+    /**
+     * Allows the doctor to view the medical records of patients under their care.
+     *
+     * @param patientUsers the list of all patients.
+     * @param appointmentOutcomes the list of appointment outcomes.
+     * @param appointments the list of appointments.
+     */
     public void viewPatientRecords(ArrayList<Patient> patientUsers, ArrayList<AppointmentOutcome> appointmentOutcomes, ArrayList<Appointment> appointments) {
         Scanner sc = new Scanner(System.in);
 
@@ -56,8 +77,13 @@ public class Doctor extends Staff {
         selectedPatient.viewMedicalRecord(appointmentOutcomes, appointments);
     }
 
-
-
+    /**
+     * Allows the doctor to update the medical records of patients under their care.
+     *
+     * @param patientUsers the list of all patients.
+     * @param appointmentOutcomes the list of appointment outcomes.
+     * @param appointments the list of appointments.
+     */
     public void updatePatientRecord(ArrayList<Patient> patientUsers, ArrayList<AppointmentOutcome> appointmentOutcomes, ArrayList<Appointment> appointments) {
         Scanner sc = new Scanner(System.in);
 
@@ -165,7 +191,9 @@ public class Doctor extends Staff {
         }
     }
 
-
+    /**
+     * Displays the doctor's personal schedule for the current month.
+     */
     public void viewPersonalSchedule() {
         ArrayList<String> slots = this.schedule.getSlots();
         System.out.println("\nFormat Explanation \nPatientID-0 means pending, PatientID-1 means confirmed");
@@ -182,6 +210,9 @@ public class Doctor extends Staff {
         }
     }
 
+    /**
+     * Allows the doctor to set their availability for specific dates and times.
+     */
     public void setAvailability() {
         Scanner sc = new Scanner(System.in);
         ArrayList<String> slots = this.schedule.getSlots();
@@ -239,6 +270,13 @@ public class Doctor extends Staff {
         System.out.println("Availability Updated Successfully!");
     }
 
+    /**
+     * Allows the doctor to accept or decline pending appointment requests.
+     *
+     * @param appointments the list of all appointments.
+     * @param doctor the doctor managing the appointments.
+     * @param notifications the list of notifications to update.
+     */
     public void acceptOrDeclineAppointment(ArrayList<Appointment> appointments, Doctor doctor, ArrayList<Notification> notifications) {
         Scanner sc = new Scanner(System.in);
         ArrayList<String> slots = this.schedule.getSlots();
@@ -330,6 +368,9 @@ public class Doctor extends Staff {
         } 
     }
 
+    /**
+     * Displays the doctor's upcoming confirmed appointments.
+     */
     public void viewUpcomingAppointments() {
         System.out.println("\nUpcoming confirmed Appointments");
         ArrayList<String> slots = this.schedule.getSlots();
@@ -349,6 +390,12 @@ public class Doctor extends Staff {
         if (count == 1) System.out.println("NIL\n");
     }
 
+    /**
+     * Records the outcome of an appointment, including diagnosis, treatment, consultation notes, and prescribed medications.
+     *
+     * @param appointments the list of all appointments.
+     * @param appointmentOutcomes the list of appointment outcomes to update.
+     */
     public void recordAppointmentOutcome(ArrayList<Appointment> appointments, ArrayList<AppointmentOutcome> appointmentOutcomes) {
 
         Scanner sc = new Scanner(System.in);
@@ -415,8 +462,11 @@ public class Doctor extends Staff {
         System.out.println(appointmentOutcome);
     }
 
-    // Helper
-
+    /**
+     * Retrieves the list of patient IDs under the doctor's care based on the doctor's schedule.
+     *
+     * @return the list of patient IDs.
+     */
     public ArrayList<String> underCarePatientIDs() {
         ArrayList<String> underCarePatientIDs = new ArrayList<>();
         ArrayList<String> slots = this.schedule.getSlots();
@@ -428,6 +478,13 @@ public class Doctor extends Staff {
         return underCarePatientIDs;
     }
 
+    /**
+     * Retrieves the list of appointment IDs for a specific patient.
+     *
+     * @param patientID the unique identifier of the patient.
+     * @param appointments the list of all appointments.
+     * @return the list of appointment IDs for the patient.
+     */
     public ArrayList<String> getPatientAppointmentIDs(String patientID, ArrayList<Appointment> appointments) {
         ArrayList<String> getPatientAppointmentIDs = new ArrayList<>();
         for (Appointment appointment : appointments) {
@@ -439,71 +496,3 @@ public class Doctor extends Staff {
         return getPatientAppointmentIDs;
     }
 }
-
-//     // writing to CSV
-
-
-
-//     public void writeAppointmentsToCSV() {
-//         try (BufferedWriter bw = new BufferedWriter(new FileWriter("../data/Appointment.csv"))) {
-//             bw.write("appointmentID,patientID,doctorID,date,time,stauts\n");
-//             for (Appointment appointment : appointmentList) {
-//                 bw.write(appointment.getAppointmentID() + "," + appointment.getPatientID() + "," +
-//                         appointment.getDoctorID() + "," + appointment.getDate() + "," +
-//                         appointment.getTime() + "," + appointment.getStatus());
-//             }
-//         } catch (IOException e) {
-//             System.out.println("Error writing to Appointment file: " + e.getMessage());
-//         }
-//     }
-
-//     public void writeAppointmentOutcomesToCSV() {
-//         try (BufferedWriter bw = new BufferedWriter(new FileWriter("../data/AppointmentOutcome.csv"))) {
-//             bw.write("appointmentID,diagnosis,serviceType,date,notes\n");
-//             for (AppointmentOutcome appointmentOutcome : appointmentOutcomesList) {
-//                 bw.write(appointmentOutcome.getAppointmentID() + "," + appointmentOutcome.getDiagnosis() + "," +
-//                         appointmentOutcome.getServiceType() + "," + appointmentOutcome.getDate() + "," +
-//                         appointmentOutcome.getNotes());
-//             }
-//         } catch (IOException e) {
-//             System.out.println("Error writing to AppointmentOutcome file: " + e.getMessage());
-//         }
-//     }
-
-//     public void writePrescribedMedicationToCSV() {
-//         try (BufferedWriter bw = new BufferedWriter(new FileWriter("../data/PrescribedMedication.csv"))) {
-//             bw.write("appointmentID,medicine,status\n");
-//             for (PrescribedMedication prescribedMedication : prescribedMedicationList) {
-//                 bw.write(prescribedMedication.getAppointmentID() + "," + prescribedMedication.getMedicationName() + "," +
-//                     prescribedMedication.getMedicationStatus());
-//             }
-//         } catch (IOException e) {
-//             System.out.println("Error writing to PrescribedMedication file: " + e.getMessage());
-//         }
-//     }
-
-//     public void writeSchedulesToCSV() {
-//         try (BufferedWriter bw = new BufferedWriter(new FileWriter("../data/Schedule.csv"))) {
-//             bw.write("doctorIDs,1/1,2/1,3/1,1/2,2/2,3/2,1/3,2/3,3/3,1/4,2/4,3/4,1/5,2/5,3/5,1/6,2/6,3/6,1/7,2/7,3/7,1/8,2/8,3/8,1/9,2/9,3/9,1/10,2/10,3/10,1/11,2/11,3/11,1/12,2/12,3/12,1/13,2/13,3/13,1/14,2/14,3/14,1/15,2/15,3/15,1/16,2/16,3/16,1/17,2/17,3/17,1/18,2/18,3/18,1/19,2/19,3/19,1/20,2/20,3/20,1/21,2/21,3/21,1/22,2/22,3/22,1/23,2/23,3/23,1/24,2/24,3/24,1/25,2/25,3/25,1/26,2/26,3/26,1/27,2/27,3/27,1/28,2/28,3/28,1/29,2/29,3/29,1/30,2/30,3/30\n");
-//             for (Schedule schedule : scheduleList) {
-//                 bw.write(schedule.getDoctorID() + "," + schedule.getSlots());
-//             }
-//         } catch (IOException e) {
-//             System.out.println("Error writing to Schedule file: " + e.getMessage());
-//         }
-//     }
-
-//     // public void writePatientsToCSV() {
-//     //     try (BufferedWriter bw = new BufferedWriter(new FileWriter("../data/AppointmentOutcome.csv"))) {
-//     //         bw.write("Patient ID,Name,Date of Birth,Gender,Blood Type,Phone Number,Email,Password\n");
-//     //         for (Patient patient : patientList) {
-//     //             bw.write(patient.getPatientID() + "," + patient.getName() + "," +
-//     //                 patient.getDob() + "," + patient.getGender() + "," + patient.getBloodType() + "," + 
-//     //                 patient.getPhoneNumber() + "," + patient.getEmail() + "," + patient.getPassword());
-//     //         }
-//     //     } catch (IOException e) {
-//     //         System.out.println("Error writing to Patient file: " + e.getMessage());
-//     //     }
-//     // }
-
-// }

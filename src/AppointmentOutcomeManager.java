@@ -3,15 +3,29 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * The {@code AppointmentOutcomeManager} class is responsible for managing appointment outcomes and their
+ * associated prescribed medications. It provides functionality to load and write data to CSV files.
+ */
 public class AppointmentOutcomeManager {
     private ArrayList<AppointmentOutcome> appointmentOutcomes;
 
+    /**
+     * Constructs an {@code AppointmentOutcomeManager} and initializes appointment outcomes and prescribed medications
+     * by loading data from CSV files.
+     */
     public AppointmentOutcomeManager() {
         this.appointmentOutcomes = new ArrayList<>();
         Map<String, ArrayList<PrescribedMedication>> prescribedMedicationsByAppointmentID = loadPrescribedMedicationsFromCSV("../data/PrescribedMedication.csv");
         loadAppointmentOutcomesFromCSV("../data/AppointmentOutcome.csv", prescribedMedicationsByAppointmentID);
     }
 
+    /**
+     * Loads prescribed medications from a CSV file and groups them by appointment ID.
+     *
+     * @param filePath the file path of the prescribed medications CSV file.
+     * @return a {@code Map} where the key is the appointment ID, and the value is a list of prescribed medications.
+     */
     private Map<String, ArrayList<PrescribedMedication>> loadPrescribedMedicationsFromCSV(String filePath) {
         Map<String, ArrayList<PrescribedMedication>> prescribedMedicationsMap = new HashMap<>();
 
@@ -43,6 +57,12 @@ public class AppointmentOutcomeManager {
         return prescribedMedicationsMap;
     }
 
+    /**
+     * Loads appointment outcomes from a CSV file and associates them with prescribed medications.
+     *
+     * @param filePath                the file path of the appointment outcomes CSV file.
+     * @param prescribedMedicationsMap a map of prescribed medications grouped by appointment ID.
+     */
     private void loadAppointmentOutcomesFromCSV(String filePath, Map<String, ArrayList<PrescribedMedication>> prescribedMedicationsMap) {
         try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
             String line;
@@ -71,6 +91,9 @@ public class AppointmentOutcomeManager {
         }
     }
 
+    /**
+     * Writes appointment outcomes to a CSV file.
+     */
     public void writeAppointmentOutcomesToCSV() {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter("../data/AppointmentOutcome.csv"))) {
             // Write the header
@@ -89,6 +112,9 @@ public class AppointmentOutcomeManager {
         }
     }
 
+    /**
+     * Writes prescribed medications to a CSV file.
+     */
     public void writePrescribedMedicationsToCSV() {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter("../data/PrescribedMedication.csv"))) {
             // Write the header
@@ -109,6 +135,11 @@ public class AppointmentOutcomeManager {
     
     
 
+    /**
+     * Retrieves the list of appointment outcomes managed by this class.
+     *
+     * @return an {@code ArrayList} of {@link AppointmentOutcome}.
+     */
     public ArrayList<AppointmentOutcome> getAppointmentOutcomes() {
         return this.appointmentOutcomes;
     }

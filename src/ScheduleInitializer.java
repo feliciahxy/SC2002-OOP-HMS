@@ -1,7 +1,19 @@
 import java.io.*;
 import java.util.*;
 
+/**
+ * The ScheduleInitializer class is responsible for initializing and updating the schedule
+ * file based on the list of doctor IDs provided in the staff list file. It ensures that the
+ * schedule includes all existing and newly added doctors while maintaining the existing data.
+ */
 public class ScheduleInitializer {
+
+    /**
+     * The main method that serves as the entry point for the ScheduleInitializer program.
+     * It reads doctor IDs from the staff list file and updates the schedule file accordingly.
+     *
+     * @param args command-line arguments (not used in this implementation).
+     */
     public static void main(String[] args) {
         String staffListFile = "../data/Staff_List.csv"; 
         String scheduleFile = "../data/Schedule.csv"; 
@@ -13,10 +25,14 @@ public class ScheduleInitializer {
         }
 
         updateScheduleFile(scheduleFile, doctorIDs); 
-        // System.out.println("Schedule has been updated successfully.");
     }
 
-    // Method to read doctor IDs from Staff_List.csv
+    /**
+     * Reads doctor IDs from the staff list CSV file.
+     *
+     * @param filePath the path to the staff list CSV file.
+     * @return a list of doctor IDs extracted from the file.
+     */
     private static List<String> readDoctorIDs(String filePath) {
         List<String> doctorIDs = new ArrayList<>();
         try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
@@ -46,7 +62,12 @@ public class ScheduleInitializer {
         return doctorIDs;
     }
 
-    // Method to update Schedule.csv with new doctor IDs or use existing data
+    /**
+     * Updates the schedule file to include new doctor IDs and retain existing data.
+     *
+     * @param filePath       the path to the schedule CSV file.
+     * @param newDoctorIDs   a list of new doctor IDs to be added to the schedule.
+     */
     private static void updateScheduleFile(String filePath, List<String> newDoctorIDs) {
         Set<String> existingDoctorIDs = new HashSet<>();
         List<String> existingLines = new ArrayList<>();

@@ -2,12 +2,32 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
+/**
+ * {@code Administrator} class represents an administrator who can manage staff and patients.
+ */
 public class Administrator extends Staff {
 
+    /**
+     * Constructor for creating an Administrator.
+     *
+     * @param id       the ID of the administrator
+     * @param name     the name of the administrator
+     * @param role     the role of the administrator
+     * @param gender   the gender of the administrator
+     * @param age      the age of the administrator
+     * @param password the password of the administrator
+     */
     public Administrator(String id, String name, String role, String gender, int age, String password) {
         super(id, name, role, gender, age, password);
     }
   
+    /**
+     * Allows the administrator to manage staff.
+     *
+     * @param staffManager the manager for staff
+     * @param userManager  the user manager
+     * @param schedules    the list of schedules
+     */
     public void manageStaff(StaffManager staffManager, UserManager userManager, ArrayList<Schedule> schedules) {
         Scanner scanner = new Scanner(System.in);
         while (true) {
@@ -48,7 +68,12 @@ public class Administrator extends Staff {
         }
     }
     
-
+    /**
+     * Allows the administrator to view staff details.
+     *
+     * @param staffManager the manager for staff
+     * @param userManager  the user manager
+     */
     public static void viewStaff(StaffManager staffManager, UserManager userManager) {
         Scanner scanner = new Scanner(System.in);
         while (true) {
@@ -91,13 +116,20 @@ public class Administrator extends Staff {
     }
     
 
+    /**
+     * Prints the header for displaying staff details.
+     */
     public static void printTableHeader() {
         System.out.printf("%-12s | %-25s | %-20s | %-10s | %-5s\n", 
                           "ID", "Name", "Role", "Gender", "Age");
         System.out.println("------------------------------------------------------------------------------------");
     }
 
-    
+    /**
+     * Filters and displays staff by role (e.g., Doctor, Pharmacist, Administrator).
+     *
+     * @param staffManager the manager that handles the staff records
+     */
     public static void filterStaffByRole(StaffManager staffManager) {
         Scanner scanner = new Scanner(System.in);
     
@@ -150,7 +182,11 @@ public class Administrator extends Staff {
         }
     }
     
-
+    /**
+     * Filters and displays staff by gender (e.g., Male, Female).
+     *
+     * @param userManager the manager that handles user accounts
+     */
     public static void filterStaffByGender(UserManager userManager) {
         Scanner scanner = new Scanner(System.in);
     
@@ -202,6 +238,11 @@ public class Administrator extends Staff {
     }
     
 
+    /**
+     * Filters and displays staff by age, with an option to sort in ascending or descending order.
+     *
+     * @param userManager the manager that handles user accounts
+     */
     public static void filterStaffByAge(UserManager userManager) {
         Scanner scanner = new Scanner(System.in);
     
@@ -258,6 +299,11 @@ public class Administrator extends Staff {
     }
     
 
+    /**
+     * Displays all staff members.
+     *
+     * @param userManager the user manager
+     */
     public static void displayAllStaff(UserManager userManager) {
         printTableHeader();
         for (Staff staff : userManager.getStaffUsers()) {
@@ -267,6 +313,13 @@ public class Administrator extends Staff {
         }
     }
 
+    /**
+     * Adds a new staff member (Doctor, Pharmacist, or Administrator) to the system.
+     *
+     * @param staffManager the manager that handles the staff records
+     * @param userManager the manager that handles user accounts
+     * @param schedules   the list of schedules for the staff
+     */
     public static void addStaff(StaffManager staffManager, UserManager userManager, ArrayList<Schedule> schedules) {
         Scanner scanner = new Scanner(System.in);
     
@@ -426,7 +479,11 @@ public class Administrator extends Staff {
         }
     }
     
-    
+    /**
+     * Updates the details of an existing staff member.
+     *
+     * @param userManager the manager that handles user accounts
+     */
     public static void updateStaff(UserManager userManager) {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Enter Staff ID to update:");
@@ -517,6 +574,12 @@ public class Administrator extends Staff {
         }
     }
     
+    /**
+     * Deletes an existing staff member from the system.
+     *
+     * @param staffManager the manager that handles the staff records
+     * @param userManager the manager that handles user accounts
+     */
     public static void deleteStaff(StaffManager staffManager, UserManager userManager) {
         Scanner scanner = new Scanner(System.in);
     
@@ -566,6 +629,13 @@ public class Administrator extends Staff {
         }
     }  
 
+    /**
+     * Finds a staff member by their ID.
+     *
+     * @param userManager the manager that handles user accounts
+     * @param staffID     the ID of the staff member to find
+     * @return the staff member, or {@code null} if not found
+     */
     public static Staff findStaff(UserManager userManager, String staffID) {
         for (Staff staff : userManager.getStaffUsers()) {
             if (staff.getId().equalsIgnoreCase(staffID)) {
@@ -575,6 +645,11 @@ public class Administrator extends Staff {
         return null;
     }
     
+    /**
+     * Manages patient records, allowing the administrator to view, add, update, or delete patients.
+     *
+     * @param userManager the manager that handles user accounts
+     */
     public void managePatient(UserManager userManager) {
         Scanner scanner = new Scanner(System.in);
     
@@ -617,7 +692,11 @@ public class Administrator extends Staff {
         }
     }
     
-
+    /**
+     * Views patient records, displaying patient details.
+     *
+     * @param userManager the manager that handles user accounts
+     */
     public static void viewPatient(UserManager userManager) {
     // Print table headers
     System.out.printf("%-12s | %-20s | %-15s | %-8s | %-10s | %-12s | %-30s\n", 
@@ -633,9 +712,14 @@ public class Administrator extends Staff {
                 patient.getBloodType(),
                 patient.getPhoneNumber(),
                 patient.getEmail());
+        }
     }
-}
 
+    /**
+     * Adds a new patient to the system.
+     *
+     * @param userManager the manager that handles user accounts
+     */
     public static void addPatient(UserManager userManager) {
         Scanner scanner = new Scanner(System.in);
         try {
@@ -699,6 +783,11 @@ public class Administrator extends Staff {
         }
     }
 
+    /**
+     * Updates the details of an existing patient.
+     *
+     * @param userManager the manager that handles user accounts
+     */
     public static void updatePatient(UserManager userManager) {
         Scanner scanner = new Scanner(System.in);
 
@@ -763,6 +852,11 @@ public class Administrator extends Staff {
         }
     }
 
+    /**
+     * Deletes an existing patient from the system.
+     *
+     * @param userManager the manager that handles user accounts
+     */
     public static void deletePatient(UserManager userManager) {
         Scanner scanner = new Scanner(System.in);
 
@@ -800,6 +894,13 @@ public class Administrator extends Staff {
         }
     }
 
+    /**
+     * Finds a patient by their ID.
+     *
+     * @param userManager the manager that handles user accounts
+     * @param patientId   the ID of the patient to find
+     * @return the patient, or {@code null} if not found
+     */
     public static Patient findPatient(UserManager userManager, String patientId) {
         for (Patient patient : userManager.getPatientUsers()) {
             if (patientId.equalsIgnoreCase(patient.getId())) {

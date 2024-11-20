@@ -1,12 +1,20 @@
 import java.io.*;
 import java.time.LocalDate;
 import java.util.*;
-
+/**
+ * The UserManager class manages user data for staff and patients, including login,
+ * password management, and loading and saving user data from and to CSV files.
+ */
 public class UserManager {
     private final ArrayList<Staff> staffUsers;
     private final ArrayList<Patient> patientUsers;
 
-
+    /**
+     * Constructs a UserManager instance and initializes user data by
+     * loading from CSV files.
+     * 
+     * @param schedules the list of schedules to assign to doctors.
+     */
     public UserManager(ArrayList<Schedule> schedules) {
         staffUsers = new ArrayList<>();
         patientUsers = new ArrayList<>();
@@ -15,14 +23,31 @@ public class UserManager {
         loadUsersFromCSV("../data/Patient_List.csv", false, null);
     }
 
+    /**
+     * Retrieves the list of staff users.
+     * 
+     * @return the list of staff users.
+     */
     public ArrayList<Staff> getStaffUsers() {
         return staffUsers;
     } 
 
+    /**
+     * Retrieves the list of patient users.
+     * 
+     * @return the list of patient users.
+     */
     public ArrayList<Patient> getPatientUsers() {
         return patientUsers;
     }
 
+    /**
+     * Loads user data from a CSV file and populates the respective user list.
+     * 
+     * @param filePath the path to the CSV file.
+     * @param isStaff  true if loading staff users, false for patient users.
+     * @param schedules the list of schedules for doctors (only used for staff).
+     */
     private void loadUsersFromCSV(String filePath, boolean isStaff, ArrayList<Schedule> schedules) {
         try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
             String line;
@@ -71,6 +96,13 @@ public class UserManager {
         }
     }
 
+    /**
+     * Finds a user by their unique ID in the specified list of users.
+     * 
+     * @param userID the unique ID of the user.
+     * @param users  the list of users to search in.
+     * @return the User object if found, otherwise null.
+     */
     private User findUser(String userID, ArrayList<? extends User> users) {
         for (User user : users) {
             if (user.getId().equals(userID)) {
@@ -80,6 +112,13 @@ public class UserManager {
         return null;
     }
 
+    /**
+     * Checks if the user is logging in for the first time by comparing their password
+     * to the default password.
+     * 
+     * @param userID the unique ID of the user.
+     * @return true if the user is logging in for the first time, otherwise false.
+     */
     public boolean isFirstLogin(String userID) {
         User user = findUser(userID, staffUsers);
         if (user == null) {
@@ -88,6 +127,13 @@ public class UserManager {
         return user != null && user.getPassword().equals("password");
     }
 
+    /**
+     * Changes the user's password if it's their first login and validates the new password.
+     * 
+     * @param userID      the unique ID of the user.
+     * @param newPassword the new password to set.
+     * @return true if the password was successfully changed, otherwise false.
+     */
     public boolean changePassword(String userID, String newPassword) {
         User user = findUser(userID, staffUsers);
         if (user == null) {
@@ -114,7 +160,12 @@ public class UserManager {
         return false;
     }
 
-
+    /**
+     * Validates a password against security requirements.
+     * 
+     * @param password the password to validate.
+     * @return true if the password meets all requirements, otherwise false.
+     */
     private boolean isValidPassword(String password) {
         return password.length() >= 8 && //min. length of 8
             password.matches(".*[A-Z].*") && //at least 1 uppercase
@@ -123,6 +174,13 @@ public class UserManager {
             password.matches(".*[!@#$%^&*(),.?\":{}|<>].*"); //at least 1 special character
     }
 
+    /**
+     * Authenticates a user by validating their login credentials.
+     * 
+     * @param userID   the unique ID of the user.
+     * @param password the password provided during login.
+     * @return true if the credentials are valid, otherwise false.
+     */
     public boolean login(String userID, String password) {
         User user = findUser(userID, staffUsers);
         if (user != null) {
@@ -132,6 +190,12 @@ public class UserManager {
         return user != null && password.equals(user.getPassword());
     }
 
+    /**
+     * Retrieves the role of a user by their unique ID.
+     * 
+     * @param userID the unique ID of the user.
+     * @return the role of the user (e.g., Doctor, Patient), or null if not found.
+     */
     public String getRole(String userID) {
         User user = findUser(userID, staffUsers);
         if (user != null) {
@@ -141,6 +205,12 @@ public class UserManager {
         return user != null ? user.getRole() : null;
     }
 
+    /**
+     * Finds a patient by their unique ID.
+     * 
+     * @param userID the unique ID of the patient.
+     * @return the Patient object if found, otherwise null.
+     */
     public Patient findPatientByID(String userID) {
         for (Patient patient : patientUsers) {
             if (patient.getId().equals(userID)) {
@@ -150,6 +220,10 @@ public class UserManager {
         return null;
     }
 
+    /**
+     * Writes the current user data to CSV files for both staff and patients.
+     * Updates their respective files with the latest user information.
+     */
     public void writeUsersToCSV() {
         //write to staff.csv
         try (BufferedWriter writer = new BufferedWriter(new FileWriter("../data/Staff_List.csv"))) {
