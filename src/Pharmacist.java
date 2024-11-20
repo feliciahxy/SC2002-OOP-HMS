@@ -51,8 +51,11 @@ public class Pharmacist extends Staff{
     public void updatePrescription(ArrayList<AppointmentOutcome> appointmentOutcomes, Inventory inventory){
         while (true) { 
             try {
-                System.out.print("Enter appointment ID: ");
+                System.out.print("Enter q to quit.\nEnter appointment ID: ");
                 String appointmentID = scanner.nextLine(); 
+                if (appointmentID.equals("q")){
+                    return;
+                }
                 AppointmentOutcome appointmentOutcome = viewAppointmentOutcomeRecord(appointmentOutcomes, appointmentID);
                 if (appointmentOutcome != null){
                     ArrayList<PrescribedMedication> medlist = appointmentOutcome.getPrescribedMedicationList();
@@ -67,32 +70,30 @@ public class Pharmacist extends Staff{
                     if (numdispensed == medlist.size()){
                         return;
                     }
-                    System.out.print("Select medication no.: ");
-                    int mednum = scanner.nextInt();
-                    scanner.nextLine();
-                    if (mednum <= 0 || mednum > medlist.size()){
-                        System.out.println("Invalid option");
-                    }
-                    else{
-                        PrescribedMedication med = medlist.get(mednum-1);
-                        if (med.getMedicationStatus().equals("dispensed")){
-                            System.out.println("Unsuccessful, already dispensed!");
+                    while (true) { 
+                        System.out.print("Enter 0 to quit.\nSelect medication no. to dispense: ");
+                        int mednum = scanner.nextInt();
+                        scanner.nextLine();
+                        if (mednum == 0){
+                            return;
+                        }
+                        if (mednum <= 0 || mednum > medlist.size()){
+                            System.out.println("Invalid option");
                         }
                         else{
-                            System.out.print("Enter (1) to dispense. Choice: ");
-                            int choice = scanner.nextInt();
-                            scanner.nextLine();
-                            if (choice ==  1){
+                            PrescribedMedication med = medlist.get(mednum-1);
+                            if (med.getMedicationStatus().equals("dispensed")){
+                                System.out.println("Unsuccessful, already dispensed!");
+                            }
+                            else{
                                 if(inventory.updateStock(med.getMedicationName(), -1)){
                                     appointmentOutcome.setMedicationStatus(med, "dispensed");
                                     System.out.println("Medication dispensed. Status updated.");
                                 }
                             }
-                            else{
-                                System.out.println("Invalid input.");
-                            }
                         }
-                    }  
+                    }
+                      
                 }
             } 
             catch (InputMismatchException e) {
